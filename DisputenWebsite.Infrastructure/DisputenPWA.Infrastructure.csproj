@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DisputenWebsite.Application\DisputenPWA.Application.csproj" />
+    <ProjectReference Include="..\DisputenWebsite.Domain\DisputenPWA.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
