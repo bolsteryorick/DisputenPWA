@@ -1,6 +1,6 @@
 using System;
 
-namespace DisputenWebsite.API
+namespace DisputenPWA.Domain.WeatherAggregate
 {
     public class WeatherForecast
     {

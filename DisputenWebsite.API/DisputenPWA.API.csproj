@@ -5,7 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DisputenWebsite.Application\DisputenPWA.Application.csproj" />
     <ProjectReference Include="..\DisputenWebsite.Domain\DisputenPWA.Domain.csproj" />
+    <ProjectReference Include="..\DisputenWebsite.Infrastructure\DisputenPWA.Infrastructure.csproj" />
   </ItemGroup>
 
 
