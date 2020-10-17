@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,12 @@ namespace DisputenWebsite.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMediatr();
+            services.AddGraphQLConfiguration();
             services.AddControllers();
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +44,8 @@ namespace DisputenWebsite.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseGraphQL();
 
             app.UseHttpsRedirection();
 
