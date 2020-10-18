@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisputenPWA.API", "DisputenWebsite.API\DisputenPWA.API.csproj", "{9C1B3867-F4C1-4D0E-9224-48D58A75C1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisputenPWA.API", "DisputenWebsite.API\DisputenPWA.API.csproj", "{9C1B3867-F4C1-4D0E-9224-48D58A75C1E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisputenPWA.Domain", "DisputenWebsite.Domain\DisputenPWA.Domain.csproj", "{FD7F628A-6A17-4DA0-84B9-73CF59142EFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisputenPWA.Domain", "DisputenWebsite.Domain\DisputenPWA.Domain.csproj", "{FD7F628A-6A17-4DA0-84B9-73CF59142EFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisputenPWA.Infrastructure", "DisputenWebsite.Infrastructure\DisputenPWA.Infrastructure.csproj", "{48A1C448-99A4-437E-94CE-4248B7CD27E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisputenPWA.Infrastructure", "DisputenWebsite.Infrastructure\DisputenPWA.Infrastructure.csproj", "{48A1C448-99A4-437E-94CE-4248B7CD27E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisputenPWA.Application", "DisputenWebsite.Application\DisputenPWA.Application.csproj", "{67AD204C-9D26-4209-9659-A1BC7BF10355}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisputenPWA.Application", "DisputenWebsite.Application\DisputenPWA.Application.csproj", "{67AD204C-9D26-4209-9659-A1BC7BF10355}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisputenPWA.DAL", "DisputenPWA.DAL\DisputenPWA.DAL.csproj", "{D6C2E77E-A0F1-4AED-8741-40D35864C501}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{67AD204C-9D26-4209-9659-A1BC7BF10355}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67AD204C-9D26-4209-9659-A1BC7BF10355}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67AD204C-9D26-4209-9659-A1BC7BF10355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6C2E77E-A0F1-4AED-8741-40D35864C501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6C2E77E-A0F1-4AED-8741-40D35864C501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6C2E77E-A0F1-4AED-8741-40D35864C501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6C2E77E-A0F1-4AED-8741-40D35864C501}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

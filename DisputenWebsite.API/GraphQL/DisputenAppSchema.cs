@@ -1,4 +1,6 @@
-﻿using GraphQL;
+﻿using DisputenPWA.API.GraphQL.Mutations;
+using DisputenPWA.API.GraphQL.Queries;
+using GraphQL;
 using GraphQL.Types;
 using System;
 using System.Collections.Generic;

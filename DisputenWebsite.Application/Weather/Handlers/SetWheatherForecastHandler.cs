@@ -1,5 +1,6 @@
 ﻿using DisputenPWA.Domain.WeatherAggregate;
 using DisputenPWA.Domain.WeatherAggregate.Commands;
+using DisputenPWA.Infrastructure.SqlDatabase;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,17 @@ namespace DisputenPWA.Application.Weather.Handlers
 {
     public class SetWheatherForecastHandler : IRequestHandler<SetWeatherForecastCommand, SetWeatherForecastCommandResult>
     {
+        private readonly ISqlDatabaseConnector _sqlDatabaseConnector;
+
+        public SetWheatherForecastHandler(
+            ISqlDatabaseConnector sqlDatabaseConnector
+            )
+        {
+            _sqlDatabaseConnector = sqlDatabaseConnector;
+        }
+
         public async Task<SetWeatherForecastCommandResult> Handle(SetWeatherForecastCommand request, CancellationToken cancellationToken)
         {
-            // todo add async database call
             var rng = new Random();
             var forecast = new WeatherForecast
             {
@@ -21,6 +30,7 @@ namespace DisputenPWA.Application.Weather.Handlers
                 TemperatureC = rng.Next(-20, 55),
                 Summary = request.Summary
             };
+            await _sqlDatabaseConnector.Add(forecast);
             return new SetWeatherForecastCommandResult(forecast);
         }
     }

@@ -1,8 +1,9 @@
+using DisputenPWA.Domain.Hierarchy;
 using System;
 
 namespace DisputenPWA.Domain.WeatherAggregate
 {
-    public class WeatherForecast
+    public class WeatherForecast : IdModelBase
     {
         public DateTime Date { get; set; }
 

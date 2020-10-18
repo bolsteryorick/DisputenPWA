@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DisputenWebsite.Domain\DisputenPWA.Domain.csproj" />
+    <ProjectReference Include="..\DisputenWebsite.Infrastructure\DisputenPWA.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

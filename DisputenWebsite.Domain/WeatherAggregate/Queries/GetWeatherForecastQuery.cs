@@ -7,8 +7,11 @@ namespace DisputenPWA.Domain.WeatherAggregate.Queries
 {
     public class GetWeatherForecastQuery : IRequest<GetWeatherForecastQueryResult>
     {
-        public GetWeatherForecastQuery()
+        public string Date { get; }
+
+        public GetWeatherForecastQuery(string date)
         {
+            Date = date;
         }
     }
 }

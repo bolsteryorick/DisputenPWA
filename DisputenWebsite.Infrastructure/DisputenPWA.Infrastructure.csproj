@@ -5,8 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DisputenWebsite.Application\DisputenPWA.Application.csproj" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DisputenPWA.DAL\DisputenPWA.DAL.csproj" />
     <ProjectReference Include="..\DisputenWebsite.Domain\DisputenPWA.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SqlDatabase\Group\" />
   </ItemGroup>
 
 </Project>
