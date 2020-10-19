@@ -13,8 +13,4 @@
     <ProjectReference Include="..\DisputenWebsite.Domain\DisputenPWA.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="SqlDatabase\Group\" />
-  </ItemGroup>
-
 </Project>

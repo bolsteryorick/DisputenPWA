@@ -1,25 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.WeatherAggregate;
 using DisputenPWA.Infrastructure.Connectors.Groups;
-using DisputenPWA.Infrastructure.SqlDatabase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DisputenWebsite.API
 {
@@ -40,9 +30,7 @@ namespace DisputenWebsite.API
             services.AddControllers();
             services.AddDbContext<DisputenAppContext>(options =>
                 options.UseSqlServer(_configuration.GetValue<string>("DatabaseConnectionString")));
-            services.AddTransient<IRepository<WeatherForecast>, Repository<WeatherForecast>>();
             services.AddTransient<IRepository<Group>, Repository<Group>>();
-            services.AddTransient<ISqlDatabaseConnector, SqlDatabaseConnector>();
             services.AddTransient<IGroupConnector, GroupConnector>();
             services.Configure<IISServerOptions>(options =>
             {

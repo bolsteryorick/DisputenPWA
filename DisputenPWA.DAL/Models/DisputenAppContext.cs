@@ -1,5 +1,4 @@
 ﻿using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.WeatherAggregate;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,6 @@ namespace DisputenPWA.DAL.Models
         {
         }
 
-        public DbSet<WeatherForecast> WeatherForecasts { get; set; }
         public DbSet<Group> Groups{ get; set; }
     }
 }

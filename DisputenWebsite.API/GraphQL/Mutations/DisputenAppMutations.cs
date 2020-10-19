@@ -1,8 +1,6 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.Groups;
-using DisputenPWA.API.GraphQL.Weather;
 using DisputenPWA.Domain.GroupAggregate.Commands;
-using DisputenPWA.Domain.WeatherAggregate.Commands;
 using GraphQL.Types;
 using MediatR;
 using System;
@@ -13,15 +11,6 @@ namespace DisputenPWA.API.GraphQL.Mutations
     {
         public DisputenAppMutations(IMediator mediator)
         {
-            Field<WeatherResultType>(
-                "SetWeather",
-                description: "Set weather forecast",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "summary" }
-                ),
-                resolve: context => mediator.Send(new SetWeatherForecastCommand(context.GetArgument<string>("summary")), context.CancellationToken).Map(r => ProcessResult(context, r))
-                );
-
             Field<GroupResultType>(
                 "CreateGroup",
                 description: "Creates a group in the database.",
