@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201024130735_index.cs" />
+    <Compile Remove="Migrations\20201024130735_index.Designer.cs" />
+    <Compile Remove="Migrations\20201024130853_index.cs" />
+    <Compile Remove="Migrations\20201024130853_index.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.9" />

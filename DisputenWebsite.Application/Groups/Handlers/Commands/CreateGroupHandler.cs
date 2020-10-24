@@ -24,7 +24,10 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
 
         public async Task<CreateGroupCommandResult> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
         {
-            var group = new Group { Name = request.Name, Description = request.Description};
+            var group = new Group { 
+                Name = request.Name, 
+                Description = request.Description
+            };
             await _groupConnector.CreateGroup(group);
             return new CreateGroupCommandResult(group);
         }

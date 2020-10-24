@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EventAggregate\Commands\" />
-    <Folder Include="EventAggregate\Queries\" />
+    <Folder Include="EventAggregate\BusinessObjects\" />
   </ItemGroup>
 
 </Project>

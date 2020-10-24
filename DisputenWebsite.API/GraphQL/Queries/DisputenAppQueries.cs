@@ -1,5 +1,7 @@
 ﻿using DisputenPWA.API.Extensions;
+using DisputenPWA.API.GraphQL.AppEvents;
 using DisputenPWA.API.GraphQL.Groups;
+using DisputenPWA.Domain.EventAggregate.Queries;
 using DisputenPWA.Domain.GroupAggregate.Queries;
 using GraphQL.Types;
 using MediatR;
@@ -11,18 +13,12 @@ using System.Threading.Tasks;
 
 namespace DisputenPWA.API.GraphQL.Queries
 {
-    public class DisputenAppQueries : DisputenAppBaseType
+    public partial class DisputenAppQueries : DisputenAppBaseType
     {
         public DisputenAppQueries(IMediator mediator)
         {
-            Field<GroupResultType>(
-                "GetGroup",
-                description: "Gets a group from the database.",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
-                ),
-                resolve: context => mediator.Send(new GetGroupQuery(context.GetArgument<Guid>("id")), context.CancellationToken).Map(r => ProcessResult(context, r))
-                );
+            AddGroupQueries(mediator);
+            AddAppEventQueries(mediator);
         }
     }
 }
