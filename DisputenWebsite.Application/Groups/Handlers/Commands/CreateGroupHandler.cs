@@ -28,7 +28,7 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
                 Name = request.Name, 
                 Description = request.Description
             };
-            await _groupConnector.CreateGroup(group);
+            await _groupConnector.Create(group);
             return new CreateGroupCommandResult(group);
         }
     }

@@ -11,7 +11,7 @@ namespace DisputenPWA.Domain.GroupAggregate
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<AppEvent> AppEvents { get; set; }
+        public IReadOnlyCollection<AppEvent> AppEvents { get; set; }
 
         public DALGroup CreateDALGroup()
         {

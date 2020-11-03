@@ -3,14 +3,17 @@ using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
+using DisputenPWA.DAL.Repositories.Base;
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DALObject;
 using DisputenPWA.Domain.EventAggregate.Mappers;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DALObject;
 using DisputenPWA.Domain.GroupAggregate.Mappers;
+using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.Groups;
+using DisputenPWA.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -47,11 +50,13 @@ namespace DisputenWebsite.API
             services.AddControllers();
             services.AddDbContext<DisputenAppContext>(options =>
                 options.UseSqlServer(_configuration.GetValue<string>("DatabaseConnectionString")));
+            //services.AddCosmosDb(_configuration);
 
-            services.AddTransient<IRepository<DALGroup>, Repository<DALGroup>>();
+            services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<IGroupConnector, GroupConnector>();
+            services.AddTransient<ISeedingService, SeedingService>();
 
-            services.AddTransient<IRepository<DALAppEvent>, Repository<DALAppEvent>>();
+            services.AddTransient<IAppEventRepository, AppEventRepository>();
             services.AddTransient<IAppEventConnector, AppEventConnector>();
 
             services.Configure<IISServerOptions>(options =>

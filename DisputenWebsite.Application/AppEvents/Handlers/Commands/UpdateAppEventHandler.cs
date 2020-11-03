@@ -1,4 +1,5 @@
-﻿using DisputenPWA.Domain.EventAggregate;
+﻿using DisputenPWA.Application.Base;
+using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.Commands;
 using DisputenPWA.Domain.EventAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.AppEvents;
@@ -9,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace DisputenPWA.Application.AppEvents.Handlers.Commands
 {
-    public class UpdateAppEventHandler 
-        : IRequestHandler<UpdateAppEventCommand, UpdateAppEventCommandResult>
+    public class UpdateAppEventHandler : UpdateHandlerBase, IRequestHandler<UpdateAppEventCommand, UpdateAppEventCommandResult>
     {
         private readonly IAppEventConnector _appEventConnector;
 
@@ -23,14 +23,8 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Commands
 
         public async Task<UpdateAppEventCommandResult> Handle(UpdateAppEventCommand request, CancellationToken cancellationToken)
         {
-            var appEvent = new AppEvent
-            {
-                Name = request.Name,
-                Description = request.Description,
-                StartTime = request.StartTime,
-                EndTime = request.EndTime
-            };
-            await _appEventConnector.UpdateAppEvent(appEvent);
+            var updateProperties = GetUpdateProperties(request);
+            var appEvent = await _appEventConnector.UpdateProperties(updateProperties, request.Id);
             return new UpdateAppEventCommandResult(appEvent);
         }
     }

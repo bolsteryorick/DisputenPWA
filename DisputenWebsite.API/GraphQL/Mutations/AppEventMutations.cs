@@ -19,10 +19,10 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 description: "Creates an app event in the database.",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "description" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "groupId" },
                     new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "startTime" },
                     new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "endTime" },
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "groupId" }
+                    new QueryArgument<StringGraphType> { Name = "description" }
                 ),
                 resolve: context =>
                     mediator.Send(
@@ -39,16 +39,18 @@ namespace DisputenPWA.API.GraphQL.Mutations
 
             Field<AppEventResultType>(
                 "UpdateAppEvent",
-                description: "Updates an app event in the database.",
+                description: "Updates an app event in the database. Properties that are not sent are not updated.",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "description" },
-                    new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "startTime" },
-                    new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "endTime" }
+                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
+                    new QueryArgument<StringGraphType> { Name = "name" },
+                    new QueryArgument<StringGraphType> { Name = "description" },
+                    new QueryArgument<DateTimeGraphType> { Name = "startTime" },
+                    new QueryArgument<DateTimeGraphType> { Name = "endTime" }
                 ),
                 resolve: context =>
                     mediator.Send(
                         new UpdateAppEventCommand(
+                            context.GetArgument<Guid>("id"),
                             context.GetArgument<string>("name"),
                             context.GetArgument<string>("description"),
                             context.GetArgument<DateTime>("startTime"),

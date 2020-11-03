@@ -1,4 +1,5 @@
-﻿using DisputenPWA.Domain.EventAggregate.Queries;
+﻿using DisputenPWA.Domain.EventAggregate;
+using DisputenPWA.Domain.EventAggregate.Queries;
 using DisputenPWA.Domain.EventAggregate.Queries.Results;
 using DisputenPWA.Infrastructure.Connectors.AppEvents;
 using MediatR;
@@ -23,7 +24,8 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Queries
 
         public async Task<GetAppEventQueryResult> Handle(GetAppEventQuery request, CancellationToken cancellationToken)
         {
-            var appEvent = await _appEventConnector.GetAppEvent(request.EventId);
+            //var appEvent = await _appEventConnector.GetAppEvent(request.EventId);
+            var appEvent = new AppEvent();
             return new GetAppEventQueryResult(appEvent);
         }
     }

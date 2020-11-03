@@ -1,4 +1,6 @@
-﻿using DisputenPWA.Domain.GroupAggregate.Queries.Results;
+﻿using DisputenPWA.Domain.GroupAggregate.Helpers;
+using DisputenPWA.Domain.GroupAggregate.Queries.Results;
+using DisputenPWA.Domain.Helpers;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,16 +13,19 @@ namespace DisputenPWA.Domain.GroupAggregate.Queries
         public Guid GroupId { get; }
         public DateTime? LowestEndDate { get; }
         public DateTime? HighestStartDate { get; }
+        public GroupPropertyHelper GroupPropertyHelper { get; }
 
         public GetGroupQuery(
             Guid groupId, 
             DateTime? lowestEndDate, 
-            DateTime? highestStartDate
+            DateTime? highestStartDate,
+            GroupPropertyHelper groupPropertyHelper
             )
         {
             GroupId = groupId;
-            LowestEndDate = lowestEndDate;
-            HighestStartDate = highestStartDate;
+            LowestEndDate = lowestEndDate ?? EventRange.LowestEndDate;
+            HighestStartDate = highestStartDate ?? EventRange.HighestStartDate;
+            GroupPropertyHelper = groupPropertyHelper;
         }
     }
 }

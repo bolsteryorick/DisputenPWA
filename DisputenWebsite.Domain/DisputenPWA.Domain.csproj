@@ -6,11 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EventAggregate\BusinessObjects\" />
+    <Folder Include="GroupAggregate\Helpers\" />
   </ItemGroup>
 
 </Project>

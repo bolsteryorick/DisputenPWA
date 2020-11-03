@@ -5,6 +5,8 @@ using DisputenPWA.Domain.GroupAggregate.DALObject;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace DisputenPWA.DAL.Models
@@ -20,5 +22,15 @@ namespace DisputenPWA.DAL.Models
 
         public DbSet<DALGroup> Groups{ get; set; }
         public DbSet<DALAppEvent> AppEvents { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            var seedData = new SeedData(1000, 12);
+            modelBuilder.Entity<DALGroup>().HasData(seedData.DALGroups);
+            modelBuilder.Entity<DALAppEvent>().HasData(seedData.DALAppEvents);
+        }
+
+       
     }
 }

@@ -10,13 +10,13 @@ namespace DisputenPWA.Domain.EventAggregate.Mappers
     {
         public AppEventMapper()
         {
-            CreateMap<DALAppEvent, AppEvent>()
-                .ForMember(dest => dest.Id, cfg => cfg.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Name, cfg => cfg.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Description, cfg => cfg.MapFrom(src => src.Description))
-                .ForMember(dest => dest.GroupId, cfg => cfg.MapFrom(src => src.GroupId))
-                .ForMember(dest => dest.Group, cfg => cfg.MapFrom(src => src.Group.CreateGroup()))
-                ;
+            //CreateMap<DALAppEvent, AppEvent>()
+            //    .ForMember(dest => dest.Id, cfg => cfg.MapFrom(src => src.Id))
+            //    .ForMember(dest => dest.Name, cfg => cfg.MapFrom(src => src.Name))
+            //    .ForMember(dest => dest.Description, cfg => cfg.MapFrom(src => src.Description))
+            //    .ForMember(dest => dest.GroupId, cfg => cfg.MapFrom(src => src.GroupId))
+            //    .ForMember(dest => dest.Group, cfg => cfg.MapFrom(src => src.Group.CreateGroup()))
+            //    ;
         }
     }
 }

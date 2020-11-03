@@ -31,7 +31,7 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Commands
                 EndTime = request.EndTime,
                 GroupId = request.GroupId
             };
-            await _appEventConnector.CreateAppEvent(appEvent);
+            await _appEventConnector.Create(appEvent);
             return new CreateAppEventCommandResult(appEvent);
         }
     }
