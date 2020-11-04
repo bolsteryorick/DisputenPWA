@@ -15,9 +15,19 @@ namespace DisputenPWA.Domain.EventAggregate.Helpers
         public bool GetDescription { get; private set; }
         public bool GetStartTime { get; set; }
         public bool GetEndTime { get; set; }
-        public bool GetGroupId { get; set; }
+        public bool GetGroupIdForGraphQL { get; set; }
         public bool GetGroup { get; set; }
         public GroupPropertyHelper GroupPropertyHelper { get; set; }
+
+        public bool CanGetGroup()
+        {
+            return GetGroup && GroupPropertyHelper != null;
+        }
+
+        public bool GetGroupId()
+        {
+            return true;
+        }
 
         public AppEventPropertyHelper(IList<Field> fields)
         {
@@ -29,7 +39,7 @@ namespace DisputenPWA.Domain.EventAggregate.Helpers
                 else if (Equals(name, nameof(AppEvent.Description))) GetDescription = true;
                 else if (Equals(name, nameof(AppEvent.StartTime))) GetStartTime = true;
                 else if (Equals(name, nameof(AppEvent.EndTime))) GetEndTime = true;
-                else if (Equals(name, nameof(AppEvent.GroupId))) GetGroupId = true;
+                else if (Equals(name, nameof(AppEvent.GroupId))) GetGroupIdForGraphQL = true;
                 else if (Equals(name, nameof(AppEvent.Group))) GetGroup = true;
             }
 

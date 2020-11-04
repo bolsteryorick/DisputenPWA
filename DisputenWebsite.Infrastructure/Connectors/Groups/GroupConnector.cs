@@ -1,27 +1,16 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using DisputenPWA.DAL.Repositories;
-using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.EventAggregate.DALObject;
+﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DALObject;
 using DisputenPWA.Domain.GroupAggregate.Helpers;
-using DisputenPWA.Domain.GroupAggregate.Queries;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using Newtonsoft.Json.Serialization;
+using DisputenPWA.Infrastructure.Connectors.GraphQLResolver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Connectors.Groups
 {
     public interface IGroupConnector
     {
-        //Task<Group> GetGroup(Guid id);
-        //Task<Group> GetGroup(Guid id, DateTime lowestEndDate, DateTime highestStartDate);
         Task<Group> GetGroup(Guid groupId, DateTime lowestEndDate,
             DateTime highestStartDate, GroupPropertyHelper helper);
         Task Create(Group newGroup);
@@ -34,15 +23,15 @@ namespace DisputenPWA.Infrastructure.Connectors.Groups
     public class GroupConnector : IGroupConnector
     {
         private readonly IGroupRepository _groupRepository;
-        private readonly IAppEventRepository _eventRepository;
+        private readonly IGraphQLResolver _graphQLResolver;
 
         public GroupConnector(
             IGroupRepository groupRepository,
-            IAppEventRepository eventRepository
+            IGraphQLResolver graphQLResolver
             )
         {
             _groupRepository = groupRepository;
-            _eventRepository = eventRepository;
+            _graphQLResolver = graphQLResolver;
         }
 
         public async Task<Group> GetGroup(Guid id, 
@@ -50,19 +39,7 @@ namespace DisputenPWA.Infrastructure.Connectors.Groups
             DateTime highestStartDate, 
             GroupPropertyHelper helper)
         {
-            // zie stappen.txt
-            var queryable = _groupRepository.GetQueryable().Where(x => x.Id == id);
-            var group = await _groupRepository.GetFirstOrDefault(queryable, helper);
-            if (helper.GetAppEvents)
-            {
-                var eventQueryable = _eventRepository.GetQueryable().Where(e => e.GroupId == id &&
-                    e.EndTime > lowestEndDate &&
-                        e.StartTime < highestStartDate);
-                var events = await _eventRepository.GetAll(eventQueryable, helper.AppEventPropertyHelper);
-                group.AppEvents = events;
-            }
-            
-            return group;
+            return await _graphQLResolver.ResolveGroup(id, helper);
         }
 
         public async Task Create(Group newGroup)

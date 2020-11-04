@@ -21,6 +21,7 @@ namespace DisputenPWA.Domain.EventAggregate
         {
             return new DALAppEvent
             {
+                Id = Id,
                 Name = Name,
                 Description = Description,
                 StartTime = StartTime,

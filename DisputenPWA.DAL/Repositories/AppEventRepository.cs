@@ -43,12 +43,12 @@ namespace DisputenPWA.DAL.Repositories
                 .Select(x =>
                     new AppEvent
                     {
-                        Id = helper.GetId ? x.Id : Guid.Empty,
+                        Id = x.Id,
                         Name = helper.GetName ? x.Name : null,
                         Description = helper.GetDescription ? x.Description : null,
                         StartTime = helper.GetStartTime ? x.StartTime : new DateTime(),
                         EndTime = helper.GetEndTime ? x.EndTime : new DateTime(),
-                        GroupId = helper.GetGroupId ? x.GroupId : Guid.Empty,
+                        GroupId = x.GroupId,
                     });
         }
     }

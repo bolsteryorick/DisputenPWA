@@ -12,6 +12,7 @@ using DisputenPWA.Domain.GroupAggregate.DALObject;
 using DisputenPWA.Domain.GroupAggregate.Mappers;
 using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.AppEvents;
+using DisputenPWA.Infrastructure.Connectors.GraphQLResolver;
 using DisputenPWA.Infrastructure.Connectors.Groups;
 using DisputenPWA.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -58,6 +59,8 @@ namespace DisputenWebsite.API
 
             services.AddTransient<IAppEventRepository, AppEventRepository>();
             services.AddTransient<IAppEventConnector, AppEventConnector>();
+
+            services.AddTransient<IGraphQLResolver, GraphQLResolver>();
 
             services.Configure<IISServerOptions>(options =>
             {

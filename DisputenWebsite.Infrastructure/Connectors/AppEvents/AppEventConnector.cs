@@ -1,16 +1,10 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using DisputenPWA.DAL.Repositories;
-using DisputenPWA.DAL.Repositories.Base;
+﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DALObject;
 using DisputenPWA.Domain.EventAggregate.Helpers;
-using DisputenPWA.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
+using DisputenPWA.Infrastructure.Connectors.GraphQLResolver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Connectors.AppEvents
@@ -28,19 +22,20 @@ namespace DisputenPWA.Infrastructure.Connectors.AppEvents
     public class AppEventConnector : IAppEventConnector
     {
         private readonly IAppEventRepository _appEventRepository;
+        private readonly IGraphQLResolver _graphQLResolver;
 
         public AppEventConnector(
-            IAppEventRepository appEventRepository
+            IAppEventRepository appEventRepository,
+            IGraphQLResolver graphQLResolver
             )
         {
             _appEventRepository = appEventRepository;
+            _graphQLResolver = graphQLResolver;
         }
 
         public async Task<AppEvent> GetAppEvent(Guid id, AppEventPropertyHelper helper)
         {
-            // zie stappen.txt
-            var queryable = _appEventRepository.GetQueryable().Where(x => x.Id == id);
-            return await _appEventRepository.GetFirstOrDefault(queryable, helper);
+            return await _graphQLResolver.ResolveAppEvent(id, helper);
         }
 
         public async Task Create(AppEvent newAppEvent)

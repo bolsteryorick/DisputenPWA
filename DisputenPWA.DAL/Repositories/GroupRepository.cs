@@ -32,7 +32,7 @@ namespace DisputenPWA.DAL.Repositories
                 .Select(x =>
                     new Group
                     {
-                        Id = helper.GetId ? x.Id : Guid.Empty,
+                        Id = helper.GetIdForGraphQL ? x.Id : Guid.Empty,
                         Name = helper.GetName ? x.Name : null,
                         Description = helper.GetDescription ? x.Description : null,
                     })
@@ -57,7 +57,7 @@ namespace DisputenPWA.DAL.Repositories
                 .Select(x =>
                     new Group
                     {
-                        Id = helper.GetId ? x.Id : Guid.Empty,
+                        Id = x.Id,
                         Name = helper.GetName ? x.Name : null,
                         Description = helper.GetDescription ? x.Description : null,
                     });

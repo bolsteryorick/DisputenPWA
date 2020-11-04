@@ -25,14 +25,22 @@ namespace DisputenPWA.Application.Groups.Handlers.Queries
 
         public async Task<GetGroupQueryResult> Handle(GetGroupQuery request, CancellationToken cancellationToken)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             var group = await GetGroup(request);
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            group.Name = elapsedMs.ToString();
             return new GetGroupQueryResult(group);
         }
 
         public async Task<Group> GetGroup(GetGroupQuery request)
         {
-            //return await _groupConnector.GetGroup(request);
-            return new Group();
+            return await _groupConnector.GetGroup(
+                request.GroupId, 
+                request.LowestEndDate ?? EventRange.LowestEndDate, 
+                request.HighestStartDate ?? EventRange.HighestStartDate, 
+                request.GroupPropertyHelper
+                );
         }
     }
 }
