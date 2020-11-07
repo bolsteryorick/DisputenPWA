@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.Queries;
 using DisputenPWA.Domain.EventAggregate.Queries.Results;
-using DisputenPWA.Infrastructure.Connectors.AppEvents;
+using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DisputenPWA.Application.AppEvents.Handlers.Queries
 {
-    public class GetAppEventHandler : IRequestHandler<GetAppEventQuery, GetAppEventQueryResult>
+    public class GetAppEventHandler : IRequestHandler<AppEventQuery, GetAppEventQueryResult>
     {
         private readonly IAppEventConnector _appEventConnector;
 
@@ -22,10 +22,9 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Queries
             _appEventConnector = appEventConnector;
         }
 
-        public async Task<GetAppEventQueryResult> Handle(GetAppEventQuery request, CancellationToken cancellationToken)
+        public async Task<GetAppEventQueryResult> Handle(AppEventQuery request, CancellationToken cancellationToken)
         {
-            //var appEvent = await _appEventConnector.GetAppEvent(request.EventId);
-            var appEvent = new AppEvent();
+            var appEvent = await _appEventConnector.GetAppEvent(request.EventId, request.AppEventPropertyHelper);
             return new GetAppEventQueryResult(appEvent);
         }
     }

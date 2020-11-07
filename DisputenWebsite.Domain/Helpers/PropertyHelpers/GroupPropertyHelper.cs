@@ -13,10 +13,9 @@ namespace DisputenPWA.Domain.GroupAggregate.Helpers
 {
     public class GroupPropertyHelper : PropertyHelperBase
     {
-        public bool GetIdForGraphQL { get; set; }
-        public bool GetName { get; private set; }
-        public bool GetDescription { get; private set; }
-        public bool GetAppEvents { get; private set; }
+        public bool GetName { get; set; }
+        public bool GetDescription { get; set; }
+        public bool GetAppEvents { get; set; }
 
         public AppEventPropertyHelper AppEventPropertyHelper { get; private set; }
 
@@ -25,26 +24,28 @@ namespace DisputenPWA.Domain.GroupAggregate.Helpers
             return GetAppEvents && AppEventPropertyHelper != null;
         }
 
-        public bool GetId()
-        {
-            return GetIdForGraphQL || CanGetAppEvents();
-        }
-
-        public GroupPropertyHelper(IEnumerable<Field> fields)
+        public GroupPropertyHelper(
+            IEnumerable<Field> fields,
+            DateTime? lowestEndDate,
+            DateTime? highestStartDate
+            )
         {
             var propertyNames = GetPropertyNames(fields);
             foreach (var name in propertyNames)
             {
-                if (Equals(name, nameof(Group.Id))) GetIdForGraphQL = true;
-                else if (Equals(name, nameof(Group.Name))) GetName = true;
+                if (Equals(name, nameof(Group.Name))) GetName = true;
                 else if (Equals(name, nameof(Group.Description))) GetDescription = true;
                 else if (Equals(name, nameof(Group.AppEvents))) GetAppEvents = true;
             }
 
-            var appEventFields = GetSubFields(fields.FirstOrDefault(x => x.Name == "appEvents"));
+            var appEventFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == nameof(Group.AppEvents).ToLower()));
             if (appEventFields.Count > 0)
             {
-                AppEventPropertyHelper = new AppEventPropertyHelper(appEventFields);
+                AppEventPropertyHelper = new AppEventPropertyHelper(
+                    appEventFields, 
+                    lowestEndDate, 
+                    highestStartDate
+                );
             }
         }
     }

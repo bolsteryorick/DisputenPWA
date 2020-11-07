@@ -2,17 +2,16 @@
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DALObject;
 using DisputenPWA.Domain.GroupAggregate.Helpers;
-using DisputenPWA.Infrastructure.Connectors.GraphQLResolver;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.Infrastructure.Connectors.Groups
+namespace DisputenPWA.Infrastructure.Connectors.SQL.Groups
 {
     public interface IGroupConnector
     {
-        Task<Group> GetGroup(Guid groupId, DateTime lowestEndDate,
-            DateTime highestStartDate, GroupPropertyHelper helper);
+        Task<Group> GetGroup(Guid groupId, GroupPropertyHelper helper);
         Task Create(Group newGroup);
         Task UpdateGroup(Group updatedGroup);
         Task DeleteGroup(Guid id);
@@ -34,9 +33,7 @@ namespace DisputenPWA.Infrastructure.Connectors.Groups
             _graphQLResolver = graphQLResolver;
         }
 
-        public async Task<Group> GetGroup(Guid id, 
-            DateTime lowestEndDate, 
-            DateTime highestStartDate, 
+        public async Task<Group> GetGroup(Guid id,
             GroupPropertyHelper helper)
         {
             return await _graphQLResolver.ResolveGroup(id, helper);

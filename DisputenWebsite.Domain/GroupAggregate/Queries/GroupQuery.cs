@@ -8,23 +8,17 @@ using System.Text;
 
 namespace DisputenPWA.Domain.GroupAggregate.Queries
 {
-    public class GetGroupQuery : IRequest<GetGroupQueryResult>
+    public class GroupQuery : IRequest<GetGroupQueryResult>
     {
         public Guid GroupId { get; }
-        public DateTime? LowestEndDate { get; }
-        public DateTime? HighestStartDate { get; }
         public GroupPropertyHelper GroupPropertyHelper { get; }
 
-        public GetGroupQuery(
+        public GroupQuery(
             Guid groupId, 
-            DateTime? lowestEndDate, 
-            DateTime? highestStartDate,
             GroupPropertyHelper groupPropertyHelper
             )
         {
             GroupId = groupId;
-            LowestEndDate = lowestEndDate ?? EventRange.LowestEndDate;
-            HighestStartDate = highestStartDate ?? EventRange.HighestStartDate;
             GroupPropertyHelper = groupPropertyHelper;
         }
     }

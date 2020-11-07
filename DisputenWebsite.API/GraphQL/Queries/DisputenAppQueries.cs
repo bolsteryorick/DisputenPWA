@@ -23,22 +23,5 @@ namespace DisputenPWA.API.GraphQL.Queries
             AddGroupQueries(mediator);
             AddAppEventQueries(mediator);
         }
-
-        //private IList<string> GetArgumentNames(ResolveFieldContext<object> context)
-        //{
-        //    return context.SubFields.Select(x => x.Key).ToImmutableList();
-        //}
-
-        //// add a first char of string to lower extension to make this easier
-        //// make it generic somehow, recreate the entire thing
-        //private IList<string> GetSubFieldChildren(ResolveFieldContext<object> context, string subFieldName)
-        //{
-        //    var hasSubField = context.SubFields.ContainsKey(subFieldName);
-        //    if(!hasSubField)
-        //    {
-        //        return new List<string>();
-        //    }
-        //    return context.SubFields[subFieldName].SelectionSet.Children.Select(x => (Field) x).Select(x => x.Name).ToList();
-        //}
     }
 }

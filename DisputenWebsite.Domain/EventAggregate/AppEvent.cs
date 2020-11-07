@@ -12,8 +12,8 @@ namespace DisputenPWA.Domain.EventAggregate
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public Guid GroupId { get; set; }
         public Group Group { get; set; }
 

@@ -17,42 +17,93 @@ namespace DisputenPWA.API.GraphQL.Mutations
             Field<GroupResultType>(
                 "CreateGroup",
                 description: "Creates a group in the database.",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
-                    new QueryArgument<StringGraphType> { Name = "description" }
-                ),
-                resolve: context => mediator.Send(new CreateGroupCommand(context.GetArgument<string>("name"), context.GetArgument<string>("description")), context.CancellationToken).Map(r => ProcessResult(context, r))
+                arguments: CreateGroupArguments(),
+                resolve: context => mediator.Send(CreateGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
 
             Field<GroupResultType>(
                 "UpdateGroup",
                 description: "Updates a group in the database. Properties that are not sent are not updated.",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
-                    new QueryArgument<StringGraphType> { Name = "name" },
-                    new QueryArgument<StringGraphType> { Name = "description" }
-                ),
-                resolve: context => mediator.Send(new UpdateGroupCommand(context.GetArgument<Guid>("id"), context.GetArgument<string>("name"), context.GetArgument<string>("description")), context.CancellationToken).Map(r => ProcessResult(context, r))
+                arguments: UpdateGroupArguments(),
+                resolve: context => mediator.Send(UpdateGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
 
             Field<GroupResultType>(
                 "DeleteGroup",
                 description: "Deletes a group in the database.",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
-                ),
-                resolve: context => mediator.Send(new DeleteGroupCommand(context.GetArgument<Guid>("id")), context.CancellationToken).Map(r => ProcessResult(context, r))
+                arguments: DeleteGroupArguments(),
+                resolve: context => mediator.Send(DeleteGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
 
             Field<GroupResultType>(
                 "SeedGroups",
                 description: "Adds x random groups with random events to database.",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "nrOfGroups" },
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "maxEventsPerGroup" }
-                ),
-                resolve: context => mediator.Send(new SeedGroupsCommand(context.GetArgument<int>("nrOfGroups"), context.GetArgument<int>("maxEventsPerGroup")), context.CancellationToken).Map(r => ProcessResult(context, r))
+                arguments: SeedGroupsArguments(),
+                resolve: context => mediator.Send(SeedGroupsCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
+        }
+
+        private QueryArguments CreateGroupArguments()
+        {
+            return new QueryArguments(
+                new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
+                new QueryArgument<StringGraphType> { Name = "description" }
+            );
+        }
+
+        private CreateGroupCommand CreateGroupCommand(ResolveFieldContext<object> context)
+        {
+            return new CreateGroupCommand(
+                context.GetArgument<string>("name"),
+                context.GetArgument<string>("description")
+            );
+        }
+
+        private QueryArguments UpdateGroupArguments()
+        {
+            return new QueryArguments(
+                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
+                new QueryArgument<StringGraphType> { Name = "name" },
+                new QueryArgument<StringGraphType> { Name = "description" }
+            );
+        }
+
+        private UpdateGroupCommand UpdateGroupCommand(ResolveFieldContext<object> context)
+        {
+            return new UpdateGroupCommand(
+                context.GetArgument<Guid>("id"),
+                context.GetArgument<string>("name"),
+                context.GetArgument<string>("description")
+            );
+        }
+
+        private QueryArguments DeleteGroupArguments()
+        {
+            return new QueryArguments(
+                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
+            );
+        }
+
+        private DeleteGroupCommand DeleteGroupCommand(ResolveFieldContext<object> context)
+        {
+            return new DeleteGroupCommand(
+                context.GetArgument<Guid>("id")
+            );
+        }
+
+        private QueryArguments SeedGroupsArguments()
+        {
+            return new QueryArguments(
+                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
+            );
+        }
+
+        private SeedGroupsCommand SeedGroupsCommand(ResolveFieldContext<object> context)
+        {
+            return new SeedGroupsCommand(
+                context.GetArgument<int>("nrOfGroups"),
+                context.GetArgument<int>("maxEventsPerGroup")
+            );
         }
     }
 }

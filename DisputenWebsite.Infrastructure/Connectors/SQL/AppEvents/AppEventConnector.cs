@@ -2,12 +2,12 @@
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DALObject;
 using DisputenPWA.Domain.EventAggregate.Helpers;
-using DisputenPWA.Infrastructure.Connectors.GraphQLResolver;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.Infrastructure.Connectors.AppEvents
+namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
 {
     public interface IAppEventConnector
     {
