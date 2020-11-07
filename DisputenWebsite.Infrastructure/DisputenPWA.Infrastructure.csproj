@@ -5,16 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.14.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DisputenPWA.DAL\DisputenPWA.DAL.csproj" />
     <ProjectReference Include="..\DisputenWebsite.Domain\DisputenPWA.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="SqlDatabase\Group\" />
   </ItemGroup>
 
 </Project>

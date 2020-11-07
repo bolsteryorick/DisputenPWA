@@ -1,11 +1,8 @@
 ﻿using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.Commands;
 using DisputenPWA.Domain.GroupAggregate.Commands.Results;
-using DisputenPWA.Infrastructure.Connectors.Groups;
+using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,8 +21,11 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
 
         public async Task<CreateGroupCommandResult> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
         {
-            var group = new Group { Name = request.Name, Description = request.Description};
-            await _groupConnector.CreateGroup(group);
+            var group = new Group { 
+                Name = request.Name, 
+                Description = request.Description
+            };
+            await _groupConnector.Create(group);
             return new CreateGroupCommandResult(group);
         }
     }

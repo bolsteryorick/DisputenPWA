@@ -1,25 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.WeatherAggregate;
-using DisputenPWA.Infrastructure.Connectors.Groups;
-using DisputenPWA.Infrastructure.SqlDatabase;
+using DisputenPWA.Infrastructure;
+using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
+using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DisputenWebsite.API
 {
@@ -40,10 +32,17 @@ namespace DisputenWebsite.API
             services.AddControllers();
             services.AddDbContext<DisputenAppContext>(options =>
                 options.UseSqlServer(_configuration.GetValue<string>("DatabaseConnectionString")));
-            services.AddTransient<IRepository<WeatherForecast>, Repository<WeatherForecast>>();
-            services.AddTransient<IRepository<Group>, Repository<Group>>();
-            services.AddTransient<ISqlDatabaseConnector, SqlDatabaseConnector>();
+            //services.AddCosmosDb(_configuration);
+
+            services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<IGroupConnector, GroupConnector>();
+            services.AddTransient<ISeedingService, SeedingService>();
+
+            services.AddTransient<IAppEventRepository, AppEventRepository>();
+            services.AddTransient<IAppEventConnector, AppEventConnector>();
+
+            services.AddTransient<IGraphQLResolver, GraphQLResolver>();
+
             services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
