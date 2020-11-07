@@ -1,13 +1,9 @@
 ﻿using DisputenPWA.Domain.EventAggregate.Helpers;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.Helpers;
 using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using GraphQL.Language.AST;
-using GraphQL.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DisputenPWA.Domain.GroupAggregate.Helpers
 {

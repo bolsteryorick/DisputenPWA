@@ -1,10 +1,6 @@
 ﻿using DisputenPWA.API.GraphQL.AppEvents;
 using DisputenPWA.Domain.GroupAggregate;
 using GraphQL.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DisputenPWA.API.GraphQL.Groups
 {

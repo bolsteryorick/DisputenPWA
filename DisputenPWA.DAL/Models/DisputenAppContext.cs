@@ -1,13 +1,6 @@
-﻿using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DALObject;
-using DisputenPWA.Domain.GroupAggregate;
+﻿using DisputenPWA.Domain.EventAggregate.DALObject;
 using DisputenPWA.Domain.GroupAggregate.DALObject;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace DisputenPWA.DAL.Models
 {

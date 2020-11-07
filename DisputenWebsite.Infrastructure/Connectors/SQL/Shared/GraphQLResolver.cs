@@ -3,11 +3,8 @@ using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.Helpers;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.Helpers;
-using DisputenPWA.Domain.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared

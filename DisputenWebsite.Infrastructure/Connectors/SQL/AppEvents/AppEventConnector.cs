@@ -62,8 +62,8 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
 
         public async Task<AppEvent> UpdateProperties(Dictionary<string, object> properties, Guid id)
         {
-            var dalGroup = new DALAppEvent { Id = id };
-            var appEvent = await _appEventRepository.UpdateProperties(dalGroup, properties);
+            var appEvent = await _appEventRepository
+                .UpdateProperties(new DALAppEvent { Id = id }, properties);
             return appEvent.CreateAppEvent();
         }
     }

@@ -1,11 +1,4 @@
-﻿using DisputenPWA.API.Extensions;
-using DisputenPWA.API.GraphQL.AppEvents;
-using DisputenPWA.API.GraphQL.Groups;
-using DisputenPWA.Domain.EventAggregate.Commands;
-using DisputenPWA.Domain.GroupAggregate.Commands;
-using GraphQL.Types;
-using MediatR;
-using System;
+﻿using MediatR;
 
 namespace DisputenPWA.API.GraphQL.Mutations
 {

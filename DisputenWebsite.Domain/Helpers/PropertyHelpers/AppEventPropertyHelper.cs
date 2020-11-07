@@ -5,7 +5,6 @@ using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DisputenPWA.Domain.EventAggregate.Helpers
 {
@@ -18,8 +17,8 @@ namespace DisputenPWA.Domain.EventAggregate.Helpers
         public bool GetGroup { get; set; }
         public GroupPropertyHelper GroupPropertyHelper { get; set; }
 
-        public DateTime? LowestEndDate { get; set; }
-        public DateTime? HighestStartDate { get; set; }
+        public DateTime LowestEndDate { get; set; }
+        public DateTime HighestStartDate { get; set; }
 
         public bool CanGetGroup()
         {

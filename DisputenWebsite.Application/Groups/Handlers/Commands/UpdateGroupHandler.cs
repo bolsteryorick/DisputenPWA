@@ -1,14 +1,8 @@
 ﻿using DisputenPWA.Application.Base;
-using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.Commands;
 using DisputenPWA.Domain.GroupAggregate.Commands.Results;
-using DisputenPWA.Domain.Hierarchy;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

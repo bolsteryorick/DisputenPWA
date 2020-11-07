@@ -4,10 +4,8 @@ using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DALObject;
 using DisputenPWA.Domain.EventAggregate.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.DAL.Repositories

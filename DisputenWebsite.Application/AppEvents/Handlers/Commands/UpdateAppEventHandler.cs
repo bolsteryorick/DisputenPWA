@@ -1,10 +1,8 @@
 ﻿using DisputenPWA.Application.Base;
-using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.Commands;
 using DisputenPWA.Domain.EventAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

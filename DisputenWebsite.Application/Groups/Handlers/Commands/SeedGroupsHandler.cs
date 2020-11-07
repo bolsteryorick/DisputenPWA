@@ -2,9 +2,6 @@
 using DisputenPWA.Domain.GroupAggregate.Commands.Results;
 using DisputenPWA.Infrastructure;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

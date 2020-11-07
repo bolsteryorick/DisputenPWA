@@ -2,7 +2,6 @@
 using DisputenPWA.Domain.GroupAggregate.DALObject;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DisputenPWA.DAL.Models
 {

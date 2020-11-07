@@ -1,9 +1,6 @@
 ﻿using DisputenPWA.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Extensions

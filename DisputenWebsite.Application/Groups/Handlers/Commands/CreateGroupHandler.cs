@@ -3,9 +3,6 @@ using DisputenPWA.Domain.GroupAggregate.Commands;
 using DisputenPWA.Domain.GroupAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -1,10 +1,7 @@
-using AutoMapper;
 using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.EventAggregate.Mappers;
-using DisputenPWA.Domain.GroupAggregate.Mappers;
 using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
@@ -30,16 +27,6 @@ namespace DisputenWebsite.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Auto Mapper Configurations
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new AppEventMapper());
-                mc.AddProfile(new GroupMapper());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-
             services.AddMediatr();
             services.AddGraphQLConfiguration();
             services.AddControllers();

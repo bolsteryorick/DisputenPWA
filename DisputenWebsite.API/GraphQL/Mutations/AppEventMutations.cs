@@ -4,9 +4,6 @@ using DisputenPWA.Domain.EventAggregate.Commands;
 using GraphQL.Types;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DisputenPWA.API.GraphQL.Mutations
 {

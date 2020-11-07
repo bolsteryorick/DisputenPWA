@@ -63,8 +63,8 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Groups
 
         public async Task<Group> UpdateProperties(Dictionary<string, object> properties, Guid id)
         {
-            var dalGroup = new DALGroup { Id = id };
-            var group = await _groupRepository.UpdateProperties(dalGroup, properties);
+            var group = await _groupRepository
+                .UpdateProperties(new DALGroup { Id = id }, properties);
             return group.CreateGroup();
         }
     }
