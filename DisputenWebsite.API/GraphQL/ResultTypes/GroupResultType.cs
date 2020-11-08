@@ -1,4 +1,4 @@
-﻿using DisputenPWA.API.GraphQL.AppEvents;
+﻿using DisputenPWA.API.GraphQL.ResultTypes;
 using DisputenPWA.Domain.GroupAggregate;
 using GraphQL.Types;
 

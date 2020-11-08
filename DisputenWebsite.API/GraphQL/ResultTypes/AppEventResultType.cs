@@ -2,7 +2,7 @@
 using DisputenPWA.Domain.EventAggregate;
 using GraphQL.Types;
 
-namespace DisputenPWA.API.GraphQL.AppEvents
+namespace DisputenPWA.API.GraphQL.ResultTypes
 {
     public class AppEventResultType : ObjectGraphType<AppEvent>
     {

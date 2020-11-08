@@ -8,6 +8,7 @@ using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,21 @@ namespace DisputenWebsite.API
             services.AddControllers();
             services.AddDbContext<DisputenAppContext>(options =>
                 options.UseSqlServer(_configuration.GetValue<string>("DatabaseConnectionString")));
+            services
+                .AddDefaultIdentity<IdentityUser>(
+                    options => options.SignIn.RequireConfirmedAccount = false
+                    )
+                .AddEntityFrameworkStores<DisputenAppContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Lockout settings.
+                options.Lockout.AllowedForNewUsers = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            });
             //services.AddCosmosDb(_configuration);
 
             services.AddTransient<IGroupRepository, GroupRepository>();

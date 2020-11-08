@@ -1,10 +1,12 @@
 ﻿using DisputenPWA.Domain.EventAggregate.DALObject;
 using DisputenPWA.Domain.GroupAggregate.DALObject;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DisputenPWA.DAL.Models
 {
-    public class DisputenAppContext : DbContext
+    public class DisputenAppContext : IdentityDbContext<IdentityUser>
     {
         public DisputenAppContext(DbContextOptions<DisputenAppContext> options)
            : base(options)
@@ -22,6 +24,7 @@ namespace DisputenPWA.DAL.Models
             var seedData = new SeedData(1000, 12);
             modelBuilder.Entity<DALGroup>().HasData(seedData.DALGroups);
             modelBuilder.Entity<DALAppEvent>().HasData(seedData.DALAppEvents);
+            base.OnModelCreating(modelBuilder);
         }
 
        
