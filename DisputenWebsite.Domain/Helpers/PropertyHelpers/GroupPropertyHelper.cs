@@ -1,23 +1,29 @@
-﻿using DisputenPWA.Domain.EventAggregate.Helpers;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
+﻿using DisputenPWA.Domain.GroupAggregate;
 using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DisputenPWA.Domain.GroupAggregate.Helpers
+namespace DisputenPWA.Domain.Helpers.PropertyHelpers
 {
     public class GroupPropertyHelper : PropertyHelperBase
     {
-        public bool GetName { get; set; }
-        public bool GetDescription { get; set; }
-        public bool GetAppEvents { get; set; }
+        public bool GetName { get; }
+        public bool GetDescription { get; }
+        public bool GetAppEvents { get; }
+        public bool GetMembers { get; }
 
-        public AppEventPropertyHelper AppEventPropertyHelper { get; private set; }
+        public AppEventPropertyHelper AppEventPropertyHelper { get; }
+        public MemberPropertyHelper MemberPropertyHelper { get; }
 
         public bool CanGetAppEvents()
         {
             return GetAppEvents && AppEventPropertyHelper != null;
+        }
+
+        public bool CanGetMembers()
+        {
+            return GetMembers && MemberPropertyHelper != null;
         }
 
         public GroupPropertyHelper(
@@ -32,17 +38,10 @@ namespace DisputenPWA.Domain.GroupAggregate.Helpers
                 if (Equals(name, nameof(Group.Name))) GetName = true;
                 else if (Equals(name, nameof(Group.Description))) GetDescription = true;
                 else if (Equals(name, nameof(Group.AppEvents))) GetAppEvents = true;
+                else if (Equals(name, nameof(Group.Members))) GetMembers = true;
             }
-
-            var appEventFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == nameof(Group.AppEvents).ToLower()));
-            if (appEventFields.Count > 0)
-            {
-                AppEventPropertyHelper = new AppEventPropertyHelper(
-                    appEventFields, 
-                    lowestEndDate, 
-                    highestStartDate
-                );
-            }
+            AppEventPropertyHelper = GetAppEventPropertyHelper(fields, nameof(Group.AppEvents), lowestEndDate, highestStartDate);
+            MemberPropertyHelper = GetMemberPropertyHelper(fields, nameof(Group.Members));
         }
     }
 }

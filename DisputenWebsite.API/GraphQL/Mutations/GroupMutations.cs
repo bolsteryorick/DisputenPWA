@@ -91,7 +91,9 @@ namespace DisputenPWA.API.GraphQL.Mutations
         private QueryArguments SeedGroupsArguments()
         {
             return new QueryArguments(
-                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
+                new QueryArgument<IntGraphType> { Name = "nrOfGroups" },
+                new QueryArgument<IntGraphType> { Name = "maxEventsPerGroup" },
+                new QueryArgument<IntGraphType> { Name = "maxMembersPerGroup" }
             );
         }
 
@@ -99,7 +101,8 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             return new SeedGroupsCommand(
                 context.GetArgument<int>("nrOfGroups"),
-                context.GetArgument<int>("maxEventsPerGroup")
+                context.GetArgument<int>("maxEventsPerGroup"),
+                context.GetArgument<int>("maxMembersPerGroup")
             );
         }
     }

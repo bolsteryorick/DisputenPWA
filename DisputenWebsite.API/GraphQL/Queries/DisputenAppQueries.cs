@@ -8,6 +8,7 @@ namespace DisputenPWA.API.GraphQL.Queries
         {
             AddGroupQueries(mediator);
             AddAppEventQueries(mediator);
+            AddMemberQueries(mediator);
         }
     }
 }

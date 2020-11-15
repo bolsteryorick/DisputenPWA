@@ -1,6 +1,7 @@
 ﻿using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.GroupAggregate.DALObject;
+using DisputenPWA.Domain.GroupAggregate.DalObject;
 using DisputenPWA.Domain.Hierarchy;
+using DisputenPWA.Domain.MemberAggregate;
 using System.Collections.Generic;
 
 namespace DisputenPWA.Domain.GroupAggregate
@@ -10,10 +11,11 @@ namespace DisputenPWA.Domain.GroupAggregate
         public string Name { get; set; }
         public string Description { get; set; }
         public IReadOnlyCollection<AppEvent> AppEvents { get; set; }
+        public IReadOnlyCollection<Member> Members { get; set; }
 
-        public DALGroup CreateDALGroup()
+        public DalGroup CreateDalGroup()
         {
-            return new DALGroup
+            return new DalGroup
             {
                 Id = Id,
                 Name = Name,

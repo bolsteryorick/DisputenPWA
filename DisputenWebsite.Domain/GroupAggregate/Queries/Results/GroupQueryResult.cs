@@ -2,9 +2,9 @@
 
 namespace DisputenPWA.Domain.GroupAggregate.Queries.Results
 {
-    public class GetGroupQueryResult : QueryResult<Group>
+    public class GroupQueryResult : QueryResult<Group>
     {
-        public GetGroupQueryResult(Group group)
+        public GroupQueryResult(Group group)
             : base(group)
         {
 

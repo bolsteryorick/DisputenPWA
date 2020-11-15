@@ -20,7 +20,7 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
 
         public async Task<DeleteGroupCommandResult> Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
         {
-            await _groupConnector.DeleteGroup(request.GroupId);
+            await _groupConnector.Delete(request.GroupId);
             return new DeleteGroupCommandResult(null);
         }
     }

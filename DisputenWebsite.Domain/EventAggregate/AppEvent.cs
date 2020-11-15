@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.EventAggregate.DALObject;
+﻿using DisputenPWA.Domain.EventAggregate.DalObject;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.Hierarchy;
 using System;
@@ -14,9 +14,9 @@ namespace DisputenPWA.Domain.EventAggregate
         public Guid GroupId { get; set; }
         public Group Group { get; set; }
 
-        public DALAppEvent CreateDALAppEvent()
+        public DalAppEvent CreateDALAppEvent()
         {
-            return new DALAppEvent
+            return new DalAppEvent
             {
                 Id = Id,
                 Name = Name,

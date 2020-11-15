@@ -1,10 +1,14 @@
+using DisputenPWA.API.Authoriation;
 using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
+using DisputenPWA.Application.Services;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
+using DisputenPWA.Domain.UserAggregate;
 using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
+using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +38,7 @@ namespace DisputenWebsite.API
             services.AddDbContext<DisputenAppContext>(options =>
                 options.UseSqlServer(_configuration.GetValue<string>("DatabaseConnectionString")));
             services
-                .AddDefaultIdentity<IdentityUser>(
+                .AddDefaultIdentity<ApplicationUser>(
                     options => options.SignIn.RequireConfirmedAccount = false
                     )
                 .AddEntityFrameworkStores<DisputenAppContext>();
@@ -53,9 +57,14 @@ namespace DisputenWebsite.API
             services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<IGroupConnector, GroupConnector>();
             services.AddTransient<ISeedingService, SeedingService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<IAppEventRepository, AppEventRepository>();
             services.AddTransient<IAppEventConnector, AppEventConnector>();
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IMemberRepository, MemberRepository>();
+            services.AddTransient<IMemberConnector, MemberConnector>();
 
             services.AddTransient<IGraphQLResolver, GraphQLResolver>();
 
@@ -73,6 +82,8 @@ namespace DisputenWebsite.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
             app.UseGraphQL();
 
             app.UseHttpsRedirection();

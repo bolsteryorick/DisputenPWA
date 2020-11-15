@@ -1,24 +1,23 @@
-﻿using DisputenPWA.Domain.GroupAggregate.Helpers;
+﻿using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.Helpers;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DisputenPWA.Domain.EventAggregate.Helpers
+namespace DisputenPWA.Domain.Helpers.PropertyHelpers
 {
     public class AppEventPropertyHelper : PropertyHelperBase
     {
-        public bool GetName { get; set; }
-        public bool GetDescription { get; set; }
-        public bool GetStartTime { get; set; }
-        public bool GetEndTime { get; set; }
-        public bool GetGroup { get; set; }
-        public GroupPropertyHelper GroupPropertyHelper { get; set; }
+        public bool GetName { get; }
+        public bool GetDescription { get; }
+        public bool GetStartTime { get; }
+        public bool GetEndTime { get; }
+        public bool GetGroup { get; }
+        public GroupPropertyHelper GroupPropertyHelper { get; }
 
-        public DateTime LowestEndDate { get; set; }
-        public DateTime HighestStartDate { get; set; }
+        public DateTime LowestEndDate { get; }
+        public DateTime HighestStartDate { get; }
 
         public bool CanGetGroup()
         {
@@ -26,7 +25,7 @@ namespace DisputenPWA.Domain.EventAggregate.Helpers
         }
 
         public AppEventPropertyHelper(
-            IEnumerable<Field> fields, 
+            IEnumerable<Field> fields,
             DateTime? lowestEndDate = null,
             DateTime? highestStartDate = null
             )
@@ -43,11 +42,7 @@ namespace DisputenPWA.Domain.EventAggregate.Helpers
             LowestEndDate = lowestEndDate ?? EventRange.LowestEndDate;
             HighestStartDate = highestStartDate ?? EventRange.HighestStartDate;
 
-            var groupFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == nameof(AppEvent.Group).ToLower()));
-            if(groupFields.Count > 0)
-            {
-                GroupPropertyHelper = new GroupPropertyHelper(groupFields, lowestEndDate, highestStartDate);
-            }
+            GroupPropertyHelper = GetGroupPropertyHelper(fields, nameof(AppEvent.Group), lowestEndDate, highestStartDate);
         }
     }
 }

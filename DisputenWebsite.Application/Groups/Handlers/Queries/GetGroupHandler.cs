@@ -1,4 +1,5 @@
-﻿using DisputenPWA.Domain.GroupAggregate.Queries;
+﻿using DisputenPWA.Domain.GroupAggregate;
+using DisputenPWA.Domain.GroupAggregate.Queries;
 using DisputenPWA.Domain.GroupAggregate.Queries.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using MediatR;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DisputenPWA.Application.Groups.Handlers.Queries
 {
-    public class GetGroupHandler : IRequestHandler<GroupQuery, GetGroupQueryResult>
+    public class GetGroupHandler : IRequestHandler<GroupQuery, GroupQueryResult>
     {
         private readonly IGroupConnector _groupConnector;
 
@@ -18,10 +19,10 @@ namespace DisputenPWA.Application.Groups.Handlers.Queries
             _groupConnector = groupConnector;
         }
 
-        public async Task<GetGroupQueryResult> Handle(GroupQuery request, CancellationToken cancellationToken)
+        public async Task<GroupQueryResult> Handle(GroupQuery request, CancellationToken cancellationToken)
         {
             var group = await _groupConnector.GetGroup(request.GroupId, request.GroupPropertyHelper);
-            return new GetGroupQueryResult(group);
+            return new GroupQueryResult(group);
         }
     }
 }

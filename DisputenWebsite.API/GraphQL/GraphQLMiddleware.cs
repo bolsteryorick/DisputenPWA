@@ -1,8 +1,10 @@
-﻿using GraphQL;
+﻿using DisputenPWA.Application.Services;
+using GraphQL;
 using GraphQL.Http;
 using GraphQL.Server.Transports.AspNetCore.Common;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -19,17 +21,21 @@ namespace DisputenPWA.API.GraphQL
         private readonly GraphQLSettings _settings;
         private readonly IDocumentExecuter _executer;
         private readonly IDocumentWriter _writer;
+        private readonly IUserService _userService;
 
         public GraphQLMiddleware(
             RequestDelegate next,
             GraphQLSettings settings,
             IDocumentExecuter executer,
-            IDocumentWriter writer)
+            IDocumentWriter writer,
+            IUserService userService
+            )
         {
             _next = next;
             _settings = settings;
             _executer = executer;
             _writer = writer;
+            _userService = userService;
         }
 
         public async Task Invoke(HttpContext context, ISchema schema)
@@ -51,6 +57,11 @@ namespace DisputenPWA.API.GraphQL
 
         private async Task ExecuteAsync(HttpContext context, ISchema schema)
         {
+            if (!_userService.IsAuthorised())
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return;
+            }
 
             var request = Deserialize<GraphQLRequest>(context.Request.Body);
 

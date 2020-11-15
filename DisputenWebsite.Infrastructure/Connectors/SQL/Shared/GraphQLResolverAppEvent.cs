@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DALObject;
-using DisputenPWA.Domain.EventAggregate.Helpers;
+using DisputenPWA.Domain.EventAggregate.DalObject;
+using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -41,7 +41,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared
             return await _eventRepository.GetFirstOrDefault(eventQueryable, helper);
         }
 
-        private IQueryable<DALAppEvent> AppEventQueryable(Guid appEventId, DateTime lowestEndDate, DateTime highestStartDate)
+        private IQueryable<DalAppEvent> AppEventQueryable(Guid appEventId, DateTime lowestEndDate, DateTime highestStartDate)
         {
             return _eventRepository.GetQueryable().Where(e => e.Id == appEventId &&
                     e.EndTime > lowestEndDate &&
@@ -54,7 +54,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared
             return await _eventRepository.GetAll(eventsQueryable, helper);
         }
 
-        private IQueryable<DALAppEvent> AppEventsQueryable(IEnumerable<Guid> groupIds, DateTime lowestEndDate, DateTime highestStartDate)
+        private IQueryable<DalAppEvent> AppEventsQueryable(IEnumerable<Guid> groupIds, DateTime lowestEndDate, DateTime highestStartDate)
         {
             return _eventRepository
                 .GetQueryable()
@@ -68,9 +68,10 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared
         private async Task<IList<AppEvent>> AddGroupsToAppEvents(IList<AppEvent> events, IEnumerable<Guid> groupIds, AppEventPropertyHelper helper)
         {
             var groups = await ResolveGroups(groupIds, helper.GroupPropertyHelper);
+            var groupsDictionary = groups.ToDictionary(x => x.Id);
             foreach (var appEvent in events)
             {
-                appEvent.Group = groups.FirstOrDefault(x => x.Id == appEvent.GroupId);
+                if(groupsDictionary.TryGetValue(appEvent.GroupId, out var group)) appEvent.Group = group;
             }
             return events;
         }

@@ -1,8 +1,8 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
 using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DALObject;
-using DisputenPWA.Domain.EventAggregate.Helpers;
+using DisputenPWA.Domain.EventAggregate.DalObject;
+using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,32 +10,32 @@ using System.Threading.Tasks;
 
 namespace DisputenPWA.DAL.Repositories
 {
-    public interface IAppEventRepository : IRepository<DALAppEvent>
+    public interface IAppEventRepository : IRepository<DalAppEvent>
     {
-        Task<AppEvent> GetFirstOrDefault(IQueryable<DALAppEvent> queryable, AppEventPropertyHelper helper);
-        Task<List<AppEvent>> GetAll(IQueryable<DALAppEvent> queryable, AppEventPropertyHelper helper);
+        Task<AppEvent> GetFirstOrDefault(IQueryable<DalAppEvent> queryable, AppEventPropertyHelper helper);
+        Task<List<AppEvent>> GetAll(IQueryable<DalAppEvent> queryable, AppEventPropertyHelper helper);
     }
 
-    public class AppEventRepository : Repository<DALAppEvent>, IAppEventRepository
+    public class AppEventRepository : Repository<DalAppEvent>, IAppEventRepository
     {
         public AppEventRepository(DisputenAppContext context) : base(context)
         {
 
         }
 
-        public async Task<AppEvent> GetFirstOrDefault(IQueryable<DALAppEvent> queryable, AppEventPropertyHelper helper)
+        public async Task<AppEvent> GetFirstOrDefault(IQueryable<DalAppEvent> queryable, AppEventPropertyHelper helper)
         {
             var selectAppEventQuery = SelectAppEvent(queryable, helper);
             return await selectAppEventQuery.FirstOrDefaultAsync();
         }
 
-        public async Task<List<AppEvent>> GetAll(IQueryable<DALAppEvent> queryable, AppEventPropertyHelper helper)
+        public async Task<List<AppEvent>> GetAll(IQueryable<DalAppEvent> queryable, AppEventPropertyHelper helper)
         {
             var selectAppEventQuery = SelectAppEvent(queryable, helper);
             return await selectAppEventQuery.ToListAsync();
         }
 
-        private IQueryable<AppEvent> SelectAppEvent(IQueryable<DALAppEvent> queryable, AppEventPropertyHelper helper)
+        private IQueryable<AppEvent> SelectAppEvent(IQueryable<DalAppEvent> queryable, AppEventPropertyHelper helper)
         {
             return queryable
                 .Select(x =>
