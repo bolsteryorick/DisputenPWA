@@ -3,6 +3,7 @@ using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DalObject;
 using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Groups
 
         public async Task<Group> GetGroup(Guid id, GroupPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveGroup(id, helper);
+            return await _graphQLResolver.ResolveGroupById(id, helper);
         }
 
         public async Task Create(Group group)

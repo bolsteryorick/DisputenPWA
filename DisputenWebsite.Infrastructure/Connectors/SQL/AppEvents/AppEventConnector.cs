@@ -3,6 +3,7 @@ using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DalObject;
 using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
 
         public async Task<AppEvent> GetAppEvent(Guid id, AppEventPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveAppEvent(id, helper);
+            return await _graphQLResolver.ResolveAppEventById(id, helper);
         }
 
         public async Task Create(AppEvent newAppEvent)

@@ -7,16 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared
+namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver
 {
     public interface IGraphQLResolver
     {
-        Task<Group> ResolveGroup(Guid id, GroupPropertyHelper helper);
-        Task<IReadOnlyCollection<Group>> ResolveGroups(IEnumerable<Guid> groupIds, GroupPropertyHelper helper);
-        Task<AppEvent> ResolveAppEvent(Guid appEventId, AppEventPropertyHelper helper);
-        Task<IReadOnlyCollection<AppEvent>> ResolveAppEvents(IEnumerable<Guid> groupIds, AppEventPropertyHelper helper);
-        Task<Member> ResolveMember(Guid id, MemberPropertyHelper helper);
-        Task<IReadOnlyCollection<Member>> ResolveMembersForGroups(IEnumerable<Guid> groupIds, MemberPropertyHelper helper);
+        Task<Group> ResolveGroupById(Guid id, GroupPropertyHelper helper);
+        Task<IReadOnlyCollection<Group>> ResolveGroupsByIds(IEnumerable<Guid> groupIds, GroupPropertyHelper helper);
+        Task<AppEvent> ResolveAppEventById(Guid appEventId, AppEventPropertyHelper helper);
+        Task<IReadOnlyCollection<AppEvent>> ResolveAppEventsFromGroupIds(IEnumerable<Guid> groupIds, AppEventPropertyHelper helper);
+        Task<Member> ResolveMemberById(Guid id, MemberPropertyHelper helper);
+        Task<IReadOnlyCollection<Member>> ResolveMembersByGroupIds(IEnumerable<Guid> groupIds, MemberPropertyHelper helper);
     }
 
     public partial class GraphQLResolver : IGraphQLResolver

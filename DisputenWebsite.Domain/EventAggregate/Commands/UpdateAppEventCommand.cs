@@ -10,8 +10,8 @@ namespace DisputenPWA.Domain.EventAggregate.Commands
             Guid id,
             string name,
             string description,
-            DateTime startTime,
-            DateTime endTime
+            DateTime? startTime,
+            DateTime? endTime
             )
         {
             Id = id;
@@ -24,7 +24,7 @@ namespace DisputenPWA.Domain.EventAggregate.Commands
         public Guid Id { get; }
         public string Name { get; }
         public string Description { get; }
-        public DateTime StartTime { get; }
-        public DateTime EndTime { get; }
+        public DateTime? StartTime { get; }
+        public DateTime? EndTime { get; }
     }
 }

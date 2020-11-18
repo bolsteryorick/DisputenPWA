@@ -11,19 +11,16 @@ namespace DisputenPWA.Domain.MemberAggregate.Commands
         public UpdateMemberCommand(
             Guid memberId,
             string userId,
-            bool isAdmin,
-            Guid groupId
+            bool? isAdmin
             )
         {
             MemberId = memberId;
             UserId = userId;
             IsAdmin = isAdmin;
-            GroupId = groupId;
         }
 
         public Guid MemberId { get; }
         public string UserId { get; }
-        public bool IsAdmin { get; }
-        public Guid GroupId { get; }
+        public bool? IsAdmin { get; }
     }
 }

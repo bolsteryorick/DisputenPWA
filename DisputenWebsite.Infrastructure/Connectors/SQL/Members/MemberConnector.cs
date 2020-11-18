@@ -3,6 +3,7 @@ using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.MemberAggregate.DalObject;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,12 +38,12 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Members
 
         public async Task<Member> GetMember(Guid id, MemberPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveMember(id, helper);
+            return await _graphQLResolver.ResolveMemberById(id, helper);
         }
 
         public async Task<IReadOnlyCollection<Member>> GetMembers(Guid groupId, MemberPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveMembersForGroups(new List<Guid> { groupId }, helper);
+            return await _graphQLResolver.ResolveMembersByGroupIds(new List<Guid> { groupId }, helper);
         }
 
         public async Task Create(Member member)

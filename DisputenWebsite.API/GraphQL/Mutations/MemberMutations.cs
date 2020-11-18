@@ -118,8 +118,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
             return new QueryArguments(
                 new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "memberId" },
                 new QueryArgument<StringGraphType> { Name = "userId" },
-                new QueryArgument<BooleanGraphType> { Name = "isAdmin" },
-                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "groupId" }
+                new QueryArgument<BooleanGraphType> { Name = "isAdmin" }
             );
         }
 
@@ -128,8 +127,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
             return new UpdateMemberCommand(
                 context.GetArgument<Guid>("memberId"),
                 context.GetArgument<string>("userId"),
-                context.GetArgument<bool>("isAdmin"),
-                context.GetArgument<Guid>("groupId")
+                context.GetArgument<bool?>("isAdmin")
             );
         }
     }
