@@ -3,6 +3,7 @@ using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Domain.MemberAggregate;
+using DisputenPWA.Domain.UserAggregate;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver
         Task<IReadOnlyCollection<AppEvent>> ResolveAppEventsFromGroupIds(IEnumerable<Guid> groupIds, AppEventPropertyHelper helper);
         Task<Member> ResolveMemberById(Guid id, MemberPropertyHelper helper);
         Task<IReadOnlyCollection<Member>> ResolveMembersByGroupIds(IEnumerable<Guid> groupIds, MemberPropertyHelper helper);
+        Task<User> ResolveUserById(string userId, UserPropertyHelper helper);
+        Task<IReadOnlyCollection<User>> ResolveUsersByIds(IEnumerable<string> userIds, UserPropertyHelper helper);
     }
 
     public partial class GraphQLResolver : IGraphQLResolver

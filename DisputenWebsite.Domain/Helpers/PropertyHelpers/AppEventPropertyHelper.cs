@@ -27,7 +27,8 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
         public AppEventPropertyHelper(
             IEnumerable<Field> fields,
             DateTime? lowestEndDate = null,
-            DateTime? highestStartDate = null
+            DateTime? highestStartDate = null,
+            int depth = 1
             )
         {
             var propertyNames = GetPropertyNames(fields);
@@ -42,7 +43,10 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
             LowestEndDate = lowestEndDate ?? EventRange.LowestEndDate;
             HighestStartDate = highestStartDate ?? EventRange.HighestStartDate;
 
-            GroupPropertyHelper = GetGroupPropertyHelper(fields, nameof(AppEvent.Group), lowestEndDate, highestStartDate);
+            if(CanGoDeeper(depth))
+            {
+                GroupPropertyHelper = GetGroupPropertyHelper(fields, nameof(AppEvent.Group), lowestEndDate, highestStartDate, depth);
+            }
         }
     }
 }

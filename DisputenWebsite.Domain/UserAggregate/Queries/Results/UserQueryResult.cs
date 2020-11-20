@@ -5,9 +5,9 @@ using System.Text;
 
 namespace DisputenPWA.Domain.UserAggregate.Queries.Results
 {
-    public class GetJwtTokenQueryResult : QueryResult<User>
+    public class UserQueryResult : QueryResult<User>
     {
-        public GetJwtTokenQueryResult(User user) : base(user)
+        public UserQueryResult(User user) : base(user)
         {
 
         }

@@ -8,6 +8,13 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
 {
     public class PropertyHelperBase
     {
+        protected const int MaxDepth = 3;
+
+        protected bool CanGoDeeper(int depth)
+        {
+            return depth <= MaxDepth;
+        }
+
         protected bool Equals(string name, string propertyName)
         {
             return name.ToLower() == propertyName.ToLower();
@@ -31,13 +38,14 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
             IEnumerable<Field> fields, 
             string groupFieldName,
             DateTime? lowestEndDate,
-            DateTime? highestStartDate
+            DateTime? highestStartDate,
+            int depth
             )
         {
             var groupFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == groupFieldName.ToLower()));
             if (groupFields.Count > 0)
             {
-                return new GroupPropertyHelper(groupFields, lowestEndDate, highestStartDate);
+                return new GroupPropertyHelper(groupFields, lowestEndDate, highestStartDate, depth + 1);
             }
             return null;
         }
@@ -46,7 +54,8 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
             IEnumerable<Field> fields,
             string appEventFieldName,
             DateTime? lowestEndDate,
-            DateTime? highestStartDate
+            DateTime? highestStartDate,
+            int depth
             )
         {
             var appEventFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == appEventFieldName.ToLower()));
@@ -55,7 +64,8 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
                 return new AppEventPropertyHelper(
                     appEventFields,
                     lowestEndDate,
-                    highestStartDate
+                    highestStartDate,
+                    depth + 1
                 );
             }
             return null;
@@ -63,14 +73,16 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
 
         public MemberPropertyHelper GetMemberPropertyHelper(
             IEnumerable<Field> fields,
-            string memberFieldName
+            string memberFieldName,
+            int depth
             )
         {
             var memberFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == memberFieldName.ToLower()));
             if (memberFields.Count > 0)
             {
                 return new MemberPropertyHelper(
-                    memberFields
+                    memberFields,
+                    depth + 1
                 );
             }
             return null;
@@ -78,14 +90,16 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
 
         public UserPropertyHelper GetUserPropertyHelper(
             IEnumerable<Field> fields,
-            string userFieldName
+            string userFieldName,
+            int depth
             )
         {
             var userFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == userFieldName.ToLower()));
             if (userFields.Count > 0)
             {
                 return new UserPropertyHelper(
-                    userFields
+                    userFields,
+                    depth + 1
                 );
             }
             return null;

@@ -26,13 +26,6 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 );
 
             Field<GroupResultType>(
-                "DeleteGroup",
-                description: "Deletes a group in the database.",
-                arguments: DeleteGroupArguments(),
-                resolve: context => mediator.Send(DeleteGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
-                );
-
-            Field<GroupResultType>(
                 "SeedGroups",
                 description: "Adds x random groups with random events to database.",
                 arguments: SeedGroupsArguments(),
@@ -71,20 +64,6 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 context.GetArgument<Guid>("id"),
                 context.GetArgument<string>("name"),
                 context.GetArgument<string>("description")
-            );
-        }
-
-        private QueryArguments DeleteGroupArguments()
-        {
-            return new QueryArguments(
-                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
-            );
-        }
-
-        private DeleteGroupCommand DeleteGroupCommand(ResolveFieldContext<object> context)
-        {
-            return new DeleteGroupCommand(
-                context.GetArgument<Guid>("id")
             );
         }
 

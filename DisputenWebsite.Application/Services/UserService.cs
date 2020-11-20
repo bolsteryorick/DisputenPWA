@@ -11,6 +11,7 @@ namespace DisputenPWA.Application.Services
     {
         bool IsAuthorised();
         ApplicationUser GetUser();
+        string GetUserId();
     }
     
     public class UserService : IUserService
@@ -32,6 +33,11 @@ namespace DisputenPWA.Application.Services
         public ApplicationUser GetUser()
         {
             return (ApplicationUser)_httpContextAccessor.HttpContext.Items["User"];
+        }
+
+        public string GetUserId()
+        {
+            return ((ApplicationUser)_httpContextAccessor.HttpContext.Items["User"]).Id;
         }
     }
 }

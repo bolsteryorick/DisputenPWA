@@ -35,7 +35,7 @@ namespace DisputenPWA.API.Controllers
         [HttpPost("gettoken")]
         public async Task<IActionResult> GetToken(UserValues values)
         {
-            var result = await _mediator.Send(new GetJwtTokenQuery(values.Email, values.Password));
+            var result = await _mediator.Send(new JwtTokenQuery(values.Email, values.Password));
             return new OkObjectResult(result.Result.JWTToken);
         }
     }

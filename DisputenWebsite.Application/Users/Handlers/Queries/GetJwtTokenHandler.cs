@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace DisputenPWA.Application.Users.Handlers.Queries
 {
-    public class GetJwtTokenHandler : IRequestHandler<GetJwtTokenQuery, GetJwtTokenQueryResult>
+    public class GetJwtTokenHandler : IRequestHandler<JwtTokenQuery, JwtTokenQueryResult>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
@@ -30,7 +30,7 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
             _signInManager = signInManager;
         }
 
-        public async Task<GetJwtTokenQueryResult> Handle(GetJwtTokenQuery request, CancellationToken cancellationToken)
+        public async Task<JwtTokenQueryResult> Handle(JwtTokenQuery request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByNameAsync(request.Email);
 
@@ -41,15 +41,15 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
             return TokenResult(token);
         }
 
-        private async Task<bool> PasswordInCorrect(ApplicationUser user, GetJwtTokenQuery request)
+        private async Task<bool> PasswordInCorrect(ApplicationUser user, JwtTokenQuery request)
         {
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             return !signInResult.Succeeded;
         }
 
-        private GetJwtTokenQueryResult TokenResult(string jwtToken)
+        private JwtTokenQueryResult TokenResult(string jwtToken)
         {
-            return new GetJwtTokenQueryResult(new User { JWTToken = jwtToken });
+            return new JwtTokenQueryResult(new User { JWTToken = jwtToken });
         }
     }
 }

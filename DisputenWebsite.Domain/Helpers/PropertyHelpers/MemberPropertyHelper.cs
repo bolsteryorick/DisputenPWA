@@ -26,7 +26,8 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
         }
 
         public MemberPropertyHelper(
-              IEnumerable<Field> fields
+              IEnumerable<Field> fields,
+              int depth = 1
             )
         {
             var propertyNames = GetPropertyNames(fields);
@@ -36,8 +37,11 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
                 else if (Equals(name, nameof(Member.User))) GetUser = true;
                 else if (Equals(name, nameof(Member.Group))) GetGroup = true;
             }
-            GroupPropertyHelper = GetGroupPropertyHelper(fields, nameof(Member.Group), EventRange.LowestEndDate, EventRange.HighestStartDate);
-            UserPropertyHelper = GetUserPropertyHelper(fields, nameof(Member.User));
+            if (CanGoDeeper(depth))
+            {
+                GroupPropertyHelper = GetGroupPropertyHelper(fields, nameof(Member.Group), EventRange.LowestEndDate, EventRange.HighestStartDate, depth);
+                UserPropertyHelper = GetUserPropertyHelper(fields, nameof(Member.User), depth);
+            }
         }
     }
 }

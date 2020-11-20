@@ -26,7 +26,8 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
         }
 
         public UserPropertyHelper(
-            IEnumerable<Field> fields
+            IEnumerable<Field> fields,
+            int depth = 1
             )
         {
             var propertyNames = GetPropertyNames(fields);
@@ -37,7 +38,10 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
                 else if (Equals(name, nameof(User.UserName))) GetUserName = true;
                 else if (Equals(name, nameof(User.Memberships))) GetGroupMemberships = true;
             }
-            MembershipsPropertyHelper = GetMemberPropertyHelper(fields, nameof(User.Memberships));
+            if (CanGoDeeper(depth))
+            {
+                MembershipsPropertyHelper = GetMemberPropertyHelper(fields, nameof(User.Memberships), depth);
+            }
         }
     }
 }

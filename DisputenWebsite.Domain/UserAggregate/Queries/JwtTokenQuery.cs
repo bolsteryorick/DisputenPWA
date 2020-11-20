@@ -6,9 +6,9 @@ using System.Text;
 
 namespace DisputenPWA.Domain.UserAggregate.Queries
 {
-    public class GetJwtTokenQuery : IRequest<GetJwtTokenQueryResult>
+    public class JwtTokenQuery : IRequest<JwtTokenQueryResult>
     {
-        public GetJwtTokenQuery(string email, string password)
+        public JwtTokenQuery(string email, string password)
         {
             Email = email;
             Password = password;
