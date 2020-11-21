@@ -19,6 +19,30 @@ namespace DisputenPWA.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DisputenPWA.Domain.AttendeeAggregate.DalObject.DalAttendee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppEventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Paid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppEventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Attendees");
+                });
+
             modelBuilder.Entity("DisputenPWA.Domain.EventAggregate.DalObject.DalAppEvent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -286,6 +310,19 @@ namespace DisputenPWA.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("DisputenPWA.Domain.AttendeeAggregate.DalObject.DalAttendee", b =>
+                {
+                    b.HasOne("DisputenPWA.Domain.EventAggregate.DalObject.DalAppEvent", "AppEvent")
+                        .WithMany("Attendances")
+                        .HasForeignKey("AppEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DisputenPWA.Domain.UserAggregate.ApplicationUser", "User")
+                        .WithMany("Attendences")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("DisputenPWA.Domain.EventAggregate.DalObject.DalAppEvent", b =>

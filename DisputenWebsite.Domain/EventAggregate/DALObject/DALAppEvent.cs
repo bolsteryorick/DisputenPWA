@@ -1,6 +1,8 @@
-﻿using DisputenPWA.Domain.GroupAggregate.DalObject;
+﻿using DisputenPWA.Domain.AttendeeAggregate.DalObject;
+using DisputenPWA.Domain.GroupAggregate.DalObject;
 using DisputenPWA.Domain.Hierarchy;
 using System;
+using System.Collections.Generic;
 
 namespace DisputenPWA.Domain.EventAggregate.DalObject
 {
@@ -12,6 +14,7 @@ namespace DisputenPWA.Domain.EventAggregate.DalObject
         public DateTime? EndTime { get; set; }
         public Guid GroupId { get; set; }
         public virtual DalGroup Group { get; set; }
+        public virtual ICollection<DalAttendee> Attendances { get; set; }
 
         public AppEvent CreateAppEvent()
         {

@@ -1,4 +1,5 @@
-﻿using DisputenPWA.Domain.GroupAggregate;
+﻿using DisputenPWA.Domain.AttendeeAggregate;
+using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.Helpers;
 using DisputenPWA.Domain.Hierarchy;
 using GraphQL.Language.AST;
@@ -14,7 +15,9 @@ namespace DisputenPWA.Domain.EventAggregate
         public bool GetStartTime { get; }
         public bool GetEndTime { get; }
         public bool GetGroup { get; }
+        public bool GetAttendees { get; set; }
         public GroupPropertyHelper GroupPropertyHelper { get; }
+        public AttendeePropertyHelper AttendeePropertyHelper { get; }
 
         public DateTime LowestEndDate { get; }
         public DateTime HighestStartDate { get; }
@@ -22,6 +25,11 @@ namespace DisputenPWA.Domain.EventAggregate
         public bool CanGetGroup()
         {
             return GetGroup && GroupPropertyHelper != null;
+        }
+
+        public bool CanGetAttendees()
+        {
+            return GetAttendees && AttendeePropertyHelper != null;
         }
 
         public AppEventPropertyHelper(
@@ -39,6 +47,7 @@ namespace DisputenPWA.Domain.EventAggregate
                 else if (Equals(name, nameof(AppEvent.StartTime))) GetStartTime = true;
                 else if (Equals(name, nameof(AppEvent.EndTime))) GetEndTime = true;
                 else if (Equals(name, nameof(AppEvent.Group))) GetGroup = true;
+                else if (Equals(name, nameof(AppEvent.Attendees))) GetAttendees = true;
             }
             LowestEndDate = lowestEndDate ?? EventRange.LowestEndDate;
             HighestStartDate = highestStartDate ?? EventRange.HighestStartDate;
@@ -46,6 +55,7 @@ namespace DisputenPWA.Domain.EventAggregate
             if (CanGoDeeper(depth))
             {
                 GroupPropertyHelper = GetGroupPropertyHelper(fields, nameof(AppEvent.Group), lowestEndDate, highestStartDate, depth);
+                AttendeePropertyHelper = GetAttendeePropertyHelper(fields, nameof(AppEvent.Attendees), depth);
             }
         }
     }

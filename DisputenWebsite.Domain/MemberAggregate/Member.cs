@@ -19,8 +19,8 @@ namespace DisputenPWA.Domain.MemberAggregate
             return new DalMember
             {
                 Id = Id,
-                IsAdmin = IsAdmin,
                 UserId = UserId,
+                IsAdmin = IsAdmin,
                 GroupId = GroupId
             };
         }

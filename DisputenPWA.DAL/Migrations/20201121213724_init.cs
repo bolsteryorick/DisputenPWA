@@ -213,6 +213,32 @@ namespace DisputenPWA.DAL.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Attendees",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    AppEventId = table.Column<Guid>(nullable: false),
+                    Paid = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attendees_AppEvents_AppEventId",
+                        column: x => x.AppEventId,
+                        principalTable: "AppEvents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Attendees_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AppEvents_GroupId",
                 table: "AppEvents",
@@ -258,6 +284,16 @@ namespace DisputenPWA.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attendees_AppEventId",
+                table: "Attendees",
+                column: "AppEventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Attendees_UserId",
+                table: "Attendees",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Members_GroupId",
                 table: "Members",
                 column: "GroupId");
@@ -270,9 +306,6 @@ namespace DisputenPWA.DAL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AppEvents");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -289,16 +322,22 @@ namespace DisputenPWA.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Attendees");
+
+            migrationBuilder.DropTable(
                 name: "Members");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "AppEvents");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
         }
     }
 }
