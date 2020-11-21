@@ -19,7 +19,7 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
         }
         public async Task<SeedGroupsCommandResult> Handle(SeedGroupsCommand request, CancellationToken cancellationToken)
         {
-            await _seedingService.Seed(request.NrOfGroups, request.MaxEventsPerGroup);
+            await _seedingService.Seed(request.NrOfGroups, request.MaxEventsPerGroup, request.MaxMembersPerGroup);
             return new SeedGroupsCommandResult(null);
         }
     }

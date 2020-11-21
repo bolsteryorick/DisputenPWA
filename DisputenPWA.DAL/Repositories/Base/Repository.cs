@@ -9,20 +9,19 @@ using System.Threading.Tasks;
 namespace DisputenPWA.DAL.Repositories.Base
 {
     public interface IRepository<TModel>
-        where TModel : class, IIdModelBase, new()
+        where TModel : class, new()
     {
         IQueryable<TModel> GetQueryable();
         Task Add(TModel item);
-        Task Add(List<TModel> items);
+        Task Add(IEnumerable<TModel> items);
         Task DeleteByQuery(IQueryable<TModel> toBeDeleted);
-        Task DeleteById(Guid id);
-        Task DeleteById(List<Guid> ids);
+        Task DeleteByObject(TModel toBeDeleted);
         Task Update(TModel item);
         Task<TModel> UpdateProperties(TModel item, Dictionary<string, object> properties);
     }
 
     public class Repository<TModel> : IRepository<TModel>
-        where TModel : class, IIdModelBase, new()
+        where TModel : class, new()
     {
         private readonly DisputenAppContext _context;
 
@@ -44,7 +43,7 @@ namespace DisputenPWA.DAL.Repositories.Base
             await Add(itemInList);
         }
 
-        public async Task Add(List<TModel> items)
+        public async Task Add(IEnumerable<TModel> items)
         {
             _context.Set<TModel>().AddRange(items);
             await _context.SaveChangesAsync();
@@ -56,16 +55,10 @@ namespace DisputenPWA.DAL.Repositories.Base
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteById(Guid id)
+        // todo check if this works
+        public async Task DeleteByObject(TModel toBeDeleted)
         {
-            var ids = new List<Guid> { id };
-            await DeleteById(ids);
-        }
-
-        public async Task DeleteById(List<Guid> ids)
-        {
-            var toBeDeleted = ids.Select(x => new TModel { Id = x });
-            _context.Set<TModel>().RemoveRange(toBeDeleted);
+            _context.Set<TModel>().Remove(toBeDeleted);
             await _context.SaveChangesAsync();
         }
 

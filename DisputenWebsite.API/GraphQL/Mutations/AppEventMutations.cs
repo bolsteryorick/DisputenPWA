@@ -1,5 +1,5 @@
 ﻿using DisputenPWA.API.Extensions;
-using DisputenPWA.API.GraphQL.AppEvents;
+using DisputenPWA.API.GraphQL.ResultTypes;
 using DisputenPWA.Domain.EventAggregate.Commands;
 using GraphQL.Types;
 using MediatR;
@@ -72,8 +72,8 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 context.GetArgument<Guid>("id"),
                 context.GetArgument<string>("name"),
                 context.GetArgument<string>("description"),
-                context.GetArgument<DateTime>("startTime"),
-                context.GetArgument<DateTime>("endTime")
+                context.GetArgument<DateTime?>("startTime"),
+                context.GetArgument<DateTime?>("endTime")
             );
         }
 

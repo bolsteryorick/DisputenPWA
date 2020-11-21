@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.Groups;
-using DisputenPWA.Domain.GroupAggregate.Helpers;
 using DisputenPWA.Domain.GroupAggregate.Queries;
+using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using GraphQL.Types;
 using MediatR;
 using System;
@@ -12,7 +12,7 @@ namespace DisputenPWA.API.GraphQL.Queries
     public partial class DisputenAppQueries
     {
         protected void AddGroupQueries(IMediator mediator)
-        {
+        { 
             Field<GroupResultType>(
                 "GetGroup", 
                 description: "Gets a group from the database.", arguments: GroupArguments(),

@@ -1,13 +1,20 @@
+using DisputenPWA.API.Authoriation;
 using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
+using DisputenPWA.Application.Services;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
+using DisputenPWA.Domain.UserAggregate;
 using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
+using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
+using DisputenPWA.Infrastructure.Connectors.SQL.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,16 +39,38 @@ namespace DisputenWebsite.API
             services.AddControllers();
             services.AddDbContext<DisputenAppContext>(options =>
                 options.UseSqlServer(_configuration.GetValue<string>("DatabaseConnectionString")));
+            services
+                .AddDefaultIdentity<ApplicationUser>(
+                    options => options.SignIn.RequireConfirmedAccount = false
+                    )
+                .AddEntityFrameworkStores<DisputenAppContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Lockout settings.
+                options.Lockout.AllowedForNewUsers = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            });
             //services.AddCosmosDb(_configuration);
 
             services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<IGroupConnector, GroupConnector>();
             services.AddTransient<ISeedingService, SeedingService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<IAppEventRepository, AppEventRepository>();
             services.AddTransient<IAppEventConnector, AppEventConnector>();
 
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserConnector, UserConnector>();
+            services.AddTransient<IMemberRepository, MemberRepository>();
+            services.AddTransient<IMemberConnector, MemberConnector>();
+
             services.AddTransient<IGraphQLResolver, GraphQLResolver>();
+            services.AddTransient<IOperationAuthorizer, OperationAuthorizer>();
 
             services.Configure<IISServerOptions>(options =>
             {
@@ -57,6 +86,8 @@ namespace DisputenWebsite.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
             app.UseGraphQL();
 
             app.UseHttpsRedirection();

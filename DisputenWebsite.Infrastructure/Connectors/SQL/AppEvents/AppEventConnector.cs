@@ -1,10 +1,12 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DALObject;
-using DisputenPWA.Domain.EventAggregate.Helpers;
+using DisputenPWA.Domain.EventAggregate.DalObject;
+using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
@@ -13,9 +15,8 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
     {
         Task<AppEvent> GetAppEvent(Guid id, AppEventPropertyHelper helper);
         Task Create(AppEvent newAppEvent);
-        Task UpdateAppEvent(AppEvent updatedAppEvent);
         Task DeleteAppEvent(Guid id);
-        Task Create(List<DALAppEvent> dalAppEvents);
+        Task Create(IEnumerable<DalAppEvent> dalAppEvents);
         Task<AppEvent> UpdateProperties(Dictionary<string, object> properties, Guid id);
     }
 
@@ -35,7 +36,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
 
         public async Task<AppEvent> GetAppEvent(Guid id, AppEventPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveAppEvent(id, helper);
+            return await _graphQLResolver.ResolveAppEventById(id, helper);
         }
 
         public async Task Create(AppEvent newAppEvent)
@@ -44,18 +45,12 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
                 .Add(newAppEvent.CreateDALAppEvent());
         }
 
-        public async Task UpdateAppEvent(AppEvent updatedAppEvent)
-        {
-            await _appEventRepository
-                .Update(updatedAppEvent.CreateDALAppEvent());
-        }
-
         public async Task DeleteAppEvent(Guid id)
         {
-            await _appEventRepository.DeleteById(id);
+            await _appEventRepository.DeleteByObject(new DalAppEvent { Id = id });
         }
 
-        public async Task Create(List<DALAppEvent> dalAppEvents)
+        public async Task Create(IEnumerable<DalAppEvent> dalAppEvents)
         {
             await _appEventRepository.Add(dalAppEvents);
         }
@@ -63,7 +58,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
         public async Task<AppEvent> UpdateProperties(Dictionary<string, object> properties, Guid id)
         {
             var appEvent = await _appEventRepository
-                .UpdateProperties(new DALAppEvent { Id = id }, properties);
+                .UpdateProperties(new DalAppEvent { Id = id }, properties);
             return appEvent.CreateAppEvent();
         }
     }
