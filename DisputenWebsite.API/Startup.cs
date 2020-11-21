@@ -9,13 +9,9 @@ using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Handlers;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Users;
 using DisputenPWA.Infrastructure.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -74,7 +70,6 @@ namespace DisputenWebsite.API
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<IMemberConnector, MemberConnector>();
 
-            services.AddTransient<IGraphQLResolver, GraphQLResolver>();
             services.AddTransient<IOperationAuthorizer, OperationAuthorizer>();
             services.AddTransient<IResolveForMembersService, ResolveForMembersService>();
 

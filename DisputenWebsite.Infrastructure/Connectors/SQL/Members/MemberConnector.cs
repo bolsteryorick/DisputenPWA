@@ -1,7 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.MemberAggregate.DalObject;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
 using MediatR;
 using System;
