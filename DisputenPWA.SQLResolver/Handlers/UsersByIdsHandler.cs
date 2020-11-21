@@ -1,22 +1,42 @@
-﻿using DisputenPWA.Domain.Helpers.PropertyHelpers;
+﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.UserAggregate;
+using DisputenPWA.SQLResolver.Members.MembersByUserIds;
+using DisputenPWA.SQLResolver.Users.UsersById;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver
+namespace DisputenPWA.SQLResolver.Handlers
 {
-    public partial class GraphQLResolver
+    public class UsersByIdsHandler : IRequestHandler<UsersByIdsRequest, IReadOnlyCollection<User>>
     {
-        public async Task<IReadOnlyCollection<User>> ResolveUsersByIds(IEnumerable<string> userIds, UserPropertyHelper helper)
+        private readonly IUserRepository _userRepository;
+        private readonly IMediator _mediator;
+
+        public UsersByIdsHandler(
+            IUserRepository userRepository,
+            IMediator mediator
+            )
+        {
+            _userRepository = userRepository;
+            _mediator = mediator;
+        }
+
+        public async Task<IReadOnlyCollection<User>> Handle(UsersByIdsRequest request, CancellationToken cancellationToken)
+        {
+            return await ResolveUsersByIds(request.UserIds, request.Helper, cancellationToken);
+        }
+
+        private async Task<IReadOnlyCollection<User>> ResolveUsersByIds(IEnumerable<string> userIds, UserPropertyHelper helper, CancellationToken cancellationToken)
         {
             var users = await GetUsersByIds(userIds, helper);
             if (helper.CanGetMembers())
             {
-                users = await ResolveMembersForUsers(users, userIds, helper);
+                users = await ResolveMembersForUsers(users, userIds, helper, cancellationToken);
             }
             return users.ToList();
         }
@@ -27,9 +47,9 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver
             return await _userRepository.GetAll(queryable, helper);
         }
 
-        private async Task<IEnumerable<User>> ResolveMembersForUsers(IEnumerable<User> users, IEnumerable<string> userIds, UserPropertyHelper helper)
+        private async Task<IEnumerable<User>> ResolveMembersForUsers(IEnumerable<User> users, IEnumerable<string> userIds, UserPropertyHelper helper, CancellationToken cancellationToken)
         {
-            var memberships = await ResolveMembersByUserIds(userIds, helper.MembershipsPropertyHelper);
+            var memberships = await _mediator.Send(new MembersByUserIdsRequest(userIds, helper.MembershipsPropertyHelper), cancellationToken);
             var userIdToMembershipDict = GetUserIdToMembershipsDict(memberships);
             foreach (var user in users)
             {

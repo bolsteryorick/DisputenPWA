@@ -1,11 +1,11 @@
-﻿using DisputenPWA.Domain.EventAggregate;
+﻿using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.Helpers;
+using DisputenPWA.Domain.Hierarchy;
 using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace DisputenPWA.Domain.Helpers.PropertyHelpers
+namespace DisputenPWA.Domain.EventAggregate
 {
     public class AppEventPropertyHelper : PropertyHelperBase
     {
@@ -43,7 +43,7 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
             LowestEndDate = lowestEndDate ?? EventRange.LowestEndDate;
             HighestStartDate = highestStartDate ?? EventRange.HighestStartDate;
 
-            if(CanGoDeeper(depth))
+            if (CanGoDeeper(depth))
             {
                 GroupPropertyHelper = GetGroupPropertyHelper(fields, nameof(AppEvent.Group), lowestEndDate, highestStartDate, depth);
             }

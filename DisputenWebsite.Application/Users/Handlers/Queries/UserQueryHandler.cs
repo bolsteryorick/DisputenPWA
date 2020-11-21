@@ -1,13 +1,8 @@
 ﻿using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.UserAggregate;
 using DisputenPWA.Domain.UserAggregate.Queries;
 using DisputenPWA.Domain.UserAggregate.Queries.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Users;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

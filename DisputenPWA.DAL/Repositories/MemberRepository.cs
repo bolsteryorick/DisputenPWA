@@ -1,13 +1,10 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.MemberAggregate.DalObject;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.DAL.Repositories

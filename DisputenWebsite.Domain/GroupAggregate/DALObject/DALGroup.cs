@@ -1,6 +1,5 @@
 ﻿using DisputenPWA.Domain.EventAggregate.DalObject;
 using DisputenPWA.Domain.Hierarchy;
-using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.MemberAggregate.DalObject;
 using System.Collections.Generic;
 

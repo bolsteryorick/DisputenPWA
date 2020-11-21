@@ -2,7 +2,6 @@
 using DisputenPWA.Domain.EventAggregate.DalObject;
 using DisputenPWA.Domain.GroupAggregate.DalObject;
 using DisputenPWA.Domain.MemberAggregate.DalObject;
-using DisputenPWA.Domain.UserAggregate;
 using System;
 using System.Collections.Generic;
 

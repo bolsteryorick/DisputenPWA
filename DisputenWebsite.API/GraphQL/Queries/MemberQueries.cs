@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.ResultTypes;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
+using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.MemberAggregate.Queries;
 using GraphQL.Types;
 using MediatR;

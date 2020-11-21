@@ -1,9 +1,5 @@
 ﻿using DisputenPWA.Domain.UserAggregate;
 using GraphQL.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DisputenPWA.API.GraphQL.ResultTypes
 {

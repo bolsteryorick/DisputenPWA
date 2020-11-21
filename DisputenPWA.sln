@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisputenPWA.Application", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DisputenPWA.DAL", "DisputenPWA.DAL\DisputenPWA.DAL.csproj", "{D6C2E77E-A0F1-4AED-8741-40D35864C501}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisputenPWA.SQLResolver", "DisputenPWA.SQLResolver\DisputenPWA.SQLResolver.csproj", "{2AF77873-3777-415C-892B-65DFE798ECFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D6C2E77E-A0F1-4AED-8741-40D35864C501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6C2E77E-A0F1-4AED-8741-40D35864C501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6C2E77E-A0F1-4AED-8741-40D35864C501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF77873-3777-415C-892B-65DFE798ECFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF77873-3777-415C-892B-65DFE798ECFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF77873-3777-415C-892B-65DFE798ECFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF77873-3777-415C-892B-65DFE798ECFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

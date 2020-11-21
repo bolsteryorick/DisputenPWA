@@ -1,13 +1,10 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.ResultTypes;
 using DisputenPWA.Domain.MemberAggregate.Commands;
-using DisputenPWA.Domain.MemberAggregate.Queries;
 using GraphQL.Types;
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DisputenPWA.API.GraphQL.Mutations
 {
@@ -41,6 +38,13 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 description: "Deletes all members for group id.",
                 arguments: DeleteMembersArguments(),
                 resolve: context => mediator.Send(DeleteMembersCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
+                );
+
+            Field<MemberResultType>(
+                "LeaveGroup",
+                description: "Deletes all members for group id.",
+                arguments: LeaveGroupArguments(),
+                resolve: context => mediator.Send(LeaveGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
 
             Field<MemberResultType>(
@@ -109,6 +113,20 @@ namespace DisputenPWA.API.GraphQL.Mutations
         private DeleteMembersCommand DeleteMembersCommand(ResolveFieldContext<object> context)
         {
             return new DeleteMembersCommand(
+                context.GetArgument<Guid>("groupId")
+            );
+        }
+
+        private QueryArguments LeaveGroupArguments()
+        {
+            return new QueryArguments(
+                new QueryArgument<IdGraphType> { Name = "memberId" }
+            );
+        }
+
+        private LeaveGroupCommand LeaveGroupCommand(ResolveFieldContext<object> context)
+        {
+            return new LeaveGroupCommand(
                 context.GetArgument<Guid>("groupId")
             );
         }

@@ -2,9 +2,7 @@
 using DisputenPWA.DAL.Repositories.Base;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DalObject;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

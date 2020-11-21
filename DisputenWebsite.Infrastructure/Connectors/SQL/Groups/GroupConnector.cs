@@ -1,12 +1,10 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DalObject;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
+using DisputenPWA.SQLResolver.Groups.GroupById;
+using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Connectors.SQL.Groups
@@ -23,20 +21,20 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Groups
     public class GroupConnector : IGroupConnector
     {
         private readonly IGroupRepository _groupRepository;
-        private readonly IGraphQLResolver _graphQLResolver;
+        private readonly IMediator _mediator;
 
         public GroupConnector(
             IGroupRepository groupRepository,
-            IGraphQLResolver graphQLResolver
+            IMediator mediator
             )
         {
             _groupRepository = groupRepository;
-            _graphQLResolver = graphQLResolver;
+            _mediator = mediator;
         }
 
         public async Task<Group> GetGroup(Guid id, GroupPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveGroupById(id, helper);
+            return await _mediator.Send(new GroupByIdRequest(id, helper));
         }
 
         public async Task Create(Group group)

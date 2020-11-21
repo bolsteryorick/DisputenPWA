@@ -1,9 +1,7 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Application.Services
@@ -16,6 +14,7 @@ namespace DisputenPWA.Application.Services
         Task<bool> CanChangeAppEvent(Guid appEventId);
         Task<bool> CanQueryMember(Guid memberId);
         Task<bool> CanChangeMember(Guid memberId);
+        Task<bool> CanLeaveGroup(Guid memberId);
     }
 
     public class OperationAuthorizer : IOperationAuthorizer
@@ -67,6 +66,11 @@ namespace DisputenPWA.Application.Services
         {
             var groupId = await GetGroupIdFromMemberId(memberId);
             return await CanUpdateGroup(groupId);
+        }
+
+        public async Task<bool> CanLeaveGroup(Guid memberId)
+        {
+            return await _memberRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.Id == memberId);
         }
 
         private async Task<Guid> GetGroupIdFromAppEventId(Guid appEventId)

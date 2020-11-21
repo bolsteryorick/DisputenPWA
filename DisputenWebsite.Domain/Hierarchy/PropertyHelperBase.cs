@@ -1,10 +1,14 @@
-﻿using GraphQL.Language.AST;
+﻿using DisputenPWA.Domain.EventAggregate;
+using DisputenPWA.Domain.GroupAggregate;
+using DisputenPWA.Domain.MemberAggregate;
+using DisputenPWA.Domain.UserAggregate;
+using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace DisputenPWA.Domain.Helpers.PropertyHelpers
+namespace DisputenPWA.Domain.Hierarchy
 {
     public class PropertyHelperBase
     {
@@ -24,10 +28,10 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
         {
             return fields.Select(x => x.Name).ToImmutableList();
         }
-        
+
         protected IList<Field> GetSubFields(Field field)
         {
-            if(field != null)
+            if (field != null)
             {
                 return field.SelectionSet.Children.Select(x => (Field)x).ToList();
             }
@@ -35,7 +39,7 @@ namespace DisputenPWA.Domain.Helpers.PropertyHelpers
         }
 
         public GroupPropertyHelper GetGroupPropertyHelper(
-            IEnumerable<Field> fields, 
+            IEnumerable<Field> fields,
             string groupFieldName,
             DateTime? lowestEndDate,
             DateTime? highestStartDate,

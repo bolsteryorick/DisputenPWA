@@ -1,28 +1,48 @@
-﻿using DisputenPWA.Domain.EventAggregate;
+﻿using DisputenPWA.DAL.Repositories;
+using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Domain.MemberAggregate;
+using DisputenPWA.SQLResolver.AppEvents.AppEventsFromGroupsIds;
+using DisputenPWA.SQLResolver.Members.MembersByGroupIds;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver
+namespace DisputenPWA.SQLResolver.Groups.GroupsByIds
 {
-    public partial class GraphQLResolver
+    public class GroupsByIdsHandler : IRequestHandler<GroupsByIdsRequest, IReadOnlyCollection<Group>>
     {
-        public async Task<IReadOnlyCollection<Group>> ResolveGroupsByIds(IEnumerable<Guid> groupIds, GroupPropertyHelper helper)
+        private readonly IGroupRepository _groupRepository;
+        private readonly IMediator _mediator;
+
+        public GroupsByIdsHandler(
+            IGroupRepository groupRepository,
+            IMediator mediator
+            )
+        {
+            _groupRepository = groupRepository;
+            _mediator = mediator;
+        }
+
+        public async Task<IReadOnlyCollection<Group>> Handle(GroupsByIdsRequest request, CancellationToken cancellationToken)
+        {
+            return await ResolveGroupsByIds(request.GroupIds, request.Helper, cancellationToken);
+        }
+
+        private async Task<IReadOnlyCollection<Group>> ResolveGroupsByIds(IEnumerable<Guid> groupIds, GroupPropertyHelper helper, CancellationToken cancellationToken)
         {
             var groups = await GetGroupsByIds(groupIds, helper);
             if (helper.CanGetAppEvents())
             {
-                groups = await ResolveAppEventsForGroups(groups, groupIds, helper);
+                groups = await ResolveAppEventsForGroups(groups, groupIds, helper, cancellationToken);
             }
             if (helper.CanGetMembers())
             {
-                groups = await ResolveMembersForGroups(groups, groupIds, helper);
+                groups = await ResolveMembersForGroups(groups, groupIds, helper, cancellationToken);
             }
             return groups.ToImmutableList();
         }
@@ -33,9 +53,9 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver
             return await _groupRepository.GetAll(queryable, helper);
         }
 
-        private async Task<IReadOnlyCollection<Group>> ResolveAppEventsForGroups(IReadOnlyCollection<Group> groups, IEnumerable<Guid> groupIds, GroupPropertyHelper helper)
+        private async Task<IReadOnlyCollection<Group>> ResolveAppEventsForGroups(IReadOnlyCollection<Group> groups, IEnumerable<Guid> groupIds, GroupPropertyHelper helper, CancellationToken cancellationToken)
         {
-            var appEvents = await ResolveAppEventsFromGroupIds(groupIds, helper.AppEventPropertyHelper);
+            var appEvents = await _mediator.Send(new AppEventsFromGroupIdsRequest(groupIds, helper.AppEventPropertyHelper), cancellationToken);
             var groupIdToAppEventsDict = MakeGroupIdToAppEventDict(appEvents);
             foreach (var group in groups)
             {
@@ -59,9 +79,9 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver
             return dict;
         }
 
-        private async Task<IReadOnlyCollection<Group>> ResolveMembersForGroups(IReadOnlyCollection<Group> groups, IEnumerable<Guid> groupIds, GroupPropertyHelper helper)
+        private async Task<IReadOnlyCollection<Group>> ResolveMembersForGroups(IReadOnlyCollection<Group> groups, IEnumerable<Guid> groupIds, GroupPropertyHelper helper, CancellationToken cancellationToken)
         {
-            var members = await ResolveMembersByGroupIds(groupIds, helper.MemberPropertyHelper);
+            var members = await _mediator.Send(new MembersByGroupIdsRequest(groupIds, helper.MemberPropertyHelper), cancellationToken);
             var groupIdToMembersDict = MakeGroupIdToMembersDict(members);
             foreach (var group in groups)
             {

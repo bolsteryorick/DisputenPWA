@@ -9,12 +9,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.14.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DisputenPWA.DAL\DisputenPWA.DAL.csproj" />
+    <ProjectReference Include="..\DisputenPWA.SQLResolver\DisputenPWA.SQLResolver.csproj" />
     <ProjectReference Include="..\DisputenWebsite.Domain\DisputenPWA.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Connectors\SQL\Shared\" />
   </ItemGroup>
 
 </Project>
