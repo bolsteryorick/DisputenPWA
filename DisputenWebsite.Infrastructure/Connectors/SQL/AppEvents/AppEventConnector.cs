@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DalObject;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using DisputenPWA.SQLResolver.AppEvents.AppEventById;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
 
         public async Task<AppEvent> GetAppEvent(Guid id, AppEventPropertyHelper helper)
         {
-            return (await _mediator.Send(new AppEventByIdRequest(id, helper))).Result;
+            return await _mediator.Send(new AppEventByIdRequest(id, helper));
         }
 
         public async Task Create(AppEvent newAppEvent)

@@ -41,6 +41,13 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 );
 
             Field<MemberResultType>(
+                "LeaveGroup",
+                description: "Deletes all members for group id.",
+                arguments: LeaveGroupArguments(),
+                resolve: context => mediator.Send(LeaveGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
+                );
+
+            Field<MemberResultType>(
                 "UpdateMember",
                 description: "Updates the member, only the passed arguments will be updated.",
                 arguments: UpdateMemberArguments(),
@@ -106,6 +113,20 @@ namespace DisputenPWA.API.GraphQL.Mutations
         private DeleteMembersCommand DeleteMembersCommand(ResolveFieldContext<object> context)
         {
             return new DeleteMembersCommand(
+                context.GetArgument<Guid>("groupId")
+            );
+        }
+
+        private QueryArguments LeaveGroupArguments()
+        {
+            return new QueryArguments(
+                new QueryArgument<IdGraphType> { Name = "memberId" }
+            );
+        }
+
+        private LeaveGroupCommand LeaveGroupCommand(ResolveFieldContext<object> context)
+        {
+            return new LeaveGroupCommand(
                 context.GetArgument<Guid>("groupId")
             );
         }

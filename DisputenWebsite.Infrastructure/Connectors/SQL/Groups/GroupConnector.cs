@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DalObject;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using DisputenPWA.SQLResolver.Groups.GroupById;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Groups
 
         public async Task<Group> GetGroup(Guid id, GroupPropertyHelper helper)
         {
-            return (await _mediator.Send(new GroupByIdRequest(id, helper))).Result;
+            return await _mediator.Send(new GroupByIdRequest(id, helper));
         }
 
         public async Task Create(Group group)

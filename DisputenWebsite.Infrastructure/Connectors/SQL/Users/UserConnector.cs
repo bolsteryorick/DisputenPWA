@@ -1,5 +1,5 @@
 ﻿using DisputenPWA.Domain.UserAggregate;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using DisputenPWA.SQLResolver.Users.UsersById;
 using MediatR;
 using System.Threading.Tasks;
 
@@ -23,7 +23,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Users
 
         public async Task<User> GetUser(string id, UserPropertyHelper helper)
         {
-            return (await _mediator.Send(new UserByIdRequest(id, helper))).Result;
+            return await _mediator.Send(new UserByIdRequest(id, helper));
         }
     }
 }

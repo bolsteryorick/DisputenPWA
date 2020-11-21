@@ -1,7 +1,8 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.MemberAggregate.DalObject;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using DisputenPWA.SQLResolver.Members.MemberById;
+using DisputenPWA.SQLResolver.Members.MembersByGroupIds;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -37,12 +38,12 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Members
 
         public async Task<Member> GetMember(Guid id, MemberPropertyHelper helper)
         {
-            return (await _mediator.Send(new MemberByIdRequest(id, helper))).Result;
+            return await _mediator.Send(new MemberByIdRequest(id, helper));
         }
 
         public async Task<IReadOnlyCollection<Member>> GetMembers(Guid groupId, MemberPropertyHelper helper)
         {
-            return (await _mediator.Send(new MembersByGroupIdsRequest(new List<Guid> { groupId }, helper))).Result;
+            return await _mediator.Send(new MembersByGroupIdsRequest(new List<Guid> { groupId }, helper));
         }
 
         public async Task Create(Member member)
