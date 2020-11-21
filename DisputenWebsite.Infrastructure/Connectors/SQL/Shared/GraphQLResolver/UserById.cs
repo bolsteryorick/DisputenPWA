@@ -1,6 +1,4 @@
-﻿using DisputenPWA.Domain.MemberAggregate;
-using DisputenPWA.Domain.UserAggregate;
-using System;
+﻿using DisputenPWA.Domain.UserAggregate;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

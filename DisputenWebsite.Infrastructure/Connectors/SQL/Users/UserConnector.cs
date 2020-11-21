@@ -1,9 +1,6 @@
-﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.UserAggregate;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DisputenPWA.Domain.UserAggregate;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using MediatR;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Connectors.SQL.Users
@@ -15,21 +12,18 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Users
 
     public class UserConnector : IUserConnector
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IGraphQLResolver _graphQLResolver;
+        private readonly IMediator _mediator;
 
         public UserConnector(
-            IUserRepository userRepository,
-            IGraphQLResolver graphQLResolver
+            IMediator mediator
             )
         {
-            _userRepository = userRepository;
-            _graphQLResolver = graphQLResolver;
+            _mediator = mediator;
         }
 
         public async Task<User> GetUser(string id, UserPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveUserById(id, helper);
+            return (await _mediator.Send(new UserByIdRequest(id, helper))).Result;
         }
     }
 }

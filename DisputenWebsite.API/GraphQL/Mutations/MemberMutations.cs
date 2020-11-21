@@ -1,13 +1,10 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.ResultTypes;
 using DisputenPWA.Domain.MemberAggregate.Commands;
-using DisputenPWA.Domain.MemberAggregate.Queries;
 using GraphQL.Types;
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DisputenPWA.API.GraphQL.Mutations
 {

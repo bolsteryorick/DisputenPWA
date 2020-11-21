@@ -4,10 +4,8 @@ using DisputenPWA.Domain.MemberAggregate.Commands;
 using DisputenPWA.Domain.MemberAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using MediatR;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

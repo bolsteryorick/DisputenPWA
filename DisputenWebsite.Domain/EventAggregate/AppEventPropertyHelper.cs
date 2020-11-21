@@ -4,7 +4,6 @@ using DisputenPWA.Domain.Hierarchy;
 using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DisputenPWA.Domain.EventAggregate
 {

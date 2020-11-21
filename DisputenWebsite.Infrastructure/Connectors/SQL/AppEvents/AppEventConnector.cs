@@ -1,11 +1,11 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DalObject;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
@@ -22,20 +22,20 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.AppEvents
     public class AppEventConnector : IAppEventConnector
     {
         private readonly IAppEventRepository _appEventRepository;
-        private readonly IGraphQLResolver _graphQLResolver;
+        private readonly IMediator _mediator;
 
         public AppEventConnector(
             IAppEventRepository appEventRepository,
-            IGraphQLResolver graphQLResolver
+            IMediator mediator
             )
         {
             _appEventRepository = appEventRepository;
-            _graphQLResolver = graphQLResolver;
+            _mediator = mediator;
         }
 
         public async Task<AppEvent> GetAppEvent(Guid id, AppEventPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveAppEventById(id, helper);
+            return (await _mediator.Send(new AppEventByIdRequest(id, helper))).Result;
         }
 
         public async Task Create(AppEvent newAppEvent)

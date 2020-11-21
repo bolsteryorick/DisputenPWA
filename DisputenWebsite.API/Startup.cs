@@ -9,9 +9,13 @@ using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Handlers;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Users;
+using DisputenPWA.Infrastructure.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -34,7 +38,8 @@ namespace DisputenWebsite.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatr();
+            services.AddApplicationMediatr();
+            services.AddInfratructureMediatr();
             services.AddGraphQLConfiguration();
             services.AddControllers();
             services.AddDbContext<DisputenAppContext>(options =>
@@ -71,6 +76,7 @@ namespace DisputenWebsite.API
 
             services.AddTransient<IGraphQLResolver, GraphQLResolver>();
             services.AddTransient<IOperationAuthorizer, OperationAuthorizer>();
+            services.AddTransient<IResolveForMembersService, ResolveForMembersService>();
 
             services.Configure<IISServerOptions>(options =>
             {

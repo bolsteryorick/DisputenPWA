@@ -1,8 +1,5 @@
 ﻿using DisputenPWA.Domain.UserAggregate.Queries.Results;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DisputenPWA.Domain.UserAggregate.Queries
 {

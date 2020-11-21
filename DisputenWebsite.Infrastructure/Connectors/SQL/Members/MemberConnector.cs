@@ -1,8 +1,9 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.MemberAggregate.DalObject;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
+using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver.Requests;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,25 +25,25 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Members
     public class MemberConnector : IMemberConnector
     {
         private readonly IMemberRepository _memberRepository;
-        private readonly IGraphQLResolver _graphQLResolver;
+        private readonly IMediator _mediator;
 
         public MemberConnector(
             IMemberRepository memberRepository,
-            IGraphQLResolver graphQLResolver
+            IMediator mediator
             )
         {
             _memberRepository = memberRepository;
-            _graphQLResolver = graphQLResolver;
+            _mediator = mediator;
         }
 
         public async Task<Member> GetMember(Guid id, MemberPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveMemberById(id, helper);
+            return (await _mediator.Send(new MemberByIdRequest(id, helper))).Result;
         }
 
         public async Task<IReadOnlyCollection<Member>> GetMembers(Guid groupId, MemberPropertyHelper helper)
         {
-            return await _graphQLResolver.ResolveMembersByGroupIds(new List<Guid> { groupId }, helper);
+            return (await _mediator.Send(new MembersByGroupIdsRequest(new List<Guid> { groupId }, helper))).Result;
         }
 
         public async Task Create(Member member)

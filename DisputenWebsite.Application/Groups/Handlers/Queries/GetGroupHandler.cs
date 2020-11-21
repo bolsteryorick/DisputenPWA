@@ -1,5 +1,4 @@
 ﻿using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.Queries;
 using DisputenPWA.Domain.GroupAggregate.Queries.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;

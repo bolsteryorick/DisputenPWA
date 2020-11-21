@@ -3,9 +3,7 @@ using DisputenPWA.Domain.Helpers;
 using DisputenPWA.Domain.Hierarchy;
 using DisputenPWA.Domain.UserAggregate;
 using GraphQL.Language.AST;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DisputenPWA.Domain.MemberAggregate
 {
