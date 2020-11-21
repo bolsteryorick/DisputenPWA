@@ -1,8 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.GroupAggregate;
 using DisputenPWA.Domain.GroupAggregate.DalObject;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
-using DisputenPWA.Infrastructure.Connectors.SQL.Shared;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using System;
 using System.Collections.Generic;

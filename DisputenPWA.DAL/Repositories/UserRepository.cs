@@ -1,6 +1,5 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using System;

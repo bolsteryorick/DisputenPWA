@@ -1,10 +1,12 @@
-﻿using DisputenPWA.Domain.GroupAggregate;
+﻿using DisputenPWA.Domain.EventAggregate;
+using DisputenPWA.Domain.Hierarchy;
+using DisputenPWA.Domain.MemberAggregate;
 using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DisputenPWA.Domain.Helpers.PropertyHelpers
+namespace DisputenPWA.Domain.GroupAggregate
 {
     public class GroupPropertyHelper : PropertyHelperBase
     {

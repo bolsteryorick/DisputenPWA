@@ -1,7 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.UserAggregate;
 using System;

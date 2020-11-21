@@ -1,5 +1,4 @@
 ﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using DisputenPWA.Domain.UserAggregate;
 using DisputenPWA.Infrastructure.Connectors.SQL.Shared.GraphQLResolver;
 using System;

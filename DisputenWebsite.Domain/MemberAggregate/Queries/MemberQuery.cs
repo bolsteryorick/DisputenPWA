@@ -1,5 +1,4 @@
-﻿using DisputenPWA.Domain.Helpers.PropertyHelpers;
-using DisputenPWA.Domain.MemberAggregate.Queries.Results;
+﻿using DisputenPWA.Domain.MemberAggregate.Queries.Results;
 using MediatR;
 using System;
 using System.Collections.Generic;

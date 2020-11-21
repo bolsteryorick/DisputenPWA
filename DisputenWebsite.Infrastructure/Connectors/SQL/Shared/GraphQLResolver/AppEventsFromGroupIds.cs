@@ -1,6 +1,5 @@
 ﻿using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DalObject;
-using DisputenPWA.Domain.Helpers.PropertyHelpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
