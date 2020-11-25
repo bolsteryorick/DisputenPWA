@@ -1,23 +1,23 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DalObject;
-using DisputenPWA.SQLResolver.Groups.GroupsByIds;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.SQLResolver.AppEvents.AppEventsFromGroupsIds
+namespace DisputenPWA.SQLResolver.AppEvents.AppEventsByIds
 {
-    public class AppEventsFromGroupIdsHandler : IRequestHandler<AppEventsFromGroupIdsRequest, IReadOnlyCollection<AppEvent>>
+    public class AppEventsByIdsHandler : IRequestHandler<AppEventsByIdsRequest, IReadOnlyCollection<AppEvent>>
     {
         private readonly IAppEventRepository _appEventRepository;
         private readonly IResolveForAppEventsService _resolveForAppEventsService;
 
-        public AppEventsFromGroupIdsHandler(
+        public AppEventsByIdsHandler(
             IAppEventRepository appEventRepository,
             IResolveForAppEventsService resolveForAppEventsService
             )
@@ -26,42 +26,42 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventsFromGroupsIds
             _resolveForAppEventsService = resolveForAppEventsService;
         }
 
-        public async Task<IReadOnlyCollection<AppEvent>> Handle(AppEventsFromGroupIdsRequest req, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<AppEvent>> Handle(AppEventsByIdsRequest req, CancellationToken cancellationToken)
         {
-            return await ResolveAppEventsFromGroupIds(req.GroupIds, req.Helper, cancellationToken);
+            return await ResolveAppEventsByIds(req.AppEventIds, req.Helper, cancellationToken);
         }
 
-        private async Task<IReadOnlyCollection<AppEvent>> ResolveAppEventsFromGroupIds(
-           IEnumerable<Guid> groupIds,
+        private async Task<IReadOnlyCollection<AppEvent>> ResolveAppEventsByIds(
+           IEnumerable<Guid> appEventIds,
            AppEventPropertyHelper helper,
            CancellationToken cancellationToken
             )
         {
-            var events = await GetAppEventsFromGroupIds(groupIds, helper);
+            var events = await GetAppEventsByIds(appEventIds, helper);
             if (helper.CanGetGroup())
             {
+                var groupIds = events.Select(x => x.GroupId).Distinct();
                 events = await _resolveForAppEventsService.GetGroupsForAppEvents(events, groupIds, helper, cancellationToken);
             }
             if (helper.CanGetAttendees())
             {
-                var appEventIds = events.Select(x => x.Id);
                 events = await _resolveForAppEventsService.GetAttendeesForAppEvents(events, appEventIds, helper, cancellationToken);
             }
             return events.ToImmutableList();
         }
 
-        private async Task<IList<AppEvent>> GetAppEventsFromGroupIds(IEnumerable<Guid> groupIds, AppEventPropertyHelper helper)
+        private async Task<IList<AppEvent>> GetAppEventsByIds(IEnumerable<Guid> appEventIds, AppEventPropertyHelper helper)
         {
-            var eventsQueryable = QueryableAppEventsByGroupIds(groupIds, helper.LowestEndDate, helper.HighestStartDate);
+            var eventsQueryable = QueryableAppEventsByIds(appEventIds, helper.LowestEndDate, helper.HighestStartDate);
             return await _appEventRepository.GetAll(eventsQueryable, helper);
         }
 
-        private IQueryable<DalAppEvent> QueryableAppEventsByGroupIds(IEnumerable<Guid> groupIds, DateTime lowestEndDate, DateTime highestStartDate)
+        private IQueryable<DalAppEvent> QueryableAppEventsByIds(IEnumerable<Guid> appeventIds, DateTime lowestEndDate, DateTime highestStartDate)
         {
             return _appEventRepository
                 .GetQueryable()
                 .Where(
-                    e => groupIds.Contains(e.GroupId) &&
+                    e => appeventIds.Contains(e.Id) &&
                     e.EndTime > lowestEndDate &&
                     e.StartTime < highestStartDate
                 );

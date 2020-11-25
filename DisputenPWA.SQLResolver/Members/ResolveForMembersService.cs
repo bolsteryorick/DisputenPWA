@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.SQLResolver.Services
+namespace DisputenPWA.SQLResolver.Members
 {
     public interface IResolveForMembersService
     {

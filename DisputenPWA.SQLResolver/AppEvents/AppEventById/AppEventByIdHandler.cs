@@ -1,9 +1,11 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.EventAggregate;
 using DisputenPWA.Domain.EventAggregate.DalObject;
+using DisputenPWA.SQLResolver.Attendees.AttendeesByEventIds;
 using DisputenPWA.SQLResolver.Groups.GroupById;
 using MediatR;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,12 +34,17 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventById
         private async Task<AppEvent> ResolveAppEventById(
             Guid appEventId,
             AppEventPropertyHelper helper,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken
+            )
         {
             var appEvent = await GetAppEventById(appEventId, helper);
             if (helper.CanGetGroup())
             {
                 appEvent.Group = await _mediator.Send(new GroupByIdRequest(appEvent.GroupId, helper.GroupPropertyHelper), cancellationToken);
+            }
+            if (helper.CanGetAttendees())
+            {
+                appEvent.Attendees = await _mediator.Send(new AttendeesByEventIdsRequest(new List<Guid> { appEventId }, helper.AttendeePropertyHelper), cancellationToken);
             }
             return appEvent;
         }

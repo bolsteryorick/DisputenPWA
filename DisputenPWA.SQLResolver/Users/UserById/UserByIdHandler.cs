@@ -1,14 +1,14 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.UserAggregate;
+using DisputenPWA.SQLResolver.Attendees.AttendeesByUserIds;
 using DisputenPWA.SQLResolver.Members.MembersByUserIds;
-using DisputenPWA.SQLResolver.Users.UsersById;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.SQLResolver.Handlers
+namespace DisputenPWA.SQLResolver.Users.UserById
 {
     public class UserByIdHandler : IRequestHandler<UserByIdRequest, User>
     {
@@ -35,6 +35,10 @@ namespace DisputenPWA.SQLResolver.Handlers
             if (helper.CanGetMembers())
             {
                 user.Memberships = await _mediator.Send(new MembersByUserIdsRequest(new List<string> { userId }, helper.MembershipsPropertyHelper), cancellationToken);
+            }
+            if (helper.CanGetAttendences())
+            {
+                user.Attendences = await _mediator.Send(new AttendeesByUserIdsRequest(new List<string> { userId }, helper.AttendeePropertyHelper), cancellationToken);
             }
             return user;
         }

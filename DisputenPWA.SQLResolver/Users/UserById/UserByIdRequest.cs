@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.Domain.UserAggregate;
 using MediatR;
 
-namespace DisputenPWA.SQLResolver.Users.UsersById
+namespace DisputenPWA.SQLResolver.Users.UserById
 {
     public class UserByIdRequest : IRequest<User>
     {

@@ -7,11 +7,14 @@ using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.UserAggregate;
 using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
+using DisputenPWA.Infrastructure.Connectors.SQL.Attendees;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using DisputenPWA.Infrastructure.Connectors.SQL.Users;
+using DisputenPWA.SQLResolver.AppEvents;
+using DisputenPWA.SQLResolver.Attendees;
 using DisputenPWA.SQLResolver.Extensions;
-using DisputenPWA.SQLResolver.Services;
+using DisputenPWA.SQLResolver.Members;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -69,9 +72,13 @@ namespace DisputenWebsite.API
             services.AddTransient<IUserConnector, UserConnector>();
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<IMemberConnector, MemberConnector>();
+            services.AddTransient<IAttendeeRepository, AttendeeRepository>();
+            services.AddTransient<IAttendeeConnector, AttendeeConnector>();
 
             services.AddTransient<IOperationAuthorizer, OperationAuthorizer>();
             services.AddTransient<IResolveForMembersService, ResolveForMembersService>();
+            services.AddTransient<IResolveForAppEventsService, ResolveForAppEventsService>();
+            services.AddTransient<IResolveForAttendeesService, ResolveForAttendeesService>();
 
             services.Configure<IISServerOptions>(options =>
             {

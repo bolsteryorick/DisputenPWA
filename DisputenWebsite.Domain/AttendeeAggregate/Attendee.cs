@@ -14,7 +14,7 @@ namespace DisputenPWA.Domain.AttendeeAggregate
         public AppEvent AppEvent { get; set; }
         public User User { get; set; }
 
-        public DalAttendee CreateAttendee()
+        public DalAttendee CreateDalAttendee()
         {
             return new DalAttendee
             {

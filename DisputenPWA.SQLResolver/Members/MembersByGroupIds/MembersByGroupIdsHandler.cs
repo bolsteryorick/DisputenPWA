@@ -1,6 +1,5 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.MemberAggregate;
-using DisputenPWA.SQLResolver.Services;
 using MediatR;
 using System;
 using System.Collections.Generic;

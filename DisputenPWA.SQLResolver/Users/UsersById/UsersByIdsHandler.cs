@@ -1,8 +1,9 @@
 ﻿using DisputenPWA.DAL.Repositories;
+using DisputenPWA.Domain.AttendeeAggregate;
 using DisputenPWA.Domain.MemberAggregate;
 using DisputenPWA.Domain.UserAggregate;
+using DisputenPWA.SQLResolver.Attendees.AttendeesByUserIds;
 using DisputenPWA.SQLResolver.Members.MembersByUserIds;
-using DisputenPWA.SQLResolver.Users.UsersById;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DisputenPWA.SQLResolver.Handlers
+namespace DisputenPWA.SQLResolver.Users.UsersById
 {
     public class UsersByIdsHandler : IRequestHandler<UsersByIdsRequest, IReadOnlyCollection<User>>
     {
@@ -37,6 +38,10 @@ namespace DisputenPWA.SQLResolver.Handlers
             if (helper.CanGetMembers())
             {
                 users = await ResolveMembersForUsers(users, userIds, helper, cancellationToken);
+            }
+            if (helper.CanGetAttendences())
+            {
+                users = await ResolveAttendencesForUsers(users, userIds, helper, cancellationToken);
             }
             return users.ToList();
         }
@@ -67,6 +72,32 @@ namespace DisputenPWA.SQLResolver.Handlers
                 if (!dict.ContainsKey(userId))
                 {
                     dict[userId] = new List<Member>();
+                }
+                dict[userId].Add(item);
+            }
+            return dict;
+        }
+
+        private async Task<IEnumerable<User>> ResolveAttendencesForUsers(IEnumerable<User> users, IEnumerable<string> userIds, UserPropertyHelper helper, CancellationToken cancellationToken)
+        {
+            var attendences = await _mediator.Send(new AttendeesByUserIdsRequest(userIds, helper.AttendeePropertyHelper), cancellationToken);
+            var userIdToAttendencesDict = GetUserIdToAttendeesDict(attendences);
+            foreach (var user in users)
+            {
+                if (userIdToAttendencesDict.TryGetValue(user.Id, out var userAttendences)) user.Attendences = userAttendences;
+            }
+            return users;
+        }
+
+        private Dictionary<string, List<Attendee>> GetUserIdToAttendeesDict(IReadOnlyCollection<Attendee> items)
+        {
+            var dict = new Dictionary<string, List<Attendee>>();
+            foreach (var item in items)
+            {
+                var userId = item.UserId;
+                if (!dict.ContainsKey(userId))
+                {
+                    dict[userId] = new List<Attendee>();
                 }
                 dict[userId].Add(item);
             }
