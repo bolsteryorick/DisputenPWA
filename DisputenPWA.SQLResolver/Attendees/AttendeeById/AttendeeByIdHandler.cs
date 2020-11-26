@@ -1,13 +1,10 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.AttendeeAggregate;
-using DisputenPWA.Domain.AttendeeAggregate.DalObject;
 using DisputenPWA.SQLResolver.AppEvents.AppEventById;
 using DisputenPWA.SQLResolver.Users.UserById;
 using MediatR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -15,4 +15,9 @@
     <ProjectReference Include="..\DisputenWebsite.Infrastructure\DisputenPWA.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Attendees\Handlers\Commands\" />
+    <Folder Include="Attendees\Handlers\Queries\" />
+  </ItemGroup>
+
 </Project>

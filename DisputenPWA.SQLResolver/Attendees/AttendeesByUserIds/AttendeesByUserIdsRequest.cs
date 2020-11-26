@@ -1,8 +1,6 @@
 ﻿using DisputenPWA.Domain.AttendeeAggregate;
 using MediatR;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DisputenPWA.SQLResolver.Attendees.AttendeesByUserIds
 {

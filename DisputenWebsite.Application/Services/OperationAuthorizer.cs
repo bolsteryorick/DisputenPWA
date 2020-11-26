@@ -15,111 +15,145 @@ namespace DisputenPWA.Application.Services
         Task<bool> CanQueryMember(Guid memberId);
         Task<bool> CanChangeMember(Guid memberId);
         Task<bool> CanLeaveGroup(Guid memberId);
+        Task<bool> CanJoinEvent(Guid appEventId);
+        Task<bool> CanLeaveEvent(Guid attendeeId);
+        Task<bool> CanQueryAttendee(Guid attendeeId);
+        Task<bool> CanChangeAttendee(Guid attendeeId);
     }
 
     public class OperationAuthorizer : IOperationAuthorizer
     {
         private readonly IMemberRepository _memberRepository;
         private readonly IAppEventRepository _appEventRepository;
+        private readonly IAttendeeRepository _attendeeRepository;
         private readonly string _userId;
 
         public OperationAuthorizer(
             IMemberRepository memberRepository,
             IAppEventRepository appEventRepository,
-            IUserService userService
+            IUserService userService,
+            IAttendeeRepository attendeeRepository
             )
         {
             _memberRepository = memberRepository;
             _appEventRepository = appEventRepository;
+            _attendeeRepository = attendeeRepository;
             _userId = userService.GetUserId();
         }
 
         public async Task<bool> CanQueryGroup(Guid groupId)
         {
-            return await _memberRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.GroupId == groupId);
+            return await IsInGroup(groupId);
         }
 
         public async Task<bool> CanUpdateGroup(Guid groupId)
         {
-            return await _memberRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.GroupId == groupId && x.IsAdmin);
+            return await IsGroupAdmin(groupId);
         }
 
         public async Task<bool> CanQueryAppEvent(Guid appEventId)
         {
-            var groupId = await GetGroupIdFromAppEventId(appEventId);
-            return await CanQueryGroup(groupId);
+            return await IsInAppEvent(appEventId);
         }
 
         public async Task<bool> CanChangeAppEvent(Guid appEventId)
         {
-            var groupId = await GetGroupIdFromAppEventId(appEventId);
-            return await CanUpdateGroup(groupId);
+            return await IsAppEventAdmin(appEventId);
         }
 
         public async Task<bool> CanQueryMember(Guid memberId)
         {
-            var groupId = await GetGroupIdFromMemberId(memberId);
-            return await CanQueryGroup(groupId);
+            return await IsInGroupWithMember(memberId);
         }
 
         public async Task<bool> CanChangeMember(Guid memberId)
         {
-            var groupId = await GetGroupIdFromMemberId(memberId);
-            return await CanUpdateGroup(groupId);
+            return await IsAdminOfGroupWithMember(memberId);
         }
 
         public async Task<bool> CanLeaveGroup(Guid memberId)
         {
-            return await _memberRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.Id == memberId);
+            return await IsThisMember(memberId);
         }
 
-        private async Task<Guid> GetGroupIdFromAppEventId(Guid appEventId)
+        public async Task<bool> CanJoinEvent(Guid appEventId)
+        {
+            return await IsInAppEvent(appEventId);
+        }
+
+        public async Task<bool> CanLeaveEvent(Guid attendeeId)
+        {
+            return await IsThisAttendee(attendeeId);
+        }
+
+        public async Task<bool> CanQueryAttendee(Guid attendeeId)
+        {
+            return await IsInGroupWithAttendee(attendeeId);
+        }
+
+        public async Task<bool> CanChangeAttendee(Guid attendeeId)
+        {
+            return await IsAdminOfGroupWithAttendee(attendeeId);
+        }
+
+
+        private async Task<bool> IsThisAttendee(Guid attendeeId)
+        {
+            return await _attendeeRepository.GetQueryable().AnyAsync(a => a.UserId == _userId && a.Id == attendeeId);
+        }
+        private async Task<bool> IsAdminOfGroupWithAttendee(Guid attendeeId)
+        {
+            var groupId = await GroupIdFromAttendeeId(attendeeId);
+            return await IsGroupAdmin(groupId);
+        }
+        private async Task<bool> IsInGroupWithAttendee(Guid attendeeId)
+        {
+            var groupId = await GroupIdFromAttendeeId(attendeeId);
+            return await IsInGroup(groupId);
+        }
+        private async Task<bool> IsThisMember(Guid memberId)
+        {
+            return await _memberRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.Id == memberId);
+        }
+        private async Task<bool> IsAdminOfGroupWithMember(Guid memberId)
+        {
+            var groupId = await GroupIdFromMemberId(memberId);
+            return await CanUpdateGroup(groupId);
+        }
+        private async Task<bool> IsInGroupWithMember(Guid memberId)
+        {
+            var groupId = await GroupIdFromMemberId(memberId);
+            return await IsInGroup(groupId);
+        }
+        private async Task<bool> IsInAppEvent(Guid appEventId)
+        {
+            var groupId = await GroupIdFromEventId(appEventId);
+            return await IsInGroup(groupId);
+        }
+        private async Task<bool> IsAppEventAdmin(Guid appEventId)
+        {
+            var groupId = await GroupIdFromEventId(appEventId);
+            return await IsGroupAdmin(groupId);
+        }
+        private async Task<bool> IsInGroup(Guid groupId)
+        {
+            return await _memberRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.GroupId == groupId);
+        }
+        private async Task<bool> IsGroupAdmin(Guid groupId)
+        {
+            return await _memberRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.GroupId == groupId && x.IsAdmin);
+        }
+        private async Task<Guid> GroupIdFromEventId(Guid appEventId)
         {
             return await _appEventRepository.GetQueryable().Where(x => x.Id == appEventId).Select(x => x.GroupId).FirstOrDefaultAsync();
         }
-
-        private async Task<Guid> GetGroupIdFromMemberId(Guid memberId)
+        private async Task<Guid> GroupIdFromMemberId(Guid memberId)
         {
             return await _memberRepository.GetQueryable().Where(x => x.Id == memberId).Select(x => x.GroupId).FirstOrDefaultAsync();
         }
-
-
-        //public async Task<bool> CanDoOperation(Operation opr)
-        //{
-        //    if(opr.Row == Row.Group)
-        //    {
-        //        return opr.Action switch
-        //        {
-        //            Action.query => await CanQueryGroup(opr.UserId, opr.ObjectId),
-        //            Action.update => await CanUpdateGroup(opr.UserId, opr.ObjectId),
-        //            Action.create => true,
-        //            Action.delete => false,
-        //            _ => false
-        //        };
-        //    }
-        //    if(opr.Row == Row.AppEvent)
-        //    {
-        //        return opr.Action switch
-        //        {
-        //            Action.query => await CanQueryAppEvent(opr.UserId, opr.ObjectId),
-        //            Action.update => await CanUpdateAppEvent(opr.UserId, opr.ObjectId),
-        //            Action.create => await CanUpdateGroup(opr.UserId, opr.ObjectId),
-        //            Action.delete => await CanUpdateGroup(opr.UserId, opr.ObjectId),
-        //            _ => false
-        //        };
-        //    }
-        //    if(opr.Row == Row.Member)
-        //    {
-        //        return opr.Action switch
-        //        {
-        //            Action.query => await CanQueryMember(opr.UserId, opr.ObjectId),
-        //            Action.update => await CanUpdateMember(opr.UserId, opr.ObjectId),
-        //            Action.create => await CanUpdateGroup(opr.UserId, opr.ObjectId),
-        //            Action.delete => await CanUpdateGroup(opr.UserId, opr.ObjectId),
-        //            _ => false
-        //        };
-        //    }
-        //    return false;
-        //}
+        private async Task<Guid> GroupIdFromAttendeeId(Guid attendeeId)
+        {
+            return await _attendeeRepository.GetQueryable().Where(x => x.Id == attendeeId).Select(x => x.AppEvent.GroupId).FirstOrDefaultAsync();
+        }
     }
 }
