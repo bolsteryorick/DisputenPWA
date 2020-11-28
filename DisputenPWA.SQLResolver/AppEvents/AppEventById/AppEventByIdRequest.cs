@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.EventAggregate;
+﻿using DisputenPWA.Domain.Aggregates.EventAggregate;
 using MediatR;
 using System;
 

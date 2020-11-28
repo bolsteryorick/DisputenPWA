@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
 using DisputenPWA.SQLResolver.Attendees.AttendeesByEventIds;
 using DisputenPWA.SQLResolver.Groups.GroupById;
 using MediatR;
@@ -51,15 +51,13 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventById
 
         private async Task<AppEvent> GetAppEventById(Guid appEventId, AppEventPropertyHelper helper)
         {
-            var eventQueryable = QueryableAppEventById(appEventId, helper.LowestEndDate, helper.HighestStartDate);
+            var eventQueryable = QueryableAppEventById(appEventId);
             return await _appEventRepository.GetFirstOrDefault(eventQueryable, helper);
         }
 
-        private IQueryable<DalAppEvent> QueryableAppEventById(Guid appEventId, DateTime lowestEndDate, DateTime highestStartDate)
+        private IQueryable<DalAppEvent> QueryableAppEventById(Guid appEventId)
         {
-            return _appEventRepository.GetQueryable().Where(e => e.Id == appEventId &&
-                    e.EndTime > lowestEndDate &&
-                        e.StartTime < highestStartDate);
+            return _appEventRepository.GetQueryable().Where(e => e.Id == appEventId);
         }
     }
 }

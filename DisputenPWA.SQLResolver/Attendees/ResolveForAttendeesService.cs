@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.AttendeeAggregate;
+﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
 using DisputenPWA.SQLResolver.AppEvents.AppEventsByIds;
 using DisputenPWA.SQLResolver.Users.UsersById;
 using MediatR;

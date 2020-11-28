@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.UserAggregate;
+﻿using DisputenPWA.Domain.Aggregates.UserAggregate;
 using MediatR;
 
 namespace DisputenPWA.SQLResolver.Users.UserById

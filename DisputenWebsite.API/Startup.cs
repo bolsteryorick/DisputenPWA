@@ -1,10 +1,11 @@
 using DisputenPWA.API.Authoriation;
 using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
+using DisputenPWA.Application.Members.Handlers;
 using DisputenPWA.Application.Services;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using DisputenPWA.Infrastructure;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Attendees;
@@ -80,6 +81,7 @@ namespace DisputenWebsite.API
             services.AddTransient<IResolveForAppEventsService, ResolveForAppEventsService>();
             services.AddTransient<IResolveForAttendeesService, ResolveForAttendeesService>();
 
+            services.AddTransient<ILeaveAllGroupEventsService, LeaveAllGroupEventsService>();
             services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;

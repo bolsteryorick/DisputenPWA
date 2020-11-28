@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
 using MediatR;
 using System;
 using System.Collections.Generic;

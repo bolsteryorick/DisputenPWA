@@ -1,5 +1,5 @@
-﻿using DisputenPWA.Domain.UserAggregate.Commands;
-using DisputenPWA.Domain.UserAggregate.Queries;
+﻿using DisputenPWA.Domain.Aggregates.UserAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.UserAggregate.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

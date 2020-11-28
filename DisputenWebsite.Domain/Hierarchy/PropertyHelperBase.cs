@@ -1,8 +1,8 @@
-﻿using DisputenPWA.Domain.AttendeeAggregate;
-using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.MemberAggregate;
-using DisputenPWA.Domain.UserAggregate;
+﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.MemberAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate;
 using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;

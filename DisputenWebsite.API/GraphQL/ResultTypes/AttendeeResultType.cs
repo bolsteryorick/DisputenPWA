@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.AttendeeAggregate;
+﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
 using GraphQL.Types;
 
 namespace DisputenPWA.API.GraphQL.ResultTypes

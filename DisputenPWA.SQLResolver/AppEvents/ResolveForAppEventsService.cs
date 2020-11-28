@@ -1,5 +1,5 @@
-﻿using DisputenPWA.Domain.AttendeeAggregate;
-using DisputenPWA.Domain.EventAggregate;
+﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
 using DisputenPWA.SQLResolver.Attendees.AttendeesByEventIds;
 using DisputenPWA.SQLResolver.Groups.GroupsByIds;
 using MediatR;

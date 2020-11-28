@@ -1,8 +1,8 @@
-﻿using DisputenPWA.Domain.AttendeeAggregate.DalObject;
-using DisputenPWA.Domain.EventAggregate.DalObject;
-using DisputenPWA.Domain.GroupAggregate.DalObject;
-using DisputenPWA.Domain.MemberAggregate.DalObject;
-using DisputenPWA.Domain.UserAggregate;
+﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.MemberAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

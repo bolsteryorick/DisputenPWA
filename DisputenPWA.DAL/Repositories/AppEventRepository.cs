@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

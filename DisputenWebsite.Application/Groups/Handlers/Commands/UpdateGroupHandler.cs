@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.Application.Base;
 using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.GroupAggregate.Commands;
-using DisputenPWA.Domain.GroupAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using MediatR;
 using System.Threading;

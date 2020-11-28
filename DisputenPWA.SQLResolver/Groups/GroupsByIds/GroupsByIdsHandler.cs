@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.MemberAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.MemberAggregate;
 using DisputenPWA.SQLResolver.AppEvents.AppEventsFromGroupsIds;
 using DisputenPWA.SQLResolver.Members.MembersByGroupIds;
 using MediatR;

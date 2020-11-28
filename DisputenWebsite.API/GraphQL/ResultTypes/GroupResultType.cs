@@ -1,5 +1,5 @@
 ﻿using DisputenPWA.API.GraphQL.ResultTypes;
-using DisputenPWA.Domain.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
 using GraphQL.Types;
 
 namespace DisputenPWA.API.GraphQL.Groups

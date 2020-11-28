@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.MemberAggregate;
+﻿using DisputenPWA.Domain.Aggregates.MemberAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;

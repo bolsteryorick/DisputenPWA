@@ -1,7 +1,8 @@
 ﻿using DisputenPWA.DAL.Helpers;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;

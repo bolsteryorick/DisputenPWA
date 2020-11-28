@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.AttendeeAggregate;
+﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
 using MediatR;
 using System;
 using System.Collections.Generic;

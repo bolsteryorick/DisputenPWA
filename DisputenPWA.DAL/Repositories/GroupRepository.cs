@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.GroupAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

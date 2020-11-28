@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.ResultTypes;
-using DisputenPWA.Domain.MemberAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.MemberAggregate.Commands;
 using GraphQL.Types;
 using MediatR;
 using System;
@@ -28,21 +28,14 @@ namespace DisputenPWA.API.GraphQL.Mutations
 
             Field<MemberResultType>(
                 "DeleteMember",
-                description: "Deletes member by member id.",
+                description: "Deletes member by member id, usable by group admin.",
                 arguments: DeleteMemberArguments(),
                 resolve: context => mediator.Send(DeleteMemberCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
 
             Field<MemberResultType>(
-                "DeleteMembers",
-                description: "Deletes all members for group id.",
-                arguments: DeleteMembersArguments(),
-                resolve: context => mediator.Send(DeleteMembersCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
-                );
-
-            Field<MemberResultType>(
                 "LeaveGroup",
-                description: "Deletes all members for group id.",
+                description: "Deletes member by member id, usable by member itself.",
                 arguments: LeaveGroupArguments(),
                 resolve: context => mediator.Send(LeaveGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
@@ -103,20 +96,6 @@ namespace DisputenPWA.API.GraphQL.Mutations
             );
         }
 
-        private QueryArguments DeleteMembersArguments()
-        {
-            return new QueryArguments(
-                new QueryArgument<IdGraphType> { Name = "groupId" }
-            );
-        }
-
-        private DeleteMembersCommand DeleteMembersCommand(ResolveFieldContext<object> context)
-        {
-            return new DeleteMembersCommand(
-                context.GetArgument<Guid>("groupId")
-            );
-        }
-
         private QueryArguments LeaveGroupArguments()
         {
             return new QueryArguments(
@@ -135,7 +114,6 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             return new QueryArguments(
                 new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "memberId" },
-                new QueryArgument<StringGraphType> { Name = "userId" },
                 new QueryArgument<BooleanGraphType> { Name = "isAdmin" }
             );
         }
@@ -144,7 +122,6 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             return new UpdateMemberCommand(
                 context.GetArgument<Guid>("memberId"),
-                context.GetArgument<string>("userId"),
                 context.GetArgument<bool?>("isAdmin")
             );
         }

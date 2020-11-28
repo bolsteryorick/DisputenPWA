@@ -1,7 +1,8 @@
 ﻿using DisputenPWA.Application.Users.Shared;
-using DisputenPWA.Domain.UserAggregate;
-using DisputenPWA.Domain.UserAggregate.Commands;
-using DisputenPWA.Domain.UserAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.UserAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
