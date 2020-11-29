@@ -1,11 +1,8 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.Aggregates.EventAggregate;
 using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
-using DisputenPWA.SQLResolver.Attendees.AttendeesByEventIds;
-using DisputenPWA.SQLResolver.Groups.GroupById;
 using MediatR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,44 +12,22 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventById
     public class AppEventByIdHandler : IRequestHandler<AppEventByIdRequest, AppEvent>
     {
         private readonly IAppEventRepository _appEventRepository;
-        private readonly IMediator _mediator;
+        private readonly IResolveForAppEventsService _resolveForAppEventsService;
 
         public AppEventByIdHandler(
             IAppEventRepository appEventRepository,
-            IMediator mediator
+            IResolveForAppEventsService resolveForAppEventsService
             )
         {
             _appEventRepository = appEventRepository;
-            _mediator = mediator;
+            _resolveForAppEventsService = resolveForAppEventsService;
         }
 
         public async Task<AppEvent> Handle(AppEventByIdRequest req, CancellationToken cancellationToken)
         {
-            return await ResolveAppEventById(req.EventId, req.Helper, cancellationToken);
-        }
-
-        private async Task<AppEvent> ResolveAppEventById(
-            Guid appEventId,
-            AppEventPropertyHelper helper,
-            CancellationToken cancellationToken
-            )
-        {
-            var appEvent = await GetAppEventById(appEventId, helper);
-            if (helper.CanGetGroup())
-            {
-                appEvent.Group = await _mediator.Send(new GroupByIdRequest(appEvent.GroupId, helper.GroupPropertyHelper), cancellationToken);
-            }
-            if (helper.CanGetAttendees())
-            {
-                appEvent.Attendees = await _mediator.Send(new AttendeesByEventIdsRequest(new List<Guid> { appEventId }, helper.AttendeePropertyHelper), cancellationToken);
-            }
-            return appEvent;
-        }
-
-        private async Task<AppEvent> GetAppEventById(Guid appEventId, AppEventPropertyHelper helper)
-        {
-            var eventQueryable = QueryableAppEventById(appEventId);
-            return await _appEventRepository.GetFirstOrDefault(eventQueryable, helper);
+            var query = QueryableAppEventById(req.EventId);
+            var appEventInList = await _resolveForAppEventsService.Resolve(query, req.Helper, cancellationToken);
+            return appEventInList.FirstOrDefault();
         }
 
         private IQueryable<DalAppEvent> QueryableAppEventById(Guid appEventId)

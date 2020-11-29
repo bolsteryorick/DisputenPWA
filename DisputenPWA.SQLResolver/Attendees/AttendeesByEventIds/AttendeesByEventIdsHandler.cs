@@ -24,34 +24,10 @@ namespace DisputenPWA.SQLResolver.Attendees.AttendeesByEventIds
             _resolveForAttendeesService = resolveForAttendeesService;
         }
 
-        public async Task<IReadOnlyCollection<Attendee>> Handle(AttendeesByEventIdsRequest request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<Attendee>> Handle(AttendeesByEventIdsRequest req, CancellationToken cancellationToken)
         {
-            return await ResolveAttendeesByEventIds(request.EventIds, request.Helper, cancellationToken);
-        }
-
-        private async Task<IReadOnlyCollection<Attendee>> ResolveAttendeesByEventIds(
-            IEnumerable<Guid> eventIds, AttendeePropertyHelper helper, CancellationToken cancellationToken
-            )
-        {
-            var attendees = await GetAttendeesByEventIds(eventIds, helper);
-            if (helper.CanGetAppEvent())
-            {
-                attendees = await _resolveForAttendeesService.GetEventsForAttendees(attendees, eventIds, helper, cancellationToken);
-            }
-            if (helper.CanGetUser())
-            {
-                var userIds = attendees.Select(x => x.UserId);
-                attendees = await _resolveForAttendeesService.GetUsersForAttendees(attendees, userIds, helper, cancellationToken);
-            }
-            return attendees.ToImmutableList();
-        }
-
-        private async Task<IList<Attendee>> GetAttendeesByEventIds(
-            IEnumerable<Guid> eventIds, AttendeePropertyHelper helper
-            )
-        {
-            var attendeesQuery = _attendeeRepository.GetQueryable().Where(a => eventIds.Contains(a.AppEventId));
-            return await _attendeeRepository.GetAll(attendeesQuery, helper);
+            var query = _attendeeRepository.GetQueryable().Where(a => req.EventIds.Contains(a.AppEventId));
+            return await _resolveForAttendeesService.Resolve(query, req.Helper, cancellationToken);
         }
     }
 }

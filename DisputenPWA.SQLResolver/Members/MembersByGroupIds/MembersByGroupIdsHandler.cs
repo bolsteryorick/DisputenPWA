@@ -23,30 +23,10 @@ namespace DisputenPWA.SQLResolver.Members.MembersByGroupIds
             _resolveForMembersService = resolveForMembersService;
         }
 
-        public async Task<IReadOnlyCollection<Member>> Handle(MembersByGroupIdsRequest request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<Member>> Handle(MembersByGroupIdsRequest req, CancellationToken cancellationToken)
         {
-            return await ResolveMembersByGroupIds(request.GroupIds, request.Helper, cancellationToken);
-        }
-
-        private async Task<IReadOnlyCollection<Member>> ResolveMembersByGroupIds(IEnumerable<Guid> groupIds, MemberPropertyHelper helper, CancellationToken cancellationToken)
-        {
-            var members = await GetMembersByGroupIds(groupIds, helper);
-            if (helper.CanGetGroup())
-            {
-                members = await _resolveForMembersService.ResolveGroupsForMembers(members, groupIds, helper, cancellationToken);
-            }
-            if (helper.CanGetUser())
-            {
-                var userIds = members.Select(x => x.UserId);
-                members = await _resolveForMembersService.ResolveUsersForMembers(members, userIds, helper, cancellationToken);
-            }
-            return members.AsReadOnly();
-        }
-
-        private async Task<List<Member>> GetMembersByGroupIds(IEnumerable<Guid> groupIds, MemberPropertyHelper helper)
-        {
-            var queryable = _memberRepository.GetQueryable().Where(x => groupIds.Contains(x.GroupId));
-            return await _memberRepository.GetAll(queryable, helper);
+            var query = _memberRepository.GetQueryable().Where(x => req.GroupIds.Contains(x.GroupId));
+            return await _resolveForMembersService.Resolve(query, req.Helper, cancellationToken);
         }
     }
 }

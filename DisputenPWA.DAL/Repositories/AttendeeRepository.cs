@@ -12,7 +12,7 @@ namespace DisputenPWA.DAL.Repositories
     public interface IAttendeeRepository : IRepository<DalAttendee>
     {
         Task<Attendee> GetFirstOrDefault(IQueryable<DalAttendee> queryable, AttendeePropertyHelper helper);
-        Task<List<Attendee>> GetAll(IQueryable<DalAttendee> queryable, AttendeePropertyHelper helper);
+        Task<IList<Attendee>> GetAll(IQueryable<DalAttendee> queryable, AttendeePropertyHelper helper);
     }
 
     public class AttendeeRepository : Repository<DalAttendee>, IAttendeeRepository
@@ -27,7 +27,7 @@ namespace DisputenPWA.DAL.Repositories
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<List<Attendee>> GetAll(IQueryable<DalAttendee> queryable, AttendeePropertyHelper helper)
+        public async Task<IList<Attendee>> GetAll(IQueryable<DalAttendee> queryable, AttendeePropertyHelper helper)
         {
             var query = SelectMember(queryable, helper);
             return await query.ToListAsync();

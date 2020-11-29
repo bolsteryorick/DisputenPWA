@@ -27,32 +27,8 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventsFromGroupsIds
 
         public async Task<IReadOnlyCollection<AppEvent>> Handle(AppEventsFromGroupIdsRequest req, CancellationToken cancellationToken)
         {
-            return await ResolveAppEventsFromGroupIds(req.GroupIds, req.Helper, cancellationToken);
-        }
-
-        private async Task<IReadOnlyCollection<AppEvent>> ResolveAppEventsFromGroupIds(
-           IEnumerable<Guid> groupIds,
-           AppEventPropertyHelper helper,
-           CancellationToken cancellationToken
-            )
-        {
-            var events = await GetAppEventsFromGroupIds(groupIds, helper);
-            if (helper.CanGetGroup())
-            {
-                events = await _resolveForAppEventsService.GetGroupsForAppEvents(events, groupIds, helper, cancellationToken);
-            }
-            if (helper.CanGetAttendees())
-            {
-                var appEventIds = events.Select(x => x.Id);
-                events = await _resolveForAppEventsService.GetAttendeesForAppEvents(events, appEventIds, helper, cancellationToken);
-            }
-            return events.ToImmutableList();
-        }
-
-        private async Task<IList<AppEvent>> GetAppEventsFromGroupIds(IEnumerable<Guid> groupIds, AppEventPropertyHelper helper)
-        {
-            var eventsQueryable = QueryableAppEventsByGroupIds(groupIds, helper.LowestEndDate, helper.HighestStartDate);
-            return await _appEventRepository.GetAll(eventsQueryable, helper);
+            var query = QueryableAppEventsByGroupIds(req.GroupIds, req.Helper.LowestEndDate, req.Helper.HighestStartDate);
+            return await _resolveForAppEventsService.Resolve(query, req.Helper, cancellationToken);
         }
 
         private IQueryable<DalAppEvent> QueryableAppEventsByGroupIds(IEnumerable<Guid> groupIds, DateTime lowestEndDate, DateTime highestStartDate)

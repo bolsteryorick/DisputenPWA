@@ -12,7 +12,7 @@ namespace DisputenPWA.DAL.Repositories
     public interface IUserRepository : IRepository<ApplicationUser>
     {
         Task<User> GetFirstOrDefault(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper);
-        Task<List<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper);
+        Task<IList<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper);
         Task<int> GetCount();
     }
 
@@ -29,7 +29,7 @@ namespace DisputenPWA.DAL.Repositories
             return await selectMemberQuery.FirstOrDefaultAsync();
         }
 
-        public async Task<List<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper)
+        public async Task<IList<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper)
         {
             var selectMemberQuery = SelectUser(queryable, helper);
             return await selectMemberQuery.ToListAsync();

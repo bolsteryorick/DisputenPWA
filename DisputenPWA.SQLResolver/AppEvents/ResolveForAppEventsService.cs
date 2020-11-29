@@ -1,10 +1,15 @@
-﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
+﻿using DisputenPWA.DAL.Repositories;
+using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
 using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
 using DisputenPWA.SQLResolver.Attendees.AttendeesByEventIds;
 using DisputenPWA.SQLResolver.Groups.GroupsByIds;
+using DisputenPWA.SQLResolver.Helpers;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,24 +18,82 @@ namespace DisputenPWA.SQLResolver.AppEvents
 {
     public interface IResolveForAppEventsService
     {
-        Task<IList<AppEvent>> GetGroupsForAppEvents(IList<AppEvent> events, IEnumerable<Guid> groupIds, AppEventPropertyHelper helper, CancellationToken cancellationToken);
-        Task<IList<AppEvent>> GetAttendeesForAppEvents(IList<AppEvent> events, IEnumerable<Guid> appEventIds, AppEventPropertyHelper helper, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<AppEvent>> Resolve(
+            IQueryable<DalAppEvent> query,
+            AppEventPropertyHelper helper,
+            CancellationToken cancellationToken
+            );
     }
 
     public class ResolveForAppEventsService : IResolveForAppEventsService
     {
         private readonly IMediator _mediator;
+        private readonly IAppEventRepository _appEventRepository;
 
         public ResolveForAppEventsService(
-            IMediator mediator
+            IMediator mediator,
+            IAppEventRepository appEventRepository
             )
         {
             _mediator = mediator;
+            _appEventRepository = appEventRepository;
         }
 
-        public async Task<IList<AppEvent>> GetGroupsForAppEvents(IList<AppEvent> events, IEnumerable<Guid> groupIds, AppEventPropertyHelper helper, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<AppEvent>> Resolve(
+            IQueryable<DalAppEvent> query,
+            AppEventPropertyHelper helper,
+            CancellationToken cancellationToken
+            )
         {
-            var groups = await _mediator.Send(new GroupsByIdsRequest(groupIds, helper.GroupPropertyHelper), cancellationToken);
+            var events = await _appEventRepository.GetAll(query, helper);
+            events = await AddForeignObjects(events, helper, cancellationToken);
+            return events.ToImmutableList();
+        }
+
+        private async Task<IList<AppEvent>> AddForeignObjects(
+            IList<AppEvent> events, 
+            AppEventPropertyHelper helper, 
+            CancellationToken cancellationToken
+            )
+        {
+            if (helper.CanGetGroup())
+            {
+                var groups = await GetGroups(events, helper, cancellationToken);
+                events = AddGroupsToAppEvents(groups, events);
+            }
+            if (helper.CanGetAttendees())
+            {
+                var attendees = await GetAttendees(events, helper, cancellationToken);
+                events = AddAttendeesToAppEvents(attendees, events);
+            }
+            return events;
+        }
+
+        private async Task<IReadOnlyCollection<Group>> GetGroups(
+            IList<AppEvent> events, 
+            AppEventPropertyHelper helper, 
+            CancellationToken cancellationToken
+            )
+        {
+            var groupIds = events.Select(x => x.GroupId).Distinct();
+            return await _mediator.Send(new GroupsByIdsRequest(groupIds, helper.GroupPropertyHelper), cancellationToken);
+        }
+
+        private async Task<IReadOnlyCollection<Attendee>> GetAttendees(
+            IList<AppEvent> events, 
+            AppEventPropertyHelper helper, 
+            CancellationToken cancellationToken
+            )
+        {
+            var appEventIds = events.Select(x => x.Id);
+            return await _mediator.Send(new AttendeesByEventIdsRequest(appEventIds, helper.AttendeePropertyHelper), cancellationToken);
+        }
+
+        private IList<AppEvent> AddGroupsToAppEvents(
+            IReadOnlyCollection<Group> groups, 
+            IList<AppEvent> events
+            )
+        {
             var groupsDictionary = groups.ToDictionary(x => x.Id);
             foreach (var appEvent in events)
             {
@@ -39,31 +102,17 @@ namespace DisputenPWA.SQLResolver.AppEvents
             return events;
         }
 
-        public async Task<IList<AppEvent>> GetAttendeesForAppEvents(IList<AppEvent> events, IEnumerable<Guid> appEventIds, AppEventPropertyHelper helper, CancellationToken cancellationToken)
+        private IList<AppEvent> AddAttendeesToAppEvents(
+            IReadOnlyCollection<Attendee> attendees, 
+            IList<AppEvent> events
+            )
         {
-            var attendees = await _mediator.Send(new AttendeesByEventIdsRequest(appEventIds, helper.AttendeePropertyHelper), cancellationToken);
-            var attendeesDictionary = MakeEventIdToAttendeeDict(attendees);
+            var attendeesDictionary = DictionaryMaker.MakeDictionary<Guid, Attendee>(nameof(Attendee.AppEventId), attendees);
             foreach (var appEvent in events)
             {
                 if (attendeesDictionary.TryGetValue(appEvent.GroupId, out var eventAttendees)) appEvent.Attendees = eventAttendees;
             }
             return events;
         }
-
-        private Dictionary<Guid, List<Attendee>> MakeEventIdToAttendeeDict(IReadOnlyCollection<Attendee> items)
-        {
-            var dict = new Dictionary<Guid, List<Attendee>>();
-            foreach (var item in items)
-            {
-                var appEventId = item.AppEventId;
-                if (!dict.ContainsKey(appEventId))
-                {
-                    dict[appEventId] = new List<Attendee>();
-                }
-                dict[appEventId].Add(item);
-            }
-            return dict;
-        }
-
     }
 }

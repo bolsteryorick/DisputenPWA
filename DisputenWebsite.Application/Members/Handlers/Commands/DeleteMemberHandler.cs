@@ -33,6 +33,7 @@ namespace DisputenPWA.Application.Members.Handlers.Commands
             }
             await _leaveAllGroupEventsService.LeaveAllGroupEvents(request.MemberId);
             await _memberConnector.Delete(request.MemberId);
+            return new DeleteMemberCommandResult(null);
         }
     }
 }
