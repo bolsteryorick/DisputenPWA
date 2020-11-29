@@ -8,16 +8,19 @@ namespace DisputenPWA.Domain.Aggregates.GroupAggregate.Commands
         public SeedGroupsCommand(
             int nrOfGroups,
             int maxEventsPerGroup,
-            int maxMembersPerGroup
+            int maxMembersPerGroup,
+            int maxAttendeesPerEvent
             )
         {
             NrOfGroups = nrOfGroups;
             MaxEventsPerGroup = maxEventsPerGroup;
             MaxMembersPerGroup = maxMembersPerGroup;
+            MaxAttendeesPerEvent = maxAttendeesPerEvent;
         }
 
         public int NrOfGroups { get; }
         public int MaxEventsPerGroup { get; }
         public int MaxMembersPerGroup { get; }
+        public int MaxAttendeesPerEvent { get; }
     }
 }

@@ -13,7 +13,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             Field<GroupResultType>(
                 "CreateGroup",
-                description: "Creates a group in the database.",
+                description: "Creates a group in the database, current user will be the only member and will be admin.",
                 arguments: CreateGroupArguments(),
                 resolve: context => mediator.Send(CreateGroupCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
@@ -27,7 +27,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
 
             Field<GroupResultType>(
                 "SeedGroups",
-                description: "Adds x random groups with random events to database.",
+                description: "Adds random events, groups, members and attendees to the database.",
                 arguments: SeedGroupsArguments(),
                 resolve: context => mediator.Send(SeedGroupsCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
@@ -72,7 +72,8 @@ namespace DisputenPWA.API.GraphQL.Mutations
             return new QueryArguments(
                 new QueryArgument<IntGraphType> { Name = "nrOfGroups" },
                 new QueryArgument<IntGraphType> { Name = "maxEventsPerGroup" },
-                new QueryArgument<IntGraphType> { Name = "maxMembersPerGroup" }
+                new QueryArgument<IntGraphType> { Name = "maxMembersPerGroup" },
+                new QueryArgument<IntGraphType> { Name = "maxAttendeesPerEvent" }
             );
         }
 
@@ -81,7 +82,8 @@ namespace DisputenPWA.API.GraphQL.Mutations
             return new SeedGroupsCommand(
                 context.GetArgument<int>("nrOfGroups"),
                 context.GetArgument<int>("maxEventsPerGroup"),
-                context.GetArgument<int>("maxMembersPerGroup")
+                context.GetArgument<int>("maxMembersPerGroup"),
+                context.GetArgument<int>("maxAttendeesPerEvent")
             );
         }
     }

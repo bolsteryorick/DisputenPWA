@@ -13,7 +13,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             Field<AppEventResultType>(
                 "CreateAppEvent",
-                description: "Creates an app event in the database.",
+                description: "Creates an app event in the database for given group id. Current user automatically joins it.",
                 arguments: CreateAppEventArguments(),
                 resolve: context => mediator.Send(CreateAppEventCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );

@@ -13,14 +13,14 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             Field<AttendeeResultType>(
                 "CreateAttendee",
-                description: "Creates an attendee in the database.",
+                description: "Creates an attendee in the database. This means the user with the sent user id will attend the event.",
                 arguments: CreateAttendeeArguments(),
                 resolve: context => mediator.Send(CreateAttendeeCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
 
             Field<AttendeeResultType>(
                 "JoinEvent",
-                description: "Creates an attendee in the database for current user.",
+                description: "Creates an attendee in the database for current user. This means the current user will attend the event.",
                 arguments: JoinEventArguments(),
                 resolve: context => mediator.Send(JoinEventCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );

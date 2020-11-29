@@ -14,14 +14,14 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             Field<MemberResultType>(
                 "CreateMember",
-                description: "Creates a member in the database.",
+                description: "Creates a member in the database for given user id and group id.",
                 arguments: CreateMemberArguments(),
                 resolve: context => mediator.Send(CreateMemberCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
 
             Field<MemberResultType>(
                 "CreateMembers",
-                description: "Creates members in the database for given group.",
+                description: "Creates members in the database for given group id and user ids.",
                 arguments: CreateMembersArguments(),
                 resolve: context => mediator.Send(CreateMembersCommand(context), context.CancellationToken).Map(r => ProcessResult(context, r))
                 );
