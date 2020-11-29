@@ -1,7 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DalObject;
-using DisputenPWA.SQLResolver.Groups.GroupsByIds;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,40 +14,21 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventsFromGroupsIds
     public class AppEventsFromGroupIdsHandler : IRequestHandler<AppEventsFromGroupIdsRequest, IReadOnlyCollection<AppEvent>>
     {
         private readonly IAppEventRepository _appEventRepository;
-        private readonly IMediator _mediator;
+        private readonly IResolveForAppEventsService _resolveForAppEventsService;
 
         public AppEventsFromGroupIdsHandler(
             IAppEventRepository appEventRepository,
-            IMediator mediator
+            IResolveForAppEventsService resolveForAppEventsService
             )
         {
             _appEventRepository = appEventRepository;
-            _mediator = mediator;
+            _resolveForAppEventsService = resolveForAppEventsService;
         }
 
         public async Task<IReadOnlyCollection<AppEvent>> Handle(AppEventsFromGroupIdsRequest req, CancellationToken cancellationToken)
         {
-            return await ResolveAppEventsFromGroupIds(req.GroupIds, req.Helper, cancellationToken);
-        }
-
-        private async Task<IReadOnlyCollection<AppEvent>> ResolveAppEventsFromGroupIds(
-           IEnumerable<Guid> groupIds,
-           AppEventPropertyHelper helper,
-           CancellationToken cancellationToken
-            )
-        {
-            var events = await GetAppEventsFromGroupIds(groupIds, helper);
-            if (helper.CanGetGroup())
-            {
-                events = await GetGroupsForAppEvents(events, groupIds, helper, cancellationToken);
-            }
-            return events.ToImmutableList();
-        }
-
-        private async Task<IList<AppEvent>> GetAppEventsFromGroupIds(IEnumerable<Guid> groupIds, AppEventPropertyHelper helper)
-        {
-            var eventsQueryable = QueryableAppEventsByGroupIds(groupIds, helper.LowestEndDate, helper.HighestStartDate);
-            return await _appEventRepository.GetAll(eventsQueryable, helper);
+            var query = QueryableAppEventsByGroupIds(req.GroupIds, req.Helper.LowestEndDate, req.Helper.HighestStartDate);
+            return await _resolveForAppEventsService.Resolve(query, req.Helper, cancellationToken);
         }
 
         private IQueryable<DalAppEvent> QueryableAppEventsByGroupIds(IEnumerable<Guid> groupIds, DateTime lowestEndDate, DateTime highestStartDate)
@@ -60,17 +40,6 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventsFromGroupsIds
                     e.EndTime > lowestEndDate &&
                     e.StartTime < highestStartDate
                 );
-        }
-
-        private async Task<IList<AppEvent>> GetGroupsForAppEvents(IList<AppEvent> events, IEnumerable<Guid> groupIds, AppEventPropertyHelper helper, CancellationToken cancellationToken)
-        {
-            var groups = await _mediator.Send(new GroupsByIdsRequest(groupIds, helper.GroupPropertyHelper), cancellationToken);
-            var groupsDictionary = groups.ToDictionary(x => x.Id);
-            foreach (var appEvent in events)
-            {
-                if (groupsDictionary.TryGetValue(appEvent.GroupId, out var group)) appEvent.Group = group;
-            }
-            return events;
         }
     }
 }

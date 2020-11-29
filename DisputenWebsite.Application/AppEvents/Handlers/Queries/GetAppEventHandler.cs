@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.EventAggregate.Queries;
-using DisputenPWA.Domain.EventAggregate.Queries.Results;
+using DisputenPWA.Domain.Aggregates.EventAggregate.Queries;
+using DisputenPWA.Domain.Aggregates.EventAggregate.Queries.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using MediatR;
 using System.Threading;
@@ -24,12 +24,12 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Queries
 
         public async Task<GetAppEventQueryResult> Handle(AppEventQuery request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanQueryAppEvent(request.EventId))
+            if(!await _operationAuthorizer.CanQueryAppEvent(request.EventId))
             {
-                var appEvent = await _appEventConnector.GetAppEvent(request.EventId, request.AppEventPropertyHelper);
-                return new GetAppEventQueryResult(appEvent);
+                return new GetAppEventQueryResult(null);
             }
-            return new GetAppEventQueryResult(null);
+            var appEvent = await _appEventConnector.GetAppEvent(request.EventId, request.AppEventPropertyHelper);
+            return new GetAppEventQueryResult(appEvent);
         }
     }
 }

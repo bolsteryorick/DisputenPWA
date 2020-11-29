@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.MemberAggregate;
-using DisputenPWA.Domain.MemberAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.MemberAggregate;
+using DisputenPWA.Domain.Aggregates.MemberAggregate.DalObject;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace DisputenPWA.DAL.Repositories
     public interface IMemberRepository : IRepository<DalMember>
     {
         Task<Member> GetFirstOrDefault(IQueryable<DalMember> queryable, MemberPropertyHelper helper);
-        Task<List<Member>> GetAll(IQueryable<DalMember> queryable, MemberPropertyHelper helper);
+        Task<IList<Member>> GetAll(IQueryable<DalMember> queryable, MemberPropertyHelper helper);
     }
 
     public class MemberRepository : Repository<DalMember>, IMemberRepository
@@ -28,7 +28,7 @@ namespace DisputenPWA.DAL.Repositories
             return await selectMemberQuery.FirstOrDefaultAsync();
         }
 
-        public async Task<List<Member>> GetAll(IQueryable<DalMember> queryable, MemberPropertyHelper helper)
+        public async Task<IList<Member>> GetAll(IQueryable<DalMember> queryable, MemberPropertyHelper helper)
         {
             var selectMemberQuery = SelectMember(queryable, helper);
             return await selectMemberQuery.ToListAsync();

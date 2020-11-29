@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.UserAggregate;
+﻿using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

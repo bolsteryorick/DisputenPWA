@@ -1,6 +1,7 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace DisputenPWA.DAL.Repositories
     public interface IUserRepository : IRepository<ApplicationUser>
     {
         Task<User> GetFirstOrDefault(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper);
-        Task<List<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper);
+        Task<IList<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper);
         Task<int> GetCount();
     }
 
@@ -28,7 +29,7 @@ namespace DisputenPWA.DAL.Repositories
             return await selectMemberQuery.FirstOrDefaultAsync();
         }
 
-        public async Task<List<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper)
+        public async Task<IList<User>> GetAll(IQueryable<ApplicationUser> queryable, UserPropertyHelper helper)
         {
             var selectMemberQuery = SelectUser(queryable, helper);
             return await selectMemberQuery.ToListAsync();

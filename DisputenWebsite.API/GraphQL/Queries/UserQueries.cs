@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.ResultTypes;
-using DisputenPWA.Domain.UserAggregate;
-using DisputenPWA.Domain.UserAggregate.Queries;
+using DisputenPWA.Domain.Aggregates.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate.Queries;
 using GraphQL.Types;
 using MediatR;
 using System.Linq;

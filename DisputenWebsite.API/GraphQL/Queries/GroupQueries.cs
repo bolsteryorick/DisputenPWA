@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.API.Extensions;
 using DisputenPWA.API.GraphQL.Groups;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.GroupAggregate.Queries;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Queries;
 using GraphQL.Types;
 using MediatR;
 using System;
@@ -15,7 +15,7 @@ namespace DisputenPWA.API.GraphQL.Queries
         { 
             Field<GroupResultType>(
                 "GetGroup", 
-                description: "Gets a group from the database.", arguments: GroupArguments(),
+                description: "Gets a group from the database. This is the only way to get events for a group outside the standard event range.", arguments: GroupArguments(),
                 resolve: context => mediator.Send(GroupQuery(context), context.CancellationToken).Map(r => ProcessResult(context, r))
             );
         }

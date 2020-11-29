@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.EventAggregate.Commands;
-using DisputenPWA.Domain.EventAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.EventAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.EventAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using MediatR;
 using System.Threading;
@@ -25,10 +25,11 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Commands
 
         public async Task<DeleteAppEventCommandResult> Handle(DeleteAppEventCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanChangeAppEvent(request.AppEventId))
+            if(!await _operationAuthorizer.CanChangeAppEvent(request.AppEventId))
             {
-                await _appEventConnector.DeleteAppEvent(request.AppEventId);
+                return new DeleteAppEventCommandResult(null);
             }
+            await _appEventConnector.DeleteAppEvent(request.AppEventId);
             return new DeleteAppEventCommandResult(null);
         }
     }

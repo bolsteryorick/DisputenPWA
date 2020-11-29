@@ -1,5 +1,5 @@
-﻿using DisputenPWA.Domain.UserAggregate;
-using DisputenPWA.SQLResolver.Users.UsersById;
+﻿using DisputenPWA.Domain.Aggregates.UserAggregate;
+using DisputenPWA.SQLResolver.Users.UserById;
 using MediatR;
 using System.Threading.Tasks;
 

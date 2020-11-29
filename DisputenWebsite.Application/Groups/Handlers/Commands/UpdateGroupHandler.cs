@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.Application.Base;
 using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.GroupAggregate.Commands;
-using DisputenPWA.Domain.GroupAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using MediatR;
 using System.Threading;
@@ -25,13 +25,13 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
 
         public async Task<UpdateGroupCommandResult> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanUpdateGroup(request.Id))
+            if(!await _operationAuthorizer.CanUpdateGroup(request.Id))
             {
-                var properties = GetUpdateProperties(request);
-                var group = await _groupConnector.UpdateProperties(properties, request.Id);
-                return new UpdateGroupCommandResult(group);
+                return new UpdateGroupCommandResult(null);
             }
-            return new UpdateGroupCommandResult(null);
+            var properties = GetUpdateProperties(request);
+            var group = await _groupConnector.UpdateProperties(properties, request.Id);
+            return new UpdateGroupCommandResult(group);
         }
     }
 }

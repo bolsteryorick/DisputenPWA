@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.DAL.Models;
 using DisputenPWA.DAL.Repositories.Base;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.GroupAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace DisputenPWA.DAL.Repositories
     public interface IGroupRepository : IRepository<DalGroup>
     {
         Task<Group> GetFirstOrDefault(IQueryable<DalGroup> queryable, GroupPropertyHelper helper);
-        Task<List<Group>> GetAll(IQueryable<DalGroup> queryable, GroupPropertyHelper helper);
+        Task<IList<Group>> GetAll(IQueryable<DalGroup> queryable, GroupPropertyHelper helper);
     }
 
     public class GroupRepository : Repository<DalGroup>, IGroupRepository
@@ -28,7 +28,7 @@ namespace DisputenPWA.DAL.Repositories
             return await selectAppEventQuery.FirstOrDefaultAsync();
         }
 
-        public async Task<List<Group>> GetAll(IQueryable<DalGroup> queryable, GroupPropertyHelper helper)
+        public async Task<IList<Group>> GetAll(IQueryable<DalGroup> queryable, GroupPropertyHelper helper)
         {
             var selectAppEventQuery = SelectGroup(queryable, helper);
             return await selectAppEventQuery.ToListAsync();

@@ -1,4 +1,4 @@
-﻿using DisputenPWA.Domain.GroupAggregate;
+﻿using DisputenPWA.Domain.Aggregates.GroupAggregate;
 using Microsoft.Azure.Cosmos;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,8 @@
 ﻿using DisputenPWA.Application.Users.Shared;
-using DisputenPWA.Domain.UserAggregate;
-using DisputenPWA.Domain.UserAggregate.Commands;
-using DisputenPWA.Domain.UserAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.UserAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.UserAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -28,13 +29,14 @@ namespace DisputenPWA.Application.Users.Handlers.Commands
         {
             var user = new ApplicationUser { UserName = request.Email, Email = request.Email };
             var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                var token = JwtTokenGenerator.GenerateJwtToken(user, _configuration.GetValue<string>("JWT:Secret"));
-                return new RegisterUserCommandResult(new User { JWTToken = token });
+                // domain error?
+                return new RegisterUserCommandResult(new User { JWTToken = null });
             }
-            // domain error?
-            return new RegisterUserCommandResult(new User { JWTToken = null });
+
+            var token = JwtTokenGenerator.GenerateJwtToken(user, _configuration.GetValue<string>("JWT:Secret"));
+            return new RegisterUserCommandResult(new User { JWTToken = token });
         }
     }
 }

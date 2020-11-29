@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.Application.Base;
 using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.MemberAggregate.Commands;
-using DisputenPWA.Domain.MemberAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.MemberAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.MemberAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using MediatR;
 using System.Threading;
@@ -25,13 +25,13 @@ namespace DisputenPWA.Application.Members.Handlers.Commands
 
         public async Task<UpdateMemberCommandResult> Handle(UpdateMemberCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanChangeMember(request.MemberId))
+            if(!await _operationAuthorizer.CanChangeMember(request.MemberId))
             {
-                var properties = GetUpdateProperties(request);
-                var member = await _memberConnector.UpdateProperties(properties, request.MemberId);
-                return new UpdateMemberCommandResult(member);
+                return new UpdateMemberCommandResult(null);
             }
-            return new UpdateMemberCommandResult(null);
+            var properties = GetUpdateProperties(request);
+            var member = await _memberConnector.UpdateProperties(properties, request.MemberId);
+            return new UpdateMemberCommandResult(member);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.GroupAggregate.Queries;
-using DisputenPWA.Domain.GroupAggregate.Queries.Results;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Queries;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Queries.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using MediatR;
 using System.Threading;
@@ -24,12 +24,12 @@ namespace DisputenPWA.Application.Groups.Handlers.Queries
 
         public async Task<GroupQueryResult> Handle(GroupQuery request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanQueryGroup(request.GroupId))
+            if(!await _operationAuthorizer.CanQueryGroup(request.GroupId))
             {
-                var group = await _groupConnector.GetGroup(request.GroupId, request.GroupPropertyHelper);
-                return new GroupQueryResult(group);
+                return new GroupQueryResult(null);
             }
-            return new GroupQueryResult(null);
+            var group = await _groupConnector.GetGroup(request.GroupId, request.GroupPropertyHelper);
+            return new GroupQueryResult(group);
         }
     }
 }

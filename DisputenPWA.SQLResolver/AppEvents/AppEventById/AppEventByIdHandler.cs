@@ -1,7 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.EventAggregate.DalObject;
-using DisputenPWA.SQLResolver.Groups.GroupById;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
 using MediatR;
 using System;
 using System.Linq;
@@ -13,46 +12,27 @@ namespace DisputenPWA.SQLResolver.AppEvents.AppEventById
     public class AppEventByIdHandler : IRequestHandler<AppEventByIdRequest, AppEvent>
     {
         private readonly IAppEventRepository _appEventRepository;
-        private readonly IMediator _mediator;
+        private readonly IResolveForAppEventsService _resolveForAppEventsService;
 
         public AppEventByIdHandler(
             IAppEventRepository appEventRepository,
-            IMediator mediator
+            IResolveForAppEventsService resolveForAppEventsService
             )
         {
             _appEventRepository = appEventRepository;
-            _mediator = mediator;
+            _resolveForAppEventsService = resolveForAppEventsService;
         }
 
         public async Task<AppEvent> Handle(AppEventByIdRequest req, CancellationToken cancellationToken)
         {
-            return await ResolveAppEventById(req.EventId, req.Helper, cancellationToken);
+            var query = QueryableAppEventById(req.EventId);
+            var appEventInList = await _resolveForAppEventsService.Resolve(query, req.Helper, cancellationToken);
+            return appEventInList.FirstOrDefault();
         }
 
-        private async Task<AppEvent> ResolveAppEventById(
-            Guid appEventId,
-            AppEventPropertyHelper helper,
-            CancellationToken cancellationToken)
+        private IQueryable<DalAppEvent> QueryableAppEventById(Guid appEventId)
         {
-            var appEvent = await GetAppEventById(appEventId, helper);
-            if (helper.CanGetGroup())
-            {
-                appEvent.Group = await _mediator.Send(new GroupByIdRequest(appEvent.GroupId, helper.GroupPropertyHelper), cancellationToken);
-            }
-            return appEvent;
-        }
-
-        private async Task<AppEvent> GetAppEventById(Guid appEventId, AppEventPropertyHelper helper)
-        {
-            var eventQueryable = QueryableAppEventById(appEventId, helper.LowestEndDate, helper.HighestStartDate);
-            return await _appEventRepository.GetFirstOrDefault(eventQueryable, helper);
-        }
-
-        private IQueryable<DalAppEvent> QueryableAppEventById(Guid appEventId, DateTime lowestEndDate, DateTime highestStartDate)
-        {
-            return _appEventRepository.GetQueryable().Where(e => e.Id == appEventId &&
-                    e.EndTime > lowestEndDate &&
-                        e.StartTime < highestStartDate);
+            return _appEventRepository.GetQueryable().Where(e => e.Id == appEventId);
         }
     }
 }

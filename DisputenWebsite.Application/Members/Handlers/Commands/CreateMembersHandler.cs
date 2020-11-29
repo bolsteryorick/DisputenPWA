@@ -1,7 +1,7 @@
 ﻿using DisputenPWA.Application.Services;
-using DisputenPWA.Domain.MemberAggregate;
-using DisputenPWA.Domain.MemberAggregate.Commands;
-using DisputenPWA.Domain.MemberAggregate.Commands.Results;
+using DisputenPWA.Domain.Aggregates.MemberAggregate;
+using DisputenPWA.Domain.Aggregates.MemberAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.MemberAggregate.Commands.Results;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using MediatR;
 using System.Collections.Generic;
@@ -28,19 +28,21 @@ namespace DisputenPWA.Application.Members.Handlers.Commands
 
         public async Task<CreateMembersCommandResult> Handle(CreateMembersCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanUpdateGroup(request.GroupId))
+            if(!await _operationAuthorizer.CanUpdateGroup(request.GroupId))
             {
-                var members = new List<Member>();
-                foreach (var userId in request.UserIds)
-                {
-                    members.Add(new Member
-                    {
-                        UserId = userId,
-                        GroupId = request.GroupId,
-                    });
-                }
-                await _memberConnector.Create(members.Select(m => m.CreateDalMember()));
+                return new CreateMembersCommandResult(null);
             }
+
+            var members = new List<Member>();
+            foreach (var userId in request.UserIds)
+            {
+                members.Add(new Member
+                {
+                    UserId = userId,
+                    GroupId = request.GroupId,
+                });
+            }
+            await _memberConnector.Create(members.Select(m => m.CreateDalMember()));
             return new CreateMembersCommandResult(null);
         }
     }

@@ -1,7 +1,8 @@
-﻿using DisputenPWA.Domain.EventAggregate;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.MemberAggregate;
-using DisputenPWA.Domain.UserAggregate;
+﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
+using DisputenPWA.Domain.Aggregates.EventAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.MemberAggregate;
+using DisputenPWA.Domain.Aggregates.UserAggregate;
 using GraphQL.Language.AST;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,23 @@ namespace DisputenPWA.Domain.Hierarchy
             if (userFields.Count > 0)
             {
                 return new UserPropertyHelper(
+                    userFields,
+                    depth + 1
+                );
+            }
+            return null;
+        }
+
+        public AttendeePropertyHelper GetAttendeePropertyHelper(
+            IEnumerable<Field> fields,
+            string userFieldName,
+            int depth
+            )
+        {
+            var userFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == userFieldName.ToLower()));
+            if (userFields.Count > 0)
+            {
+                return new AttendeePropertyHelper(
                     userFields,
                     depth + 1
                 );

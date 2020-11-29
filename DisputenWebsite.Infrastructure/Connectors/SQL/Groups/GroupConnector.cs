@@ -1,6 +1,6 @@
 ﻿using DisputenPWA.DAL.Repositories;
-using DisputenPWA.Domain.GroupAggregate;
-using DisputenPWA.Domain.GroupAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.GroupAggregate;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject;
 using DisputenPWA.SQLResolver.Groups.GroupById;
 using MediatR;
 using System;

@@ -1,5 +1,5 @@
-﻿using DisputenPWA.Domain.GroupAggregate.Commands;
-using DisputenPWA.Domain.GroupAggregate.Commands.Results;
+﻿using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands;
+using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands.Results;
 using DisputenPWA.Infrastructure;
 using MediatR;
 using System.Threading;
@@ -17,9 +17,14 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
         {
             _seedingService = seedingService;
         }
-        public async Task<SeedGroupsCommandResult> Handle(SeedGroupsCommand request, CancellationToken cancellationToken)
+        public async Task<SeedGroupsCommandResult> Handle(SeedGroupsCommand req, CancellationToken cancellationToken)
         {
-            await _seedingService.Seed(request.NrOfGroups, request.MaxEventsPerGroup, request.MaxMembersPerGroup);
+            await _seedingService.Seed(
+                req.NrOfGroups, 
+                req.MaxEventsPerGroup, 
+                req.MaxMembersPerGroup, 
+                req.MaxAttendeesPerEvent
+                );
             return new SeedGroupsCommandResult(null);
         }
     }
