@@ -24,12 +24,12 @@ namespace DisputenPWA.Application.Groups.Handlers.Queries
 
         public async Task<GroupQueryResult> Handle(GroupQuery request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanQueryGroup(request.GroupId))
+            if(!await _operationAuthorizer.CanQueryGroup(request.GroupId))
             {
-                var group = await _groupConnector.GetGroup(request.GroupId, request.GroupPropertyHelper);
-                return new GroupQueryResult(group);
+                return new GroupQueryResult(null);
             }
-            return new GroupQueryResult(null);
+            var group = await _groupConnector.GetGroup(request.GroupId, request.GroupPropertyHelper);
+            return new GroupQueryResult(group);
         }
     }
 }

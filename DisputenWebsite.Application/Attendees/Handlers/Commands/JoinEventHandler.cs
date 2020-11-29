@@ -12,33 +12,42 @@ namespace DisputenPWA.Application.Attendees.Handlers.Commands
     public class JoinEventHandler : IRequestHandler<JoinEventCommand, CreateAttendeeCommandResult>
     {
         private readonly IOperationAuthorizer _operationAuthorizer;
+        private readonly IBusinessAuthorizer _businessAuthorizer;
         private readonly IAttendeeConnector _attendeeConnector;
         private readonly IUserService _userService;
 
         public JoinEventHandler(
             IOperationAuthorizer operationAuthorizer,
+            IBusinessAuthorizer businessAuthorizer,
             IAttendeeConnector attendeeConnector,
             IUserService userService
             )
         {
             _operationAuthorizer = operationAuthorizer;
+            _businessAuthorizer = businessAuthorizer;
             _attendeeConnector = attendeeConnector;
             _userService = userService;
         }
 
         public async Task<CreateAttendeeCommandResult> Handle(JoinEventCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanJoinEvent(request.AppEventId))
+            if (!await _operationAuthorizer.CanJoinEvent(request.AppEventId))
             {
-                var attendee = new Attendee
-                {
-                    AppEventId = request.AppEventId,
-                    UserId = _userService.GetUserId()
-                };
-                await _attendeeConnector.Create(attendee);
-                return new CreateAttendeeCommandResult(attendee);
+                return new CreateAttendeeCommandResult(null);
             }
-            return new CreateAttendeeCommandResult(null);
+
+            if (!await _businessAuthorizer.CanAddAttendee(request.AppEventId))
+            {
+                return new CreateAttendeeCommandResult(null);
+            }
+
+            var attendee = new Attendee
+            {
+                AppEventId = request.AppEventId,
+                UserId = _userService.GetUserId()
+            };
+            await _attendeeConnector.Create(attendee);
+            return new CreateAttendeeCommandResult(attendee);
         }
     }
 }

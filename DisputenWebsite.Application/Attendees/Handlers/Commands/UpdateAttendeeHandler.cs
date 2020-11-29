@@ -25,13 +25,13 @@ namespace DisputenPWA.Application.Attendees.Handlers.Commands
 
         public async Task<UpdateAttendeeCommandResult> Handle(UpdateAttendeeCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanChangeAttendee(request.AtttendeeId))
+            if(!await _operationAuthorizer.CanChangeAttendee(request.AtttendeeId))
             {
-                var properties = GetUpdateProperties(request);
-                var attendee = await _attendeeConnector.UpdateProperties(properties, request.AtttendeeId);
-                return new UpdateAttendeeCommandResult(attendee);
+                return new UpdateAttendeeCommandResult(null);
             }
-            return new UpdateAttendeeCommandResult(null);
+            var properties = GetUpdateProperties(request);
+            var attendee = await _attendeeConnector.UpdateProperties(properties, request.AtttendeeId);
+            return new UpdateAttendeeCommandResult(attendee);
         }
     }
 }

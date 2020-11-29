@@ -24,10 +24,11 @@ namespace DisputenPWA.Application.Attendees.Handlers.Commands
 
         public async Task<DeleteAttendeeCommandResult> Handle(DeleteAttendeeCommand request, CancellationToken cancellationToken)
         {
-            if (await _operationAuthorizer.CanChangeAttendee(request.AttendeeId))
+            if (!await _operationAuthorizer.CanChangeAttendee(request.AttendeeId))
             {
-                await _attendeeConnector.Delete(request.AttendeeId);
+                return new DeleteAttendeeCommandResult(null);
             }
+            await _attendeeConnector.Delete(request.AttendeeId);
             return new DeleteAttendeeCommandResult(null);
         }
     }

@@ -29,13 +29,14 @@ namespace DisputenPWA.Application.Users.Handlers.Commands
         {
             var user = new ApplicationUser { UserName = request.Email, Email = request.Email };
             var result = await _userManager.CreateAsync(user, request.Password);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                var token = JwtTokenGenerator.GenerateJwtToken(user, _configuration.GetValue<string>("JWT:Secret"));
-                return new RegisterUserCommandResult(new User { JWTToken = token });
+                // domain error?
+                return new RegisterUserCommandResult(new User { JWTToken = null });
             }
-            // domain error?
-            return new RegisterUserCommandResult(new User { JWTToken = null });
+
+            var token = JwtTokenGenerator.GenerateJwtToken(user, _configuration.GetValue<string>("JWT:Secret"));
+            return new RegisterUserCommandResult(new User { JWTToken = token });
         }
     }
 }

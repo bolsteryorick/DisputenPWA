@@ -25,18 +25,18 @@ namespace DisputenPWA.Application.Members.Handlers.Commands
 
         public async Task<CreateMemberCommandResult> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanUpdateGroup(request.GroupId))
+            if(!await _operationAuthorizer.CanUpdateGroup(request.GroupId))
             {
-                var member = new Member
-                {
-                    UserId = request.UserId,
-                    GroupId = request.GroupId,
-                    IsAdmin = request.IsAdmin
-                };
-                await _memberConnector.Create(member);
-                return new CreateMemberCommandResult(member);
+                return new CreateMemberCommandResult(null);
             }
-            return new CreateMemberCommandResult(null);
+            var member = new Member
+            {
+                UserId = request.UserId,
+                GroupId = request.GroupId,
+                IsAdmin = request.IsAdmin
+            };
+            await _memberConnector.Create(member);
+            return new CreateMemberCommandResult(member);
         }
     }
 }

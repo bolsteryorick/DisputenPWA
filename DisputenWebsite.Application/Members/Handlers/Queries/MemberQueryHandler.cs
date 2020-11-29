@@ -24,12 +24,12 @@ namespace DisputenPWA.Application.Members.Handlers.Queries
 
         public async Task<MemberQueryResult> Handle(MemberQuery request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanQueryMember(request.MemberId))
+            if(!await _operationAuthorizer.CanQueryMember(request.MemberId))
             {
-                var member = await _memberConnector.GetMember(request.MemberId, request.MemberPropertyHelper);
-                return new MemberQueryResult(member);
+                return new MemberQueryResult(null);
             }
-            return new MemberQueryResult(null);
+            var member = await _memberConnector.GetMember(request.MemberId, request.MemberPropertyHelper);
+            return new MemberQueryResult(member);
         }
     }
 }

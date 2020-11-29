@@ -27,11 +27,12 @@ namespace DisputenPWA.Application.Members.Handlers.Commands
 
         public async Task<DeleteMemberCommandResult> Handle(LeaveGroupCommand request, CancellationToken cancellationToken)
         {
-            if (await _operationAuthorizer.CanLeaveGroup(request.MemberId))
+            if (!await _operationAuthorizer.CanLeaveGroup(request.MemberId))
             {
-                await _leaveAllGroupEventsService.LeaveAllGroupEvents(request.MemberId);
-                await _memberConnector.Delete(request.MemberId);
+                return new DeleteMemberCommandResult(null);
             }
+            await _leaveAllGroupEventsService.LeaveAllGroupEvents(request.MemberId);
+            await _memberConnector.Delete(request.MemberId);
             return new DeleteMemberCommandResult(null);
         }
     }

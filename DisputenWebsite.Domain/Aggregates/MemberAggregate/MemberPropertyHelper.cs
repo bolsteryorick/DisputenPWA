@@ -1,6 +1,5 @@
 ﻿using DisputenPWA.Domain.Aggregates.GroupAggregate;
 using DisputenPWA.Domain.Aggregates.UserAggregate;
-using DisputenPWA.Domain.Helpers;
 using DisputenPWA.Domain.Hierarchy;
 using GraphQL.Language.AST;
 using System.Collections.Generic;

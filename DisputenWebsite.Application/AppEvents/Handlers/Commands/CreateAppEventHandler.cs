@@ -24,22 +24,24 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Commands
             _appEventConnector = appEventConnector;
         }
 
-        public async Task<CreateAppEventCommandResult> Handle(CreateAppEventCommand request, CancellationToken cancellationToken)
+        public async Task<CreateAppEventCommandResult> Handle(CreateAppEventCommand req, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanUpdateGroup(request.GroupId))
+            if(!await _operationAuthorizer.CanUpdateGroup(req.GroupId))
             {
-                var appEvent = new AppEvent
-                {
-                    Name = request.Name,
-                    Description = request.Description,
-                    StartTime = request.StartTime,
-                    EndTime = request.EndTime,
-                    GroupId = request.GroupId
-                };
-                await _appEventConnector.Create(appEvent);
-                return new CreateAppEventCommandResult(appEvent);
+                return new CreateAppEventCommandResult(null);
             }
-            return new CreateAppEventCommandResult(null);
+
+            var appEvent = new AppEvent
+            {
+                Name = req.Name,
+                Description = req.Description,
+                StartTime = req.StartTime,
+                EndTime = req.EndTime,
+                MaxAttendees = req.Maxattendees,
+                GroupId = req.GroupId
+            };
+            await _appEventConnector.Create(appEvent);
+            return new CreateAppEventCommandResult(appEvent);
         }
     }
 }

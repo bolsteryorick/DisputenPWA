@@ -25,13 +25,13 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Commands
 
         public async Task<UpdateAppEventCommandResult> Handle(UpdateAppEventCommand request, CancellationToken cancellationToken)
         {
-            if (await _operationAuthorizer.CanChangeAppEvent(request.Id))
+            if (!await _operationAuthorizer.CanChangeAppEvent(request.Id))
             {
-                var updateProperties = GetUpdateProperties(request);
-                var appEvent = await _appEventConnector.UpdateProperties(updateProperties, request.Id);
-                return new UpdateAppEventCommandResult(appEvent);
+                return new UpdateAppEventCommandResult(null);
             }
-            return new UpdateAppEventCommandResult(null);
+            var updateProperties = GetUpdateProperties(request);
+            var appEvent = await _appEventConnector.UpdateProperties(updateProperties, request.Id);
+            return new UpdateAppEventCommandResult(appEvent);
         }
     }
 }

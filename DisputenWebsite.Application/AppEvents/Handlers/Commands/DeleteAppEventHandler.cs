@@ -25,10 +25,11 @@ namespace DisputenPWA.Application.AppEvents.Handlers.Commands
 
         public async Task<DeleteAppEventCommandResult> Handle(DeleteAppEventCommand request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanChangeAppEvent(request.AppEventId))
+            if(!await _operationAuthorizer.CanChangeAppEvent(request.AppEventId))
             {
-                await _appEventConnector.DeleteAppEvent(request.AppEventId);
+                return new DeleteAppEventCommandResult(null);
             }
+            await _appEventConnector.DeleteAppEvent(request.AppEventId);
             return new DeleteAppEventCommandResult(null);
         }
     }

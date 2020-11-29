@@ -11,6 +11,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate.Commands
             string description,
             DateTime startTime,
             DateTime endTime,
+            int maxattendees,
             Guid groupId
             )
         {
@@ -18,6 +19,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate.Commands
             Description = description;
             StartTime = startTime;
             EndTime = endTime;
+            Maxattendees = maxattendees;
             GroupId = groupId;
         }
 
@@ -25,6 +27,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate.Commands
         public string Description { get; }
         public DateTime StartTime { get; }
         public DateTime EndTime { get; }
+        public int Maxattendees { get; }
         public Guid GroupId { get; }
     }
 }

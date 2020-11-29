@@ -1,21 +1,12 @@
 using DisputenPWA.API.Authoriation;
 using DisputenPWA.API.Extensions;
 using DisputenPWA.Application;
-using DisputenPWA.Application.Members.Handlers;
+using DisputenPWA.Application.Extensions;
 using DisputenPWA.Application.Services;
 using DisputenPWA.DAL.Models;
-using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
-using DisputenPWA.Infrastructure;
-using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
-using DisputenPWA.Infrastructure.Connectors.SQL.Attendees;
-using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
-using DisputenPWA.Infrastructure.Connectors.SQL.Members;
-using DisputenPWA.Infrastructure.Connectors.SQL.Users;
-using DisputenPWA.SQLResolver.AppEvents;
-using DisputenPWA.SQLResolver.Attendees;
+using DisputenPWA.Infrastructure.Extensions;
 using DisputenPWA.SQLResolver.Extensions;
-using DisputenPWA.SQLResolver.Members;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -61,27 +52,11 @@ namespace DisputenWebsite.API
             });
             //services.AddCosmosDb(_configuration);
 
-            services.AddTransient<IGroupRepository, GroupRepository>();
-            services.AddTransient<IGroupConnector, GroupConnector>();
-            services.AddTransient<ISeedingService, SeedingService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddSQLConnectors();
+            services.AddSQLResolverServices();
+            services.AddBusinessLogicServices();
 
-            services.AddTransient<IAppEventRepository, AppEventRepository>();
-            services.AddTransient<IAppEventConnector, AppEventConnector>();
-
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IUserConnector, UserConnector>();
-            services.AddTransient<IMemberRepository, MemberRepository>();
-            services.AddTransient<IMemberConnector, MemberConnector>();
-            services.AddTransient<IAttendeeRepository, AttendeeRepository>();
-            services.AddTransient<IAttendeeConnector, AttendeeConnector>();
-
-            services.AddTransient<IOperationAuthorizer, OperationAuthorizer>();
-            services.AddTransient<IResolveForMembersService, ResolveForMembersService>();
-            services.AddTransient<IResolveForAppEventsService, ResolveForAppEventsService>();
-            services.AddTransient<IResolveForAttendeesService, ResolveForAttendeesService>();
-
-            services.AddTransient<ILeaveAllGroupEventsService, LeaveAllGroupEventsService>();
             services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;

@@ -24,12 +24,12 @@ namespace DisputenPWA.Application.Attendees.Handlers.Queries
 
         public async Task<GetAttendeeResult> Handle(GetAttendee request, CancellationToken cancellationToken)
         {
-            if(await _operationAuthorizer.CanQueryAttendee(request.AttendeeId))
+            if(!await _operationAuthorizer.CanQueryAttendee(request.AttendeeId))
             {
-                var attendee = await _attendeeConnector.Get(request.AttendeeId, request.Helper);
-                return new GetAttendeeResult(attendee);
+                return new GetAttendeeResult(null);
             }
-            return new GetAttendeeResult(null);
+            var attendee = await _attendeeConnector.Get(request.AttendeeId, request.Helper);
+            return new GetAttendeeResult(attendee);
         }
     }
 }
