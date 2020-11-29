@@ -19,7 +19,7 @@ namespace DisputenPWA.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DisputenPWA.Domain.AttendeeAggregate.DalObject.DalAttendee", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject.DalAttendee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace DisputenPWA.DAL.Migrations
                     b.ToTable("Attendees");
                 });
 
-            modelBuilder.Entity("DisputenPWA.Domain.EventAggregate.DalObject.DalAppEvent", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.EventAggregate.DalObject.DalAppEvent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,6 +58,9 @@ namespace DisputenPWA.DAL.Migrations
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("MaxAttendees")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -71,7 +74,7 @@ namespace DisputenPWA.DAL.Migrations
                     b.ToTable("AppEvents");
                 });
 
-            modelBuilder.Entity("DisputenPWA.Domain.GroupAggregate.DalObject.DalGroup", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject.DalGroup", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,7 +91,7 @@ namespace DisputenPWA.DAL.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("DisputenPWA.Domain.MemberAggregate.DalObject.DalMember", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.MemberAggregate.DalObject.DalMember", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +115,7 @@ namespace DisputenPWA.DAL.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("DisputenPWA.Domain.UserAggregate.ApplicationUser", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -312,37 +315,37 @@ namespace DisputenPWA.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("DisputenPWA.Domain.AttendeeAggregate.DalObject.DalAttendee", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject.DalAttendee", b =>
                 {
-                    b.HasOne("DisputenPWA.Domain.EventAggregate.DalObject.DalAppEvent", "AppEvent")
+                    b.HasOne("DisputenPWA.Domain.Aggregates.EventAggregate.DalObject.DalAppEvent", "AppEvent")
                         .WithMany("Attendances")
                         .HasForeignKey("AppEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DisputenPWA.Domain.UserAggregate.ApplicationUser", "User")
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", "User")
                         .WithMany("Attendences")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("DisputenPWA.Domain.EventAggregate.DalObject.DalAppEvent", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.EventAggregate.DalObject.DalAppEvent", b =>
                 {
-                    b.HasOne("DisputenPWA.Domain.GroupAggregate.DalObject.DalGroup", "Group")
+                    b.HasOne("DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject.DalGroup", "Group")
                         .WithMany("AppEvents")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DisputenPWA.Domain.MemberAggregate.DalObject.DalMember", b =>
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.MemberAggregate.DalObject.DalMember", b =>
                 {
-                    b.HasOne("DisputenPWA.Domain.GroupAggregate.DalObject.DalGroup", "Group")
+                    b.HasOne("DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject.DalGroup", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DisputenPWA.Domain.UserAggregate.ApplicationUser", "User")
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", "User")
                         .WithMany("GroupMemberships")
                         .HasForeignKey("UserId");
                 });
@@ -358,7 +361,7 @@ namespace DisputenPWA.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("DisputenPWA.Domain.UserAggregate.ApplicationUser", null)
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -367,7 +370,7 @@ namespace DisputenPWA.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("DisputenPWA.Domain.UserAggregate.ApplicationUser", null)
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,7 +385,7 @@ namespace DisputenPWA.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DisputenPWA.Domain.UserAggregate.ApplicationUser", null)
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -391,7 +394,7 @@ namespace DisputenPWA.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("DisputenPWA.Domain.UserAggregate.ApplicationUser", null)
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

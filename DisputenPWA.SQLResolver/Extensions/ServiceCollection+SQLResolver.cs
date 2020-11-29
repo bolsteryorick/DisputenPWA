@@ -1,6 +1,8 @@
 ﻿using DisputenPWA.SQLResolver.AppEvents;
 using DisputenPWA.SQLResolver.Attendees;
+using DisputenPWA.SQLResolver.Groups;
 using DisputenPWA.SQLResolver.Members;
+using DisputenPWA.SQLResolver.Users;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DisputenPWA.SQLResolver.Extensions
@@ -12,6 +14,8 @@ namespace DisputenPWA.SQLResolver.Extensions
             services.AddTransient<IResolveForMembersService, ResolveForMembersService>();
             services.AddTransient<IResolveForAppEventsService, ResolveForAppEventsService>();
             services.AddTransient<IResolveForAttendeesService, ResolveForAttendeesService>();
+            services.AddTransient<IResolveForGroupsService, ResolveForGroupsService>();
+            services.AddTransient<IResolveForUserService, ResolveForUserService>();
             return services;
         }
     }

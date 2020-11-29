@@ -174,6 +174,7 @@ namespace DisputenPWA.DAL.Migrations
                     Description = table.Column<string>(nullable: true),
                     StartTime = table.Column<DateTime>(nullable: true),
                     EndTime = table.Column<DateTime>(nullable: true),
+                    MaxAttendees = table.Column<int>(nullable: false),
                     GroupId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
