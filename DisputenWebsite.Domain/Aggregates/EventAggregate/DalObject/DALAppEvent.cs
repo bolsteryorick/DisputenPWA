@@ -12,7 +12,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate.DalObject
         public string Description { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public int MaxAttendees { get; set; }
+        public int? MaxAttendees { get; set; }
         public Guid GroupId { get; set; }
         public virtual DalGroup Group { get; set; }
         public virtual ICollection<DalAttendee> Attendances { get; set; }

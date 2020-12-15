@@ -15,6 +15,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate
         public bool GetStartTime { get; }
         public bool GetEndTime { get; }
         public bool GetGroup { get; }
+        public bool GetMaxAttendees { get; }
         public bool GetAttendees { get; set; }
         public GroupPropertyHelper GroupPropertyHelper { get; }
         public AttendeePropertyHelper AttendeePropertyHelper { get; }
@@ -46,6 +47,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate
                 else if (Equals(name, nameof(AppEvent.Description))) GetDescription = true;
                 else if (Equals(name, nameof(AppEvent.StartTime))) GetStartTime = true;
                 else if (Equals(name, nameof(AppEvent.EndTime))) GetEndTime = true;
+                else if (Equals(name, nameof(AppEvent.MaxAttendees))) GetMaxAttendees = true;
                 else if (Equals(name, nameof(AppEvent.Group))) GetGroup = true;
                 else if (Equals(name, nameof(AppEvent.Attendees))) GetAttendees = true;
             }

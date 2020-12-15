@@ -110,7 +110,7 @@ namespace DisputenPWA.SQLResolver.AppEvents
             var attendeesDictionary = DictionaryMaker.MakeDictionary<Guid, Attendee>(nameof(Attendee.AppEventId), attendees);
             foreach (var appEvent in events)
             {
-                if (attendeesDictionary.TryGetValue(appEvent.GroupId, out var eventAttendees)) appEvent.Attendees = eventAttendees;
+                if (attendeesDictionary.TryGetValue(appEvent.Id, out var eventAttendees)) appEvent.Attendees = eventAttendees;
             }
             return events;
         }

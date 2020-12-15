@@ -70,7 +70,8 @@ namespace DisputenWebsite.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            //app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowAnyCredentials());
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthorization();
             app.UseMiddleware<JwtMiddleware>();
             app.UseGraphQL();

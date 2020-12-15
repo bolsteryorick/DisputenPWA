@@ -61,7 +61,7 @@ namespace DisputenPWA.API.GraphQL
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return;
             }
-
+            //var body = await StreamToStringAsync(context.Request);
             var request = Deserialize<GraphQLRequest>(context.Request.Body);
 
             var result = await _executer.ExecuteAsync(options =>
@@ -80,6 +80,14 @@ namespace DisputenPWA.API.GraphQL
             }
 
             await WriteResponseAsync(context, result);
+        }
+
+        private async Task<string> StreamToStringAsync(HttpRequest request)
+        {
+            using (var sr = new StreamReader(request.Body))
+            {
+                return await sr.ReadToEndAsync();
+            }
         }
 
         private void SetContextResponseUnauthorized(HttpContext context)
