@@ -1,4 +1,5 @@
 ﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects;
 using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.MemberAggregate.DalObject;
@@ -21,13 +22,11 @@ namespace DisputenPWA.DAL.Models
         public DbSet<DalAppEvent> AppEvents { get; set; }
         public DbSet<DalMember> Members { get; set; }
         public DbSet<DalAttendee> Attendees { get; set; }
+        public DbSet<DalPlatformContact> PlatformContacts { get; set; }
+        public DbSet<DalOutsideContact> OutsideContacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            //var seedData = new SeedData(100, 12);
-            //modelBuilder.Entity<DalGroup>().HasData(seedData.DALGroups);
-            //modelBuilder.Entity<DalAppEvent>().HasData(seedData.DALAppEvents);
             modelBuilder.Entity<DalMember>()
                 .HasOne(x => x.Group)
                 .WithMany(x => x.Members);
@@ -48,14 +47,26 @@ namespace DisputenPWA.DAL.Models
                 .HasOne(x => x.AppEvent)
                 .WithMany(x => x.Attendances);
 
+            modelBuilder.Entity<DalPlatformContact>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.PlatformContacts);
+
+            modelBuilder.Entity<DalPlatformContact>()
+                .HasOne(x => x.ContactUser)
+                .WithMany(x => x.PlatformContactReferences);
+
+            modelBuilder.Entity<DalOutsideContact>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.OutsideContacts);
+
             modelBuilder.Entity<DalAppEvent>().HasIndex(a => a.GroupId);
             modelBuilder.Entity<DalMember>().HasIndex(a => a.GroupId);
             modelBuilder.Entity<DalMember>().HasIndex(a => a.UserId);
             modelBuilder.Entity<DalAttendee>().HasIndex(a => a.AppEventId);
+            modelBuilder.Entity<DalPlatformContact>().HasIndex(a => a.UserId);
+            modelBuilder.Entity<DalPlatformContact>().HasIndex(a => a.ContactUserId);
 
             base.OnModelCreating(modelBuilder);
-        }
-
-       
+        }  
     }
 }

@@ -1,9 +1,11 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
+using DisputenPWA.Domain.Aggregates.ContactAggregate;
 using DisputenPWA.Domain.Aggregates.MemberAggregate;
 using DisputenPWA.Domain.Aggregates.UserAggregate;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using DisputenPWA.SQLResolver.Attendees.AttendeesByUserIds;
+using DisputenPWA.SQLResolver.Contacts.ContactsByUserId;
 using DisputenPWA.SQLResolver.Helpers;
 using DisputenPWA.SQLResolver.Members.MembersByUserIds;
 using MediatR;
@@ -64,6 +66,11 @@ namespace DisputenPWA.SQLResolver.Users
                 var attendees = await GetAttendees(users, helper, cancellationToken);
                 users = AddAttendeesToUsers(attendees, users);
             }
+            if (helper.CanGetContacts())
+            {
+                var contacts = await GetContacts(users, helper, cancellationToken);
+                users = AddContactsToUsers(contacts, users);
+            }
             return users;
         }
 
@@ -85,6 +92,16 @@ namespace DisputenPWA.SQLResolver.Users
         {
             var userIds = users.Select(x => x.Id);
             return await _mediator.Send(new AttendeesByUserIdsRequest(userIds, helper.AttendeePropertyHelper), cancellationToken);
+        }
+
+        private async Task<IReadOnlyCollection<Contact>> GetContacts(
+            IList<User> users,
+            UserPropertyHelper helper,
+            CancellationToken cancellationToken
+            )
+        {
+            var userIds = users.Select(x => x.Id);
+            return await _mediator.Send(new ContactsByUserIdsRequest(userIds, helper.ContactPropertyHelper), cancellationToken);
         }
 
         private IList<User> AddMembersToUsers(
@@ -109,6 +126,19 @@ namespace DisputenPWA.SQLResolver.Users
             foreach (var user in users)
             {
                 if (userIdToAttendencesDict.TryGetValue(user.Id, out var userAttendences)) user.Attendences = userAttendences;
+            }
+            return users;
+        }
+
+        private IList<User> AddContactsToUsers(
+            IReadOnlyCollection<Contact> contacts,
+            IList<User> users
+            )
+        {
+            var userIdToContactsDict = DictionaryMaker.MakeDictionary<string, Contact>(nameof(Contact.UserId), contacts);
+            foreach (var user in users)
+            {
+                if (userIdToContactsDict.TryGetValue(user.Id, out var userContacts)) user.Contacts = userContacts;
             }
             return users;
         }

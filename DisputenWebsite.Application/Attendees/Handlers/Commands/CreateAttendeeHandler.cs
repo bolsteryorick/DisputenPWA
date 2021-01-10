@@ -31,7 +31,7 @@ namespace DisputenPWA.Application.Attendees.Handlers.Commands
 
         public async Task<CreateAttendeeCommandResult> Handle(CreateAttendeeCommand request, CancellationToken cancellationToken)
         {
-            if (!await _operationAuthorizer.CanJoinEvent(request.AppEventId))
+            if (!await _operationAuthorizer.CanChangeAppEvent(request.AppEventId))
             {
                 return new CreateAttendeeCommandResult(null);
             }

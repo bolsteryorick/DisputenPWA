@@ -4,6 +4,7 @@ using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands;
 using GraphQL.Types;
 using MediatR;
 using System;
+using System.Collections.Generic;
 
 namespace DisputenPWA.API.GraphQL.Mutations
 {
@@ -37,7 +38,8 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             return new QueryArguments(
                 new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" },
-                new QueryArgument<StringGraphType> { Name = "description" }
+                new QueryArgument<StringGraphType> { Name = "description" },
+                new QueryArgument<ListGraphType<StringGraphType>> { Name = "userIds" }
             );
         }
 
@@ -45,7 +47,8 @@ namespace DisputenPWA.API.GraphQL.Mutations
         {
             return new CreateGroupCommand(
                 context.GetArgument<string>("name"),
-                context.GetArgument<string>("description")
+                context.GetArgument<string>("description"),
+                context.GetArgument<List<string>>("userIds")
             );
         }
 

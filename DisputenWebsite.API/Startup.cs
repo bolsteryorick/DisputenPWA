@@ -4,6 +4,7 @@ using DisputenPWA.Application;
 using DisputenPWA.Application.Extensions;
 using DisputenPWA.Application.Services;
 using DisputenPWA.DAL.Models;
+using DisputenPWA.Domain.Aggregates.ContactAggregate.Commands;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using DisputenPWA.Infrastructure.Extensions;
 using DisputenPWA.SQLResolver.Extensions;

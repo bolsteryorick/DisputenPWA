@@ -10,6 +10,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
             AddAppEventMutations(mediator);
             AddMemberMutations(mediator);
             AddAttendeeMutations(mediator);
+            AddContactMutations(mediator);
         }
     }
 }
