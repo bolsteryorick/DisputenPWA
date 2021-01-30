@@ -23,7 +23,7 @@ namespace DisputenPWA.Application.Contacts.Handlers.Commands
 
         public async Task<DeleteContactResult> Handle(DeleteContactCommand request, CancellationToken cancellationToken)
         {
-            await _contactConnector.Delete(request.ContactId);
+            await _contactConnector.DeletePlatformContact(request.ContactId);
             return new DeleteContactResult(null);
         }
     }

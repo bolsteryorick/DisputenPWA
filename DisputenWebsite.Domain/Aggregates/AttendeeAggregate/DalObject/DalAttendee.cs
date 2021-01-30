@@ -15,13 +15,7 @@ namespace DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject
 
         public Attendee CreateAttendee()
         {
-            return new Attendee
-            {
-                Id = Id,
-                UserId = UserId,
-                AppEventId = AppEventId,
-                Paid = Paid,
-            };
+            return Attendee.FromDalAttendee(this);
         }
     }
 }

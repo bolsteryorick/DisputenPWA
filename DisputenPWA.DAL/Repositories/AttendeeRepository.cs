@@ -36,14 +36,7 @@ namespace DisputenPWA.DAL.Repositories
         private IQueryable<Attendee> SelectMember(IQueryable<DalAttendee> queryable, AttendeePropertyHelper helper)
         {
             return queryable
-                .Select(x =>
-                    new Attendee
-                    {
-                        Id = x.Id,
-                        AppEventId = x.AppEventId,
-                        UserId = x.UserId,
-                        Paid = helper.GetPaid ? x.Paid : false,
-                    });
+                .Select(x => Attendee.FromSqlQuery(x, helper));
         }
     }
 }

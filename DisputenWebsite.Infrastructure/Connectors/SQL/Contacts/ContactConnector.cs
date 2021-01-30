@@ -15,7 +15,8 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Contacts
     public interface IContactConnector
     {
         Task Create(Contact contact);
-        Task Delete(Guid id);
+        Task DeletePlatformContact(Guid id);
+        Task DeleteOutsideContacts(IQueryable<DalOutsideContact> toBeDeleted);
         Task CreatePlatformContact(IEnumerable<Contact> contacts);
         Task CreateOutsideContact(IEnumerable<Contact> contacts);
         Task<Contact> UpdateProperties(Dictionary<string, object> properties, Guid id);
@@ -42,9 +43,14 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Contacts
             await _contactRepository.Add(contact.CreateDalContact());
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeletePlatformContact(Guid id)
         {
             await _contactRepository.DeleteByObject(new DalPlatformContact { Id = id });
+        }
+
+        public async Task DeleteOutsideContacts(IQueryable<DalOutsideContact> toBeDeleted)
+        {
+            await _outsideContactRepository.DeleteByQuery(toBeDeleted);
         }
 
         public async Task CreatePlatformContact(IEnumerable<Contact> contacts)

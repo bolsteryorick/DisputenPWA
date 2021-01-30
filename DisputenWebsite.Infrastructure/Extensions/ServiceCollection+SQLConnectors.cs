@@ -19,6 +19,7 @@ namespace DisputenPWA.Infrastructure.Extensions
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<IAttendeeRepository, AttendeeRepository>();
             services.AddTransient<IContactRepository, ContactRepository>();
+            services.AddTransient<IOutsideContactRepository, OutsideContactRepository>();
 
             services.AddTransient<IGroupConnector, GroupConnector>();
             services.AddTransient<IAppEventConnector, AppEventConnector>();
