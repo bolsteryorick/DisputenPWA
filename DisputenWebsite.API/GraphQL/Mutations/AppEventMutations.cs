@@ -41,7 +41,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "startTime" },
                 new QueryArgument<NonNullGraphType<DateTimeGraphType>> { Name = "endTime" },
                 new QueryArgument<StringGraphType> { Name = "description" },
-                new QueryArgument<IntGraphType> { Name = "maxattendees" }
+                new QueryArgument<IntGraphType> { Name = "maxAttendees" }
             );
         }
 
@@ -52,7 +52,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 context.GetArgument<string>("description"),
                 context.GetArgument<DateTime>("startTime"),
                 context.GetArgument<DateTime>("endTime"),
-                context.GetArgument<int?>("maxattendees"),
+                context.GetArgument<int?>("maxAttendees"),
                 context.GetArgument<Guid>("groupId")
             );
         }
@@ -65,7 +65,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 new QueryArgument<StringGraphType> { Name = "description" },
                 new QueryArgument<DateTimeGraphType> { Name = "startTime" },
                 new QueryArgument<DateTimeGraphType> { Name = "endTime" },
-                new QueryArgument<StringGraphType> { Name = "maxattendees" }
+                new QueryArgument<StringGraphType> { Name = "maxAttendees" }
             );
         }
 
@@ -77,7 +77,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 context.GetArgument<string>("description"),
                 context.GetArgument<DateTime?>("startTime"),
                 context.GetArgument<DateTime?>("endTime"),
-                context.GetArgument<int?>("maxattendees")
+                context.GetArgument<int?>("maxAttendees")
             );
         }
 

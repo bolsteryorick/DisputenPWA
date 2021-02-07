@@ -38,16 +38,15 @@ namespace DisputenPWA.DAL.Repositories
         {
             return queryable
                 .Select(x =>
-                    new AppEvent
-                    {
-                        Id = x.Id,
-                        Name = helper.GetName ? x.Name : null,
-                        Description = helper.GetDescription ? x.Description : null,
-                        StartTime = helper.GetStartTime ? x.StartTime : null,
-                        EndTime = helper.GetEndTime ? x.EndTime : null,
-                        MaxAttendees = helper.GetMaxAttendees ? x.MaxAttendees : null,
-                        GroupId = x.GroupId,
-                    });
+                    AppEvent.WithUtcDateKind(
+                            x.Id,
+                            helper.GetName ? x.Name : null,
+                            helper.GetDescription ? x.Description : null,
+                            helper.GetStartTime ? x.StartTime : null,
+                            helper.GetEndTime ? x.EndTime : null,
+                            helper.GetMaxAttendees ? x.MaxAttendees : null,
+                            x.GroupId
+                        ));
         }
     }
 }

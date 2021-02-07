@@ -32,6 +32,30 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate
             };
         }
 
+        public static AppEvent WithUtcDateKind(
+                Guid id, string name, string description, DateTime? startTime, DateTime? endTime, int? maxAttendees, Guid groupId
+            )
+        {
+            if (startTime != null)
+            {
+                startTime = DateTime.SpecifyKind((DateTime)startTime, DateTimeKind.Utc);
+            }
+            if (endTime != null)
+            {
+                endTime = DateTime.SpecifyKind((DateTime)endTime, DateTimeKind.Utc);
+            }
+            return new AppEvent
+            {
+                Id = id,
+                Name = name,
+                Description = description,
+                StartTime = startTime,
+                EndTime = endTime,
+                MaxAttendees = maxAttendees,
+                GroupId = groupId
+            };
+        }
+
         // document
         // notification?
         // location

@@ -80,14 +80,14 @@ namespace DisputenPWA.API.GraphQL.Mutations
         private QueryArguments DeleteAttendeeArguments()
         {
             return new QueryArguments(
-                new QueryArgument<IdGraphType> { Name = "attendeeId" }
+                new QueryArgument<IdGraphType> { Name = "id" }
             );
         }
 
         private DeleteAttendeeCommand DeleteAttendeeCommand(ResolveFieldContext<object> context)
         {
             return new DeleteAttendeeCommand(
-                context.GetArgument<Guid>("attendeeId")
+                context.GetArgument<Guid>("id")
             );
         }
 
@@ -108,7 +108,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
         private QueryArguments UpdateAttendeeArguments()
         {
             return new QueryArguments(
-                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "attendeeId" },
+                new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" },
                 new QueryArgument<BooleanGraphType> { Name = "paid" }
             );
         }
@@ -116,7 +116,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
         private UpdateAttendeeCommand UpdateAttendeeCommand(ResolveFieldContext<object> context)
         {
             return new UpdateAttendeeCommand(
-                context.GetArgument<Guid>("attendeeId"),
+                context.GetArgument<Guid>("id"),
                 context.GetArgument<bool?>("paid")
             );
         }

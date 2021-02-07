@@ -7,15 +7,15 @@ namespace DisputenPWA.Domain.Aggregates.AttendeeAggregate.Commands
     public class UpdateAttendeeCommand : IRequest<UpdateAttendeeCommandResult>
     {
         public UpdateAttendeeCommand(
-            Guid atttendeeId,
+            Guid id,
             bool? paid
             )
         {
-            AtttendeeId = atttendeeId;
+            Id = id;
             Paid = paid;
         }
 
-        public Guid AtttendeeId { get; }
+        public Guid Id { get; }
         public bool? Paid { get; }
     }
 }
