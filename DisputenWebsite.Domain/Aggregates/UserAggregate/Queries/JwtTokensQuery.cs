@@ -3,15 +3,17 @@ using MediatR;
 
 namespace DisputenPWA.Domain.Aggregates.UserAggregate.Queries
 {
-    public class JwtTokenQuery : IRequest<JwtTokenQueryResult>
+    public class JwtTokensQuery : IRequest<JwtTokensQueryResult>
     {
-        public JwtTokenQuery(string email, string password)
+        public JwtTokensQuery(string email, string password, string appInstanceId)
         {
             Email = email;
             Password = password;
+            AppInstanceId = appInstanceId;
         }
 
         public string Email { get; }
         public string Password { get; }
+        public string AppInstanceId { get; }
     }
 }

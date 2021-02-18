@@ -24,6 +24,7 @@ namespace DisputenPWA.API.Controllers
         {
             public string Email { get; set; }
             public string Password { get; set; }
+            public string AppInstanceId { get; set; }
         }
 
         public class SuccessObject
@@ -40,14 +41,28 @@ namespace DisputenPWA.API.Controllers
 
         public class TokenObject
         {
-            public string Token { get; set; }
+            public string AccessToken { get; set; }
+            public string RefreshToken { get; set; }
         }
 
         [HttpPost("gettoken")]
         public async Task<TokenObject> GetToken(UserValues values)
         {
-            var result = await _mediator.Send(new JwtTokenQuery(values.Email, values.Password));
-            return new TokenObject { Token = result.Result.JWTToken };
+            var result = await _mediator.Send(new JwtTokensQuery(values.Email, values.Password, values.AppInstanceId));
+            return new TokenObject { AccessToken = result.Result.AccessToken, RefreshToken = result.Result.RefreshToken };
+        }
+
+        public class RefreshTokenValues
+        {
+            public string RefreshToken { get; set; }
+            public string AppInstanceId { get; set; }
+        }
+
+        [HttpPost("refreshtoken")]
+        public async Task<TokenObject> GetToken(RefreshTokenValues values)
+        {
+            var result = await _mediator.Send(new RefreshJwtTokensQuery(values.RefreshToken, values.AppInstanceId));
+            return new TokenObject { AccessToken = result.Result.AccessToken, RefreshToken = result.Result.RefreshToken };
         }
     }
 }

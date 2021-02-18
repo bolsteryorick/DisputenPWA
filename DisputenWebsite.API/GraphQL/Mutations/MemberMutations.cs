@@ -106,7 +106,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
         private LeaveGroupCommand LeaveGroupCommand(ResolveFieldContext<object> context)
         {
             return new LeaveGroupCommand(
-                context.GetArgument<Guid>("groupId")
+                context.GetArgument<Guid>("memberId")
             );
         }
 

@@ -24,6 +24,7 @@ namespace DisputenPWA.DAL.Models
         public DbSet<DalAttendee> Attendees { get; set; }
         public DbSet<DalPlatformContact> PlatformContacts { get; set; }
         public DbSet<DalOutsideContact> OutsideContacts { get; set; }
+        public DbSet<DalRefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,12 +60,18 @@ namespace DisputenPWA.DAL.Models
                 .HasOne(x => x.User)
                 .WithMany(x => x.OutsideContacts);
 
+            modelBuilder.Entity<DalRefreshToken>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.RefreshTokens);
+
             modelBuilder.Entity<DalAppEvent>().HasIndex(a => a.GroupId);
             modelBuilder.Entity<DalMember>().HasIndex(a => a.GroupId);
             modelBuilder.Entity<DalMember>().HasIndex(a => a.UserId);
             modelBuilder.Entity<DalAttendee>().HasIndex(a => a.AppEventId);
             modelBuilder.Entity<DalPlatformContact>().HasIndex(a => a.UserId);
             modelBuilder.Entity<DalPlatformContact>().HasIndex(a => a.ContactUserId);
+            modelBuilder.Entity<DalRefreshToken>().HasIndex(a => a.UserId);
+            modelBuilder.Entity<DalRefreshToken>().HasIndex(a => a.AppInstanceId);
 
             base.OnModelCreating(modelBuilder);
         }  

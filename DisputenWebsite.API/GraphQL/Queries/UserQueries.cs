@@ -13,10 +13,17 @@ namespace DisputenPWA.API.GraphQL.Queries
         protected void AddUserQueries(IMediator mediator)
         {
             Field<UserResultType>(
-                   "GetUser",
-                   description: "Gets the current user.",
-                   resolve: context => mediator.Send(GetUserQuery(context), context.CancellationToken).Map(r => ProcessResult(context, r))
-                   );
+                    "GetUser",
+                    description: "Gets the current user.",
+                    resolve: context => mediator.Send(GetUserQuery(context), context.CancellationToken).Map(r => ProcessResult(context, r))
+                );
+
+            Field<NestedUserResultType>(
+                    "GetOtherUser",
+                    description: "Gets another user.",
+                    arguments: OtherUserQueryArguments(),
+                    resolve: context => mediator.Send(OtherUserQuery(context), context.CancellationToken).Map(r => ProcessResult(context, r))
+                );
         }
 
         private UserQuery GetUserQuery(ResolveFieldContext<object> context)
@@ -28,6 +35,20 @@ namespace DisputenPWA.API.GraphQL.Queries
         {
             return new UserPropertyHelper(
                 context.SubFields.Select(x => x.Value)
+            );
+        }
+
+        private QueryArguments OtherUserQueryArguments()
+        {
+            return new QueryArguments(
+                new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "userId" }
+            );
+        }
+
+        private OtherUserQuery OtherUserQuery(ResolveFieldContext<object> context)
+        {
+            return new OtherUserQuery(
+                context.GetArgument<string>("userId")
             );
         }
     }

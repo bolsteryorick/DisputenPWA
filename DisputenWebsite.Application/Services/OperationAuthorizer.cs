@@ -8,6 +8,7 @@ namespace DisputenPWA.Application.Services
 {
     public interface IOperationAuthorizer
     {
+        Task<bool> CanSeeOtherUser(string otherUserId);
         Task<bool> CanQueryGroup(Guid groupId);
         Task<bool> CanUpdateGroup(Guid groupId);
         Task<bool> CanQueryAppEvent(Guid appEventId);
@@ -26,19 +27,33 @@ namespace DisputenPWA.Application.Services
         private readonly IMemberRepository _memberRepository;
         private readonly IAppEventRepository _appEventRepository;
         private readonly IAttendeeRepository _attendeeRepository;
+        private readonly IContactRepository _contactRepository;
         private readonly string _userId;
 
         public OperationAuthorizer(
             IMemberRepository memberRepository,
             IAppEventRepository appEventRepository,
             IUserService userService,
-            IAttendeeRepository attendeeRepository
+            IAttendeeRepository attendeeRepository,
+            IContactRepository contactRepository
             )
         {
             _memberRepository = memberRepository;
             _appEventRepository = appEventRepository;
             _attendeeRepository = attendeeRepository;
+            _contactRepository = contactRepository;
             _userId = userService.GetUserId();
+        }
+
+        public async Task<bool> CanSeeOtherUser(string otherUserId)
+        {
+            var isUserContact = await _contactRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.ContactUserId == otherUserId);
+            if (isUserContact) return true;
+            
+            // this part will be redundant later
+            var groupIdsUser = await _memberRepository.GetQueryable().Where(m => m.UserId == _userId).Select(x => x.GroupId).ToListAsync();
+            var groupIdsOtherUser = await _memberRepository.GetQueryable().Where(m => m.UserId == otherUserId).Select(x => x.GroupId).ToListAsync();
+            return groupIdsOtherUser.Intersect(groupIdsUser).Any();
         }
 
         public async Task<bool> CanQueryGroup(Guid groupId)

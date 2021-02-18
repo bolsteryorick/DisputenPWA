@@ -2,9 +2,9 @@
 
 namespace DisputenPWA.Domain.Aggregates.UserAggregate.Queries.Results
 {
-    public class JwtTokenQueryResult : QueryResult<User>
+    public class JwtTokensQueryResult : QueryResult<User>
     {
-        public JwtTokenQueryResult(User user) : base(user)
+        public JwtTokensQueryResult(User user) : base(user)
         {
 
         }

@@ -1,4 +1,5 @@
-﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject;
+﻿using DisputenPWA.DAL.Models;
+using DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects;
 using DisputenPWA.Domain.Aggregates.MemberAggregate.DalObject;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ namespace DisputenPWA.Domain.Aggregates.UserAggregate.DalObject
         public virtual ICollection<DalPlatformContact> PlatformContacts { get; set; }
         public virtual ICollection<DalPlatformContact> PlatformContactReferences { get; set; }
         public virtual ICollection<DalOutsideContact> OutsideContacts { get; set; }
+        public virtual ICollection<DalRefreshToken> RefreshTokens { get; set; }
 
         public User CreateUser()
         {

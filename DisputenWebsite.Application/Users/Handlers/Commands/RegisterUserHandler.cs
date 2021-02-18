@@ -44,13 +44,12 @@ namespace DisputenPWA.Application.Users.Handlers.Commands
             if (!result.Succeeded)
             {
                 // domain error?
-                return new RegisterUserCommandResult(new User { JWTToken = null });
+                return new RegisterUserCommandResult(new User { AccessToken = null });
             }
 
             await MoveOutsideContactsToPlatformContacts(user.Email, user.Id);
 
-            var token = JwtTokenGenerator.GenerateJwtToken(user, _configuration.GetValue<string>("JWT:Secret"));
-            return new RegisterUserCommandResult(new User { JWTToken = token });
+            return new RegisterUserCommandResult(user.CreateUser());
         }
 
         private async Task MoveOutsideContactsToPlatformContacts(string newUserEmail, string newUserId)

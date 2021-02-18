@@ -65,7 +65,7 @@ namespace DisputenPWA.API.GraphQL.Mutations
                 new QueryArgument<StringGraphType> { Name = "description" },
                 new QueryArgument<DateTimeGraphType> { Name = "startTime" },
                 new QueryArgument<DateTimeGraphType> { Name = "endTime" },
-                new QueryArgument<StringGraphType> { Name = "maxAttendees" }
+                new QueryArgument<IntGraphType> { Name = "maxAttendees" }
             );
         }
 

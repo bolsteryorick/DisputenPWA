@@ -13,6 +13,7 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Users
     public interface IUserConnector
     {
         Task<User> GetUser(string id, UserPropertyHelper helper);
+        Task<User> GetUserById(string id);
         Task<User> GetUserByEmail(string email);
         Task<IEnumerable<User>> GetUsersByEmail(IEnumerable<string> emailAddresses);
     }
@@ -34,6 +35,11 @@ namespace DisputenPWA.Infrastructure.Connectors.SQL.Users
         public async Task<User> GetUser(string id, UserPropertyHelper helper)
         {
             return await _mediator.Send(new UserByIdRequest(id, helper));
+        }
+
+        public async Task<User> GetUserById(string id)
+        {
+            return (await _userRepository.GetQueryable().FirstOrDefaultAsync(u => u.Id == id)).CreateUser();
         }
 
         public async Task<User> GetUserByEmail(string email)

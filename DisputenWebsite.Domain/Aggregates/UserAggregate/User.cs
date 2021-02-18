@@ -13,6 +13,7 @@ namespace DisputenPWA.Domain.Aggregates.UserAggregate
         public IReadOnlyCollection<Member> Memberships { get; set; }
         public IReadOnlyCollection<Attendee> Attendences { get; set; }
         public IReadOnlyCollection<Contact> Contacts { get; set; }
-        public string JWTToken { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
