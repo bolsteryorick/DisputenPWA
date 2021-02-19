@@ -4,14 +4,16 @@ using DisputenPWA.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DisputenPWA.DAL.Migrations
 {
     [DbContext(typeof(DisputenAppContext))]
-    partial class DisputenAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210219203820_RefreshTokenSalt")]
+    partial class RefreshTokenSalt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,11 +30,11 @@ namespace DisputenPWA.DAL.Migrations
                     b.Property<string>("AppInstanceId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RefreshTokenHash")
+                    b.Property<string>("RefrehTokenSalt")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("RefreshTokenSalt")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("RefreshTokenHash")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");

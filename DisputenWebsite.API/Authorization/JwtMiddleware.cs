@@ -1,4 +1,5 @@
-﻿using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
+﻿using DisputenPWA.Application.Constants;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -53,6 +54,10 @@ namespace DisputenPWA.API.Authoriation
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
+                
+                var tokenType = jwtToken.Claims.First(x => x.Type == TokenTypes.ClaimType).Value;
+                if (tokenType == TokenTypes.Refresh) return;
+
                 var user = await userManager.FindByIdAsync(userId);
                 // attach user to context on successful jwt validation
                 context.Items["User"] = user;

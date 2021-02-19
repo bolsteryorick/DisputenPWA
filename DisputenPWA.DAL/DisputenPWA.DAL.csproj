@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210219205111_RefreshTokenSaltByteArray.cs" />
+    <Compile Remove="Migrations\20210219205111_RefreshTokenSaltByteArray.Designer.cs" />
+    <Compile Remove="Migrations\20210219205225_RefreshTokenSaltByteArray.cs" />
+    <Compile Remove="Migrations\20210219205225_RefreshTokenSaltByteArray.Designer.cs" />
+    <Compile Remove="Migrations\20210219205520_RefreshTokenSaltByteArray.cs" />
+    <Compile Remove="Migrations\20210219205520_RefreshTokenSaltByteArray.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.9" />

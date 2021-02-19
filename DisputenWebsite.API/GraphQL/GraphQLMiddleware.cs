@@ -56,6 +56,7 @@ namespace DisputenPWA.API.GraphQL
 
         private async Task ExecuteAsync(HttpContext context, ISchema schema)
         {
+            var user = _userService.GetUser();
             if (!_userService.IsAuthorised())
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;

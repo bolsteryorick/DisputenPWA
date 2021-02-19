@@ -10,6 +10,7 @@ namespace DisputenPWA.DAL.Models
     {
         public string UserId { get; set; }
         public string RefreshTokenHash { get; set; }
+        public byte[] RefreshTokenSalt { get; set; }
         public string AppInstanceId { get; set; }
 
         public virtual ApplicationUser User { get; set; }

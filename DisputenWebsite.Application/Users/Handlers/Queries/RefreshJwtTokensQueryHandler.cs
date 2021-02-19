@@ -22,23 +22,17 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
     public class RefreshJwtTokensQueryHandler : IRequestHandler<RefreshJwtTokensQuery, JwtTokensQueryResult>
     {
         private readonly IUserService _userService;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
 
         public RefreshJwtTokensQueryHandler(
             IUserService userService,
-            UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
-            SignInManager<ApplicationUser> signInManager,
             IRefreshTokenRepository refreshTokenRepository
             )
         {
             _userService = userService;
-            _userManager = userManager;
             _configuration = configuration;
-            _signInManager = signInManager;
             _refreshTokenRepository = refreshTokenRepository;
         }
 
@@ -47,18 +41,20 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
             var userId = _userService.GetUserId();
             var tokenQuery = _refreshTokenRepository.GetQueryable().Where(r => r.AppInstanceId == request.AppInstanceId && r.UserId == userId);
             var tokenEntry = await tokenQuery.FirstOrDefaultAsync();
-            if(tokenEntry?.RefreshTokenHash != TokenHasher.HashToken(request.RefreshToken))
+            if(tokenEntry?.RefreshTokenHash != TokenHasher.HashToken(request.RefreshToken, tokenEntry.RefreshTokenSalt).TokenHash)
             {
                 return TokenResult(null, null);
             }
 
-            var refreshToken = JwtTokenGenerator.GenerateJwtToken(userId, _configuration.GetValue<string>("JWT:Secret"), 60);
-            var accessToken = JwtTokenGenerator.GenerateJwtToken(userId, _configuration.GetValue<string>("JWT:Secret"), 525600);
+            var refreshToken = JwtTokenGenerator.GenerateRefeshJwtToken(userId, _configuration);
+            var accessToken = JwtTokenGenerator.GenerateAccessJwtToken(userId, _configuration);
 
+            var tokenHashResult = TokenHasher.HashToken(refreshToken);
             var refreshTokenEntry = new DalRefreshToken
             {
                 UserId = userId,
-                RefreshTokenHash = TokenHasher.HashToken(refreshToken),
+                RefreshTokenSalt = tokenHashResult.Salt,
+                RefreshTokenHash = tokenHashResult.TokenHash,
                 AppInstanceId = request.AppInstanceId
             };
             
@@ -66,13 +62,7 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
             await _refreshTokenRepository.DeleteByQuery(deleteQuery);
             await _refreshTokenRepository.Add(refreshTokenEntry);
 
-            return TokenResult(refreshToken, accessToken);
-        }
-
-        private async Task<bool> PasswordInCorrect(ApplicationUser user, JwtTokensQuery request)
-        {
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-            return !signInResult.Succeeded;
+            return TokenResult(accessToken: accessToken, refreshToken: refreshToken);
         }
 
         private JwtTokensQueryResult TokenResult(string accessToken, string refreshToken)

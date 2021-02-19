@@ -44,13 +44,15 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
             if (user == null || await PasswordInCorrect(user, request))
                 return TokenResult(null, null) ;
 
-            var refreshToken = JwtTokenGenerator.GenerateJwtToken(user.Id, _configuration.GetValue<string>("JWT:Secret"), 60);
-            var accessToken = JwtTokenGenerator.GenerateJwtToken(user.Id, _configuration.GetValue<string>("JWT:Secret"), 525600);
+            var refreshToken = JwtTokenGenerator.GenerateRefeshJwtToken(user.Id, _configuration);
+            var accessToken = JwtTokenGenerator.GenerateAccessJwtToken(user.Id, _configuration);
 
+            var tokenHashResult = TokenHasher.HashToken(refreshToken);
             var refreshTokenEntry = new DalRefreshToken
             {
                 UserId = user.Id,
-                RefreshTokenHash = TokenHasher.HashToken(refreshToken),
+                RefreshTokenSalt = tokenHashResult.Salt,
+                RefreshTokenHash = tokenHashResult.TokenHash,
                 AppInstanceId = request.AppInstanceId
             };
             
@@ -58,7 +60,7 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
             await _refreshTokenRepository.DeleteByQuery(deleteQuery);
             await _refreshTokenRepository.Add(refreshTokenEntry);
 
-            return TokenResult(refreshToken, accessToken);
+            return TokenResult(accessToken: accessToken, refreshToken: refreshToken);
         }
 
         private async Task<bool> PasswordInCorrect(ApplicationUser user, JwtTokensQuery request)
