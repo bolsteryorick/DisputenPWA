@@ -13,7 +13,7 @@ namespace DisputenPWA.Application.Users.Shared
     {
         public static string GenerateAccessJwtToken(string userId, IConfiguration configuration)
         {
-            return GenerateJwtToken(userId, configuration, 525600, TokenTypes.Access);
+            return GenerateJwtToken(userId, configuration, 60, TokenTypes.Access);
         }
 
         public static string GenerateRefeshJwtToken(string userId, IConfiguration configuration)

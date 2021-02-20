@@ -33,7 +33,7 @@ namespace DisputenPWA.Application.Services
 
         public string GetUserId()
         {
-            return ((ApplicationUser)_httpContextAccessor.HttpContext.Items["User"]).Id;
+            return (string)_httpContextAccessor.HttpContext.Items["UserId"];
         }
     }
 }
