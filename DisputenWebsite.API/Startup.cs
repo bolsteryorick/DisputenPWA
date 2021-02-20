@@ -53,6 +53,7 @@ namespace DisputenWebsite.API
             });
             //services.AddCosmosDb(_configuration);
 
+            services.AddTransient<IUserAuthorizedService, UserAuthorizedService>();
             services.AddTransient<IUserService, UserService>();
             services.AddSQLConnectors();
             services.AddSQLResolverServices();

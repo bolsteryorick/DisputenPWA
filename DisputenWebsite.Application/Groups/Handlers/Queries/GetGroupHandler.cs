@@ -12,14 +12,17 @@ namespace DisputenPWA.Application.Groups.Handlers.Queries
     {
         private readonly IGroupConnector _groupConnector;
         private readonly IOperationAuthorizer _operationAuthorizer;
+        private readonly IUserService _userService;
 
         public GetGroupHandler(
             IGroupConnector groupConnector,
-            IOperationAuthorizer operationAuthorizer
+            IOperationAuthorizer operationAuthorizer,
+            IUserService userService
             )
         {
             _groupConnector = groupConnector;
             _operationAuthorizer = operationAuthorizer;
+            _userService = userService;
         }
 
         public async Task<GroupQueryResult> Handle(GroupQuery request, CancellationToken cancellationToken)

@@ -23,17 +23,14 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
 {
     public class RefreshJwtTokensQueryHandler : IRequestHandler<RefreshJwtTokensQuery, JwtTokensQueryResult>
     {
-        private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
 
         public RefreshJwtTokensQueryHandler(
-            IUserService userService,
             IConfiguration configuration,
             IRefreshTokenRepository refreshTokenRepository
             )
         {
-            _userService = userService;
             _configuration = configuration;
             _refreshTokenRepository = refreshTokenRepository;
         }

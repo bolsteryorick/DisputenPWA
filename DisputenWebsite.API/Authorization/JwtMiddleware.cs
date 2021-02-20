@@ -33,16 +33,15 @@ namespace DisputenPWA.API.Authoriation
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                await AttachUserToContext(context, userManager, token);
+                AddUserIdAndAuthorizedToContext(context, userManager, token);
 
             await _next(context);
         }
 
-        private async Task AttachUserToContext(HttpContext context, UserManager<ApplicationUser> userManager, string token)
+        private void AddUserIdAndAuthorizedToContext(HttpContext context, UserManager<ApplicationUser> userManager, string token)
         {
             try
             {
-                Thread.Sleep(500);
                 var validatedToken = SecurityTokenMaker.MakeSecurityToken(_configuration, token);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
@@ -51,16 +50,14 @@ namespace DisputenPWA.API.Authoriation
 
                 var tokenType = jwtToken.Claims.First(x => x.Type == TokenTypes.ClaimType).Value;
                 if (tokenType == TokenTypes.Refresh) return;
-
-                var user = await userManager.FindByIdAsync(userId);
-                // attach user to context on successful jwt validation
-                context.Items["User"] = user;
+                context.Items["Authorized"] = true;
             }
             catch
             {
                 // do nothing if jwt validation fails
-                // user is not attached to context so request won't have access to secure routes
+                // Authorized boolean is not attached to context so request won't have access to secure routes
             }
+            Thread.Sleep(500);
         }
     }
 }
