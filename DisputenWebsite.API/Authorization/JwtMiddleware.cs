@@ -57,7 +57,6 @@ namespace DisputenPWA.API.Authoriation
                 // do nothing if jwt validation fails
                 // Authorized boolean is not attached to context so request won't have access to secure routes
             }
-            Thread.Sleep(500);
         }
     }
 }
