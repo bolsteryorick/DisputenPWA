@@ -50,10 +50,9 @@ namespace DisputenPWA.Application.Services
             var isUserContact = await _contactRepository.GetQueryable().AnyAsync(x => x.UserId == _userId && x.ContactUserId == otherUserId);
             if (isUserContact) return true;
             
-            // this part will be redundant later
-            var groupIdsUser = await _memberRepository.GetQueryable().Where(m => m.UserId == _userId).Select(x => x.GroupId).ToListAsync();
-            var groupIdsOtherUser = await _memberRepository.GetQueryable().Where(m => m.UserId == otherUserId).Select(x => x.GroupId).ToListAsync();
-            return groupIdsOtherUser.Intersect(groupIdsUser).Any();
+            var combinedGroupIds = await _memberRepository.GetQueryable().Where(m => m.UserId == _userId || m.UserId == otherUserId).Select(x => x.GroupId).ToListAsync();
+            var hasDouble = combinedGroupIds.Count > combinedGroupIds.Distinct().Count();
+            return hasDouble;
         }
 
         public async Task<bool> CanQueryGroup(Guid groupId)

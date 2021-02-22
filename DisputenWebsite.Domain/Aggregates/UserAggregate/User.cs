@@ -10,6 +10,7 @@ namespace DisputenPWA.Domain.Aggregates.UserAggregate
         public string Id { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
+        public bool? IsContact { get; set; }
         public IReadOnlyCollection<Member> Memberships { get; set; }
         public IReadOnlyCollection<Attendee> Attendences { get; set; }
         public IReadOnlyCollection<Contact> Contacts { get; set; }

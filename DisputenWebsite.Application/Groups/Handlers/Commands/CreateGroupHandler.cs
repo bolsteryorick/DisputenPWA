@@ -1,4 +1,6 @@
 ﻿using DisputenPWA.Application.Services;
+using DisputenPWA.DAL.Repositories;
+using DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects;
 using DisputenPWA.Domain.Aggregates.GroupAggregate;
 using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands;
 using DisputenPWA.Domain.Aggregates.GroupAggregate.Commands.Results;
@@ -7,6 +9,11 @@ using DisputenPWA.Domain.Aggregates.MemberAggregate.Commands;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,18 +25,21 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
         private readonly IMemberConnector _memberConnector;
         private readonly IUserService _userService;
         private readonly IMediator _mediator;
+        private readonly IContactRepository _contactRepository;
 
         public CreateGroupHandler(
             IGroupConnector groupConnector,
             IMemberConnector memberConnector,
             IUserService userService,
-            IMediator mediator
+            IMediator mediator,
+            IContactRepository contactRepository
             )
         {
             _groupConnector = groupConnector;
             _memberConnector = memberConnector;
             _userService = userService;
             _mediator = mediator;
+            _contactRepository = contactRepository;
         }
 
         public async Task<CreateGroupCommandResult> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
@@ -37,6 +47,7 @@ namespace DisputenPWA.Application.Groups.Handlers.Commands
             var group = await CreateGroup(request);
             await AddSelfAsAdmin(group);
             await AddOtherMembers(request, group);
+
             return new CreateGroupCommandResult(group);
         }
 
