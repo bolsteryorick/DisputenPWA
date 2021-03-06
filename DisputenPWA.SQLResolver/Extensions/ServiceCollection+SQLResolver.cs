@@ -1,5 +1,6 @@
 ﻿using DisputenPWA.SQLResolver.AppEvents;
 using DisputenPWA.SQLResolver.Attendees;
+using DisputenPWA.SQLResolver.Contacts;
 using DisputenPWA.SQLResolver.Groups;
 using DisputenPWA.SQLResolver.Members;
 using DisputenPWA.SQLResolver.Users;
@@ -16,6 +17,7 @@ namespace DisputenPWA.SQLResolver.Extensions
             services.AddTransient<IResolveForAttendeesService, ResolveForAttendeesService>();
             services.AddTransient<IResolveForGroupsService, ResolveForGroupsService>();
             services.AddTransient<IResolveForUserService, ResolveForUserService>();
+            services.AddTransient<IResolveForContactsService, ResolveForContactsService>();
             return services;
         }
     }

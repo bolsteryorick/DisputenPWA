@@ -31,7 +31,7 @@ namespace DisputenPWA.Application.Attendees.Handlers.Commands
 
         public async Task<CreateAttendeeCommandResult> Handle(CreateAttendeeCommand request, CancellationToken cancellationToken)
         {
-            if (!await _operationAuthorizer.CanJoinEvent(request.AppEventId))
+            if (!await _operationAuthorizer.CanChangeAppEvent(request.AppEventId))
             {
                 return new CreateAttendeeCommandResult(null);
             }
@@ -41,11 +41,8 @@ namespace DisputenPWA.Application.Attendees.Handlers.Commands
                 return new CreateAttendeeCommandResult(null);
             }
 
-            var attendee = new Attendee
-            {
-                AppEventId = request.AppEventId,
-                UserId = request.UserId
-            };
+            var attendee = Attendee.ForJoiningEvent(request.UserId, request.AppEventId);
+
             await _attendeeConnector.Create(attendee);
             return new CreateAttendeeCommandResult(attendee);
         }

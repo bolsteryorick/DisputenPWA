@@ -18,6 +18,7 @@ namespace DisputenPWA.Infrastructure
     {
         Task Seed(int nrOfGroups, int maxEventsPerGroup, int maxMembersPerGroup, int maxAttendeesPerEvent);
     }
+
     public class SeedingService : ISeedingService
     {
         private readonly UserManager<ApplicationUser> _userManager;

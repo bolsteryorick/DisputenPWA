@@ -41,11 +41,7 @@ namespace DisputenPWA.Application.Attendees.Handlers.Commands
                 return new CreateAttendeeCommandResult(null);
             }
 
-            var attendee = new Attendee
-            {
-                AppEventId = request.AppEventId,
-                UserId = _userService.GetUserId()
-            };
+            var attendee = Attendee.ForJoiningEvent(_userService.GetUserId(), request.AppEventId);
             await _attendeeConnector.Create(attendee);
             return new CreateAttendeeCommandResult(attendee);
         }

@@ -1,6 +1,7 @@
 ﻿using DisputenPWA.DAL.Repositories;
 using DisputenPWA.Infrastructure.Connectors.SQL.AppEvents;
 using DisputenPWA.Infrastructure.Connectors.SQL.Attendees;
+using DisputenPWA.Infrastructure.Connectors.SQL.Contacts;
 using DisputenPWA.Infrastructure.Connectors.SQL.Groups;
 using DisputenPWA.Infrastructure.Connectors.SQL.Members;
 using DisputenPWA.Infrastructure.Connectors.SQL.Users;
@@ -17,12 +18,16 @@ namespace DisputenPWA.Infrastructure.Extensions
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<IAttendeeRepository, AttendeeRepository>();
+            services.AddTransient<IContactRepository, ContactRepository>();
+            services.AddTransient<IOutsideContactRepository, OutsideContactRepository>();
+            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
 
             services.AddTransient<IGroupConnector, GroupConnector>();
             services.AddTransient<IAppEventConnector, AppEventConnector>();
             services.AddTransient<IUserConnector, UserConnector>();
             services.AddTransient<IMemberConnector, MemberConnector>();
             services.AddTransient<IAttendeeConnector, AttendeeConnector>();
+            services.AddTransient<IContactConnector, ContactConnector>();
 
             services.AddTransient<ISeedingService, SeedingService>();
             return services;

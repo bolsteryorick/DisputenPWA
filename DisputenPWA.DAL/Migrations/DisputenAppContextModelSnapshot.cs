@@ -19,6 +19,33 @@ namespace DisputenPWA.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DisputenPWA.DAL.Models.DalRefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppInstanceId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RefreshTokenHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RefreshTokenSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppInstanceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject.DalAttendee", b =>
                 {
                     b.Property<Guid>("Id")
@@ -43,6 +70,46 @@ namespace DisputenPWA.DAL.Migrations
                     b.ToTable("Attendees");
                 });
 
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects.DalOutsideContact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("OutsideContacts");
+                });
+
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects.DalPlatformContact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContactUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PlatformContacts");
+                });
+
             modelBuilder.Entity("DisputenPWA.Domain.Aggregates.EventAggregate.DalObject.DalAppEvent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -58,7 +125,7 @@ namespace DisputenPWA.DAL.Migrations
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("MaxAttendees")
+                    b.Property<int?>("MaxAttendees")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -315,6 +382,13 @@ namespace DisputenPWA.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("DisputenPWA.DAL.Models.DalRefreshToken", b =>
+                {
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject.DalAttendee", b =>
                 {
                     b.HasOne("DisputenPWA.Domain.Aggregates.EventAggregate.DalObject.DalAppEvent", "AppEvent")
@@ -325,6 +399,24 @@ namespace DisputenPWA.DAL.Migrations
 
                     b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", "User")
                         .WithMany("Attendences")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects.DalOutsideContact", b =>
+                {
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", "User")
+                        .WithMany("OutsideContacts")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects.DalPlatformContact", b =>
+                {
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", "ContactUser")
+                        .WithMany("PlatformContactReferences")
+                        .HasForeignKey("ContactUserId");
+
+                    b.HasOne("DisputenPWA.Domain.Aggregates.UserAggregate.DalObject.ApplicationUser", "User")
+                        .WithMany("PlatformContacts")
                         .HasForeignKey("UserId");
                 });
 

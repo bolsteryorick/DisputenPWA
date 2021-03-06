@@ -43,6 +43,7 @@ namespace DisputenPWA.Application.Members.Handlers.Commands
                 });
             }
             await _memberConnector.Create(members.Select(m => m.CreateDalMember()));
+
             return new CreateMembersCommandResult(null);
         }
     }

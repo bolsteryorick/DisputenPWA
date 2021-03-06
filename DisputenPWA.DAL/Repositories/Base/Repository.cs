@@ -68,6 +68,14 @@ namespace DisputenPWA.DAL.Repositories.Base
 
         public async Task<TModel> UpdateProperties(TModel item, Dictionary<string, object> properties)
         {
+            // so bool changes are created in generated sql
+            foreach(var property in properties)
+            {
+                if(property.Value.GetType() == typeof(bool))
+                {
+                    UpdateItemProperty(item, property.Key, !(bool)property.Value);
+                }
+            }
             _context.Attach(item);
             UpdateItemProperties(item, properties);
             await _context.SaveChangesAsync();

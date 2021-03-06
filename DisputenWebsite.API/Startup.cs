@@ -4,6 +4,7 @@ using DisputenPWA.Application;
 using DisputenPWA.Application.Extensions;
 using DisputenPWA.Application.Services;
 using DisputenPWA.DAL.Models;
+using DisputenPWA.Domain.Aggregates.ContactAggregate.Commands;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using DisputenPWA.Infrastructure.Extensions;
 using DisputenPWA.SQLResolver.Extensions;
@@ -52,6 +53,7 @@ namespace DisputenWebsite.API
             });
             //services.AddCosmosDb(_configuration);
 
+            services.AddTransient<IUserAuthorizedService, UserAuthorizedService>();
             services.AddTransient<IUserService, UserService>();
             services.AddSQLConnectors();
             services.AddSQLResolverServices();
@@ -70,7 +72,8 @@ namespace DisputenWebsite.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            //app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowAnyCredentials());
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthorization();
             app.UseMiddleware<JwtMiddleware>();
             app.UseGraphQL();

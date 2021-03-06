@@ -166,6 +166,50 @@ namespace DisputenPWA.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OutsideContacts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    EmailAddress = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OutsideContacts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OutsideContacts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlatformContacts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    ContactUserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlatformContacts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlatformContacts_AspNetUsers_ContactUserId",
+                        column: x => x.ContactUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PlatformContacts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppEvents",
                 columns: table => new
                 {
@@ -174,7 +218,7 @@ namespace DisputenPWA.DAL.Migrations
                     Description = table.Column<string>(nullable: true),
                     StartTime = table.Column<DateTime>(nullable: true),
                     EndTime = table.Column<DateTime>(nullable: true),
-                    MaxAttendees = table.Column<int>(nullable: false),
+                    MaxAttendees = table.Column<int>(nullable: true),
                     GroupId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -303,6 +347,21 @@ namespace DisputenPWA.DAL.Migrations
                 name: "IX_Members_UserId",
                 table: "Members",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OutsideContacts_UserId",
+                table: "OutsideContacts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlatformContacts_ContactUserId",
+                table: "PlatformContacts",
+                column: "ContactUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlatformContacts_UserId",
+                table: "PlatformContacts",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -327,6 +386,12 @@ namespace DisputenPWA.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Members");
+
+            migrationBuilder.DropTable(
+                name: "OutsideContacts");
+
+            migrationBuilder.DropTable(
+                name: "PlatformContacts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

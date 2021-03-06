@@ -1,4 +1,5 @@
 ﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate;
+using DisputenPWA.Domain.Aggregates.ContactAggregate;
 using DisputenPWA.Domain.Aggregates.EventAggregate;
 using DisputenPWA.Domain.Aggregates.GroupAggregate;
 using DisputenPWA.Domain.Aggregates.MemberAggregate;
@@ -121,6 +122,23 @@ namespace DisputenPWA.Domain.Hierarchy
             {
                 return new AttendeePropertyHelper(
                     userFields,
+                    depth + 1
+                );
+            }
+            return null;
+        }
+
+        public ContactPropertyHelper GetContactPropertyHelper(
+            IEnumerable<Field> fields,
+            string userFieldName,
+            int depth
+            )
+        {
+            var subFields = GetSubFields(fields.FirstOrDefault(x => x.Name.ToLower() == userFieldName.ToLower()));
+            if (subFields.Count > 0)
+            {
+                return new ContactPropertyHelper(
+                    subFields,
                     depth + 1
                 );
             }

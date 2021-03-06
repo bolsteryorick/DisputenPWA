@@ -20,21 +20,21 @@ namespace DisputenPWA.API.GraphQL
         private readonly GraphQLSettings _settings;
         private readonly IDocumentExecuter _executer;
         private readonly IDocumentWriter _writer;
-        private readonly IUserService _userService;
+        private readonly IUserAuthorizedService _userAuthorizedService;
 
         public GraphQLMiddleware(
             RequestDelegate next,
             GraphQLSettings settings,
             IDocumentExecuter executer,
             IDocumentWriter writer,
-            IUserService userService
+            IUserAuthorizedService userAuthorizedService
             )
         {
             _next = next;
             _settings = settings;
             _executer = executer;
             _writer = writer;
-            _userService = userService;
+            _userAuthorizedService = userAuthorizedService;
         }
 
         public async Task Invoke(HttpContext context, ISchema schema)
@@ -56,12 +56,12 @@ namespace DisputenPWA.API.GraphQL
 
         private async Task ExecuteAsync(HttpContext context, ISchema schema)
         {
-            if (!_userService.IsAuthorised())
+            if (!_userAuthorizedService.IsAuthorised())
             {
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return;
             }
-
+            //var body = await StreamToStringAsync(context.Request);
             var request = Deserialize<GraphQLRequest>(context.Request.Body);
 
             var result = await _executer.ExecuteAsync(options =>

@@ -1,4 +1,6 @@
-﻿using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
+﻿using DisputenPWA.Application.Constants;
+using DisputenPWA.Application.Helpers;
+using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +9,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DisputenPWA.API.Authoriation
@@ -30,37 +33,29 @@ namespace DisputenPWA.API.Authoriation
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                await AttachUserToContext(context, userManager, token);
+                AddUserIdAndAuthorizedToContext(context, userManager, token);
 
             await _next(context);
         }
 
-        private async Task AttachUserToContext(HttpContext context, UserManager<ApplicationUser> userManager, string token)
+        private void AddUserIdAndAuthorizedToContext(HttpContext context, UserManager<ApplicationUser> userManager, string token)
         {
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWT:Secret"));
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                var validatedToken = SecurityTokenMaker.MakeSecurityToken(_configuration, token);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
-                var user = await userManager.FindByIdAsync(userId);
-                // attach user to context on successful jwt validation
-                context.Items["User"] = user;
+                context.Items["UserId"] = userId;
+
+                var tokenType = jwtToken.Claims.First(x => x.Type == TokenTypes.ClaimType).Value;
+                if (tokenType == TokenTypes.Refresh) return;
+                context.Items["Authorized"] = true;
             }
             catch
             {
                 // do nothing if jwt validation fails
-                // user is not attached to context so request won't have access to secure routes
+                // Authorized boolean is not attached to context so request won't have access to secure routes
             }
         }
     }

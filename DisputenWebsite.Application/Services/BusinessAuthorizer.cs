@@ -23,7 +23,7 @@ namespace DisputenPWA.Application.Services
 
         public async Task<bool> CanAddAttendee(Guid appEventId)
         {
-            return await _appEventRepository.GetQueryable().AnyAsync(x => x.Id == appEventId && x.MaxAttendees > x.Attendances.Count);
+            return await _appEventRepository.GetQueryable().AnyAsync(x => x.Id == appEventId && (x.MaxAttendees == null || x.MaxAttendees > x.Attendances.Count));
         }
     }
 }
