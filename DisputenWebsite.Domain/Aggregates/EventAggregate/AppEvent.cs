@@ -18,6 +18,11 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate
         public Group Group { get; set; }
         public IReadOnlyCollection<Attendee> Attendees { get; set; }
 
+        public AppEvent()
+        {
+            Attendees = new List<Attendee>();
+        }
+
         public DalAppEvent CreateDALAppEvent()
         {
             return new DalAppEvent

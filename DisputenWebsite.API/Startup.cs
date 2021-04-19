@@ -1,5 +1,6 @@
 using DisputenPWA.API.Authoriation;
 using DisputenPWA.API.Extensions;
+using DisputenPWA.API.Security;
 using DisputenPWA.Application;
 using DisputenPWA.Application.Extensions;
 using DisputenPWA.Application.Services;
@@ -46,7 +47,7 @@ namespace DisputenWebsite.API
                 // Default Lockout settings.
                 options.Lockout.AllowedForNewUsers = true;
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 1;
+                options.Password.RequiredLength = 12;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
@@ -55,6 +56,7 @@ namespace DisputenWebsite.API
 
             services.AddTransient<IUserAuthorizedService, UserAuthorizedService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IGeneratePassword, GeneratePassword>();
             services.AddSQLConnectors();
             services.AddSQLResolverServices();
             services.AddBusinessLogicServices();

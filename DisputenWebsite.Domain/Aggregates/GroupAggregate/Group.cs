@@ -13,6 +13,12 @@ namespace DisputenPWA.Domain.Aggregates.GroupAggregate
         public IReadOnlyCollection<AppEvent> AppEvents { get; set; }
         public IReadOnlyCollection<Member> Members { get; set; }
 
+        public Group()
+        {
+            AppEvents = new List<AppEvent>();
+            Members = new List<Member>();
+        }
+
         public DalGroup CreateDalGroup()
         {
             return new DalGroup

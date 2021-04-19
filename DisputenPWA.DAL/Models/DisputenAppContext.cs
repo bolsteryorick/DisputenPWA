@@ -1,6 +1,7 @@
 ﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.ContactAggregate.DalObjects;
 using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
+using DisputenPWA.Domain.Aggregates.GoogleAccessInfoAggregate;
 using DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.MemberAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
@@ -18,13 +19,14 @@ namespace DisputenPWA.DAL.Models
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        public DbSet<DalGroup> Groups{ get; set; }
+        public DbSet<DalGroup> Groups { get; set; }
         public DbSet<DalAppEvent> AppEvents { get; set; }
         public DbSet<DalMember> Members { get; set; }
         public DbSet<DalAttendee> Attendees { get; set; }
         public DbSet<DalPlatformContact> PlatformContacts { get; set; }
         public DbSet<DalOutsideContact> OutsideContacts { get; set; }
         public DbSet<DalRefreshToken> RefreshTokens { get; set; }
+        public DbSet<GoogleAccessInfo> GoogleAccessInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +65,10 @@ namespace DisputenPWA.DAL.Models
             modelBuilder.Entity<DalRefreshToken>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.RefreshTokens);
+
+            modelBuilder.Entity<GoogleAccessInfo>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.GoogleAccessInfos);
 
             modelBuilder.Entity<DalAppEvent>().HasIndex(a => a.GroupId);
             modelBuilder.Entity<DalMember>().HasIndex(a => a.GroupId);

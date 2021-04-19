@@ -6,6 +6,7 @@ using DisputenPWA.Domain.Aggregates.UserAggregate;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.UserAggregate.Queries;
 using DisputenPWA.Domain.Aggregates.UserAggregate.Queries.Results;
+using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -41,7 +42,9 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
         {
             var user = await _userManager.FindByNameAsync(request.Email);
 
-            if (user == null || await PasswordInCorrect(user, request))
+            if (user == null || (request.Password == null && request.GoogleToken == null)
+                || request.Password != null && await PasswordInCorrect(user, request) 
+                || request.GoogleToken != null && await GoogleJsonWebSignature.ValidateAsync(request.GoogleToken) == null) 
                 return TokenResult(null, null) ;
 
             var refreshToken = JwtTokenGenerator.GenerateRefeshJwtToken(user.Id, _configuration);
