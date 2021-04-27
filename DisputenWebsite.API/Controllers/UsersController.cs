@@ -1,4 +1,4 @@
-﻿using DisputenPWA.API.Security;
+﻿using DisputenPWA.Application.Users.Shared;
 using DisputenPWA.Domain.Aggregates.UserAggregate.Commands;
 using DisputenPWA.Domain.Aggregates.UserAggregate.Queries;
 using Google.Apis.Auth;
@@ -93,69 +93,66 @@ namespace DisputenPWA.API.Controllers
             public string AppInstanceId { get; set; }
         }
 
-        [HttpPost("register/google")]
-        public async Task<TokenObject> RegisterWithGoogle(GoogleRegisterValues values)
+        [HttpPost("login/google")]
+        public async Task<TokenObject> LoginWithGoogle(GoogleRegisterValues values)
         {
-            var clientId = _configuration.GetValue<string>("Authentication:Google:ClientId");
-            var clientSecret = _configuration.GetValue<string>("Authentication:Google:ClientSecret");
+            var result = await _mediator.Send(new LoginWithGoogleCommand(values.Token, values.AppInstanceId));
+            return new TokenObject { AccessToken = result.Result.AccessToken, RefreshToken = result.Result.RefreshToken };
 
-            var googleAuthCodeFlow = new GoogleAuthorizationCodeFlow(
-                new GoogleAuthorizationCodeFlow.Initializer
-                {
-                    ClientSecrets = new ClientSecrets
-                    {
-                        ClientId = clientId,
-                        ClientSecret = clientSecret
-                    },
-                    Scopes = new[] { CalendarService.Scope.CalendarEvents, CalendarService.Scope.Calendar }
-                });
+            //var clientId = _configuration.GetValue<string>("Authentication:Google:ClientId");
+            //var clientSecret = _configuration.GetValue<string>("Authentication:Google:ClientSecret");
 
-            var tokenResponse = await googleAuthCodeFlow.ExchangeCodeForTokenAsync("UserId", values.Token, "http://localhost:4200", CancellationToken.None);
-            var credential = GoogleCredential.FromAccessToken(tokenResponse.AccessToken);
+            //var googleAuthCodeFlow = new GoogleAuthorizationCodeFlow(
+            //    new GoogleAuthorizationCodeFlow.Initializer
+            //    {
+            //        ClientSecrets = new ClientSecrets
+            //        {
+            //            ClientId = clientId,
+            //            ClientSecret = clientSecret
+            //        },
+            //        Scopes = new[] { CalendarService.Scope.CalendarEvents, CalendarService.Scope.Calendar }
+            //    });
 
-            var service = new CalendarService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "DispuutWeb",
-            });
+            //var tokenResponse = await googleAuthCodeFlow.ExchangeCodeForTokenAsync("UserId", values.Token, "http://localhost:4200", CancellationToken.None);
+            //var validPayloadTest = await GoogleJsonWebSignature.ValidateAsync(tokenResponse.IdToken);
 
-            var myEvent = new Event
-            {
-                Summary = "Appointment",
-                Start = new EventDateTime()
-                {
-                    DateTime = new DateTime(2021, 4, 20, 10, 0, 0),
-                    TimeZone = "America/Los_Angeles"
-                },
-                End = new EventDateTime()
-                {
-                    DateTime = new DateTime(2021, 4, 20, 11, 0, 0),
-                    TimeZone = "America/Los_Angeles"
-                },
-            };
 
-            try
-            {
-                await service.Events.Insert(myEvent, "primary").ExecuteAsync();
-            }
-            catch(Exception e)
-            {
+            //var credential = GoogleCredential.FromAccessToken(tokenResponse.AccessToken);
+            //var service = new CalendarService(new BaseClientService.Initializer()
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = "DispuutWeb",
+            //});
 
-            }
+            //var myEvent = new Event
+            //{
+            //    Summary = "Appointment",
+            //    Start = new EventDateTime()
+            //    {
+            //        DateTime = new DateTime(2021, 4, 20, 10, 0, 0),
+            //        TimeZone = "America/Los_Angeles"
+            //    },
+            //    End = new EventDateTime()
+            //    {
+            //        DateTime = new DateTime(2021, 4, 20, 11, 0, 0),
+            //        TimeZone = "America/Los_Angeles"
+            //    },
+            //};
+            //await service.Events.Insert(myEvent, "primary").ExecuteAsync();
 
-            // move whole thing to a command
-            var validPayload = await GoogleJsonWebSignature.ValidateAsync(values.Token);
-            if (validPayload == null) return new TokenObject { AccessToken = null, RefreshToken = null };
+            //// move whole thing to a command
+            //var validPayload = await GoogleJsonWebSignature.ValidateAsync(values.Token);
+            //if (validPayload == null) return new TokenObject { AccessToken = null, RefreshToken = null };
 
-            // check if user already exists
+            //// check if user already exists
 
-            // if user exists, skip this step
-            var passWord = _generatePassword.GenerateAPassword();
-            var registerResult = await _mediator.Send(new RegisterUserCommand(validPayload.Email, passWord));
-            if (registerResult.Errors.Any()) return new TokenObject { AccessToken = null, RefreshToken = null };
+            //// if user exists, skip this step
+            //var passWord = _generatePassword.GenerateAPassword();
+            //var registerResult = await _mediator.Send(new RegisterUserCommand(validPayload.Email, passWord));
+            //if (registerResult.Errors.Any()) return new TokenObject { AccessToken = null, RefreshToken = null };
 
-            var tokenQueryResult = await _mediator.Send(new JwtTokensQuery(validPayload.Email, null, values.Token, values.AppInstanceId));
-            return new TokenObject { AccessToken = tokenQueryResult.Result.AccessToken, RefreshToken = tokenQueryResult.Result.RefreshToken };
+            //var tokenQueryResult = await _mediator.Send(new JwtTokensQuery(validPayload.Email, null, values.Token, values.AppInstanceId));
+            //return new TokenObject { AccessToken = tokenQueryResult.Result.AccessToken, RefreshToken = tokenQueryResult.Result.RefreshToken };
         }
         //[HttpPost("googlesingin")]
         //public async Task<TokenObject> getToken()

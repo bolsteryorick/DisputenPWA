@@ -45,7 +45,7 @@ namespace DisputenPWA.Application.Users.Handlers.Queries
             if (user == null || (request.Password == null && request.GoogleToken == null)
                 || request.Password != null && await PasswordInCorrect(user, request) 
                 || request.GoogleToken != null && await GoogleJsonWebSignature.ValidateAsync(request.GoogleToken) == null) 
-                return TokenResult(null, null) ;
+                return TokenResult(null, null);
 
             var refreshToken = JwtTokenGenerator.GenerateRefeshJwtToken(user.Id, _configuration);
             var accessToken = JwtTokenGenerator.GenerateAccessJwtToken(user.Id, _configuration);

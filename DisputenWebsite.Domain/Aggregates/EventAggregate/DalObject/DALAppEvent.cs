@@ -1,6 +1,7 @@
 ﻿using DisputenPWA.Domain.Aggregates.AttendeeAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.GroupAggregate.DalObject;
 using DisputenPWA.Domain.Hierarchy;
+using Google.Apis.Calendar.v3.Data;
 using System;
 using System.Collections.Generic;
 
@@ -14,6 +15,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate.DalObject
         public DateTime? EndTime { get; set; }
         public int? MaxAttendees { get; set; }
         public Guid GroupId { get; set; }
+        public string GoogleEventId { get; set; }
         public virtual DalGroup Group { get; set; }
         public virtual ICollection<DalAttendee> Attendances { get; set; }
 
@@ -30,5 +32,19 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate.DalObject
                 GroupId = GroupId
             };
         }
+
+        public Event CreateGoogleCalendarEvent => new Event
+        {
+            Summary = Name,
+            Start = new EventDateTime()
+            {
+                DateTime = StartTime
+            },
+            End = new EventDateTime()
+            {
+                DateTime = EndTime
+            },
+            Description = Description,
+        };
     }
 }

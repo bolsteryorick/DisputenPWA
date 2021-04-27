@@ -2,6 +2,7 @@
 using DisputenPWA.Domain.Aggregates.EventAggregate.DalObject;
 using DisputenPWA.Domain.Aggregates.GroupAggregate;
 using DisputenPWA.Domain.Hierarchy;
+using Google.Apis.Calendar.v3.Data;
 using System;
 using System.Collections.Generic;
 
@@ -15,6 +16,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate
         public DateTime? EndTime { get; set; }
         public int? MaxAttendees { get; set; }
         public Guid GroupId { get; set; }
+        public string GoogleEventId { get; set; }
         public Group Group { get; set; }
         public IReadOnlyCollection<Attendee> Attendees { get; set; }
 
@@ -33,12 +35,13 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate
                 StartTime = StartTime,
                 EndTime = EndTime,
                 MaxAttendees = MaxAttendees,
+                GoogleEventId = GoogleEventId,
                 GroupId = GroupId
             };
         }
 
         public static AppEvent WithUtcDateKind(
-                Guid id, string name, string description, DateTime? startTime, DateTime? endTime, int? maxAttendees, Guid groupId
+                Guid id, string name, string description, DateTime? startTime, DateTime? endTime, int? maxAttendees, Guid groupId, string googleEventId
             )
         {
             if (startTime != null)
@@ -57,6 +60,7 @@ namespace DisputenPWA.Domain.Aggregates.EventAggregate
                 StartTime = startTime,
                 EndTime = endTime,
                 MaxAttendees = maxAttendees,
+                GoogleEventId = googleEventId,
                 GroupId = groupId
             };
         }

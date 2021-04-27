@@ -45,7 +45,8 @@ namespace DisputenPWA.DAL.Repositories
                             helper.GetStartTime ? x.StartTime : null,
                             helper.GetEndTime ? x.EndTime : null,
                             helper.GetMaxAttendees ? x.MaxAttendees : null,
-                            x.GroupId
+                            x.GroupId,
+                            x.GoogleEventId
                         ));
         }
     }

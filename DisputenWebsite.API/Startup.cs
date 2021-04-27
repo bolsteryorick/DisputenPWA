@@ -1,9 +1,10 @@
 using DisputenPWA.API.Authoriation;
 using DisputenPWA.API.Extensions;
-using DisputenPWA.API.Security;
 using DisputenPWA.Application;
 using DisputenPWA.Application.Extensions;
 using DisputenPWA.Application.Services;
+using DisputenPWA.Application.Services.Google;
+using DisputenPWA.Application.Users.Shared;
 using DisputenPWA.DAL.Models;
 using DisputenPWA.Domain.Aggregates.ContactAggregate.Commands;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
@@ -57,6 +58,7 @@ namespace DisputenWebsite.API
             services.AddTransient<IUserAuthorizedService, UserAuthorizedService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IGeneratePassword, GeneratePassword>();
+            services.AddTransient<IGoogleCalendarService, GoogleCalendarService>();
             services.AddSQLConnectors();
             services.AddSQLResolverServices();
             services.AddBusinessLogicServices();

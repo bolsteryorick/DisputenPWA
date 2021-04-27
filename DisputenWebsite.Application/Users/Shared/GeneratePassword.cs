@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DisputenPWA.Domain.Aggregates.UserAggregate.DalObject;
 using Microsoft.AspNetCore.Identity;
 
-namespace DisputenPWA.API.Security
+namespace DisputenPWA.Application.Users.Shared
 {
     public interface IGeneratePassword
     {

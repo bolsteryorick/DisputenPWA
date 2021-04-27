@@ -45,25 +45,28 @@ namespace DisputenPWA.DAL.Repositories.Base
         {
             _context.Set<TModel>().AddRange(items);
             await _context.SaveChangesAsync();
+            UntrackAll();
         }
 
         public async Task DeleteByQuery(IQueryable<TModel> toBeDeleted)
         {
             _context.Set<TModel>().RemoveRange(toBeDeleted);
             await _context.SaveChangesAsync();
+            UntrackAll();
         }
 
-        // todo check if this works
         public async Task DeleteByObject(TModel toBeDeleted)
         {
             _context.Set<TModel>().Remove(toBeDeleted);
             await _context.SaveChangesAsync();
+            UntrackAll();
         }
 
         public async Task Update(TModel item)
         {
             _context.Update(item);
             await _context.SaveChangesAsync();
+            UntrackAll();
         }
 
         public async Task<TModel> UpdateProperties(TModel item, Dictionary<string, object> properties)
@@ -79,6 +82,7 @@ namespace DisputenPWA.DAL.Repositories.Base
             _context.Attach(item);
             UpdateItemProperties(item, properties);
             await _context.SaveChangesAsync();
+            UntrackAll();
             return item;
         }
 
@@ -94,6 +98,14 @@ namespace DisputenPWA.DAL.Repositories.Base
         {
             var propertyInfo = typeof(TModel).GetProperty(propertyName);
             propertyInfo.SetValue(item, newValue);
+        }
+
+        private void UntrackAll()
+        {
+            foreach (var entry in _context.ChangeTracker.Entries())
+            {
+                entry.State = EntityState.Detached;
+            }
         }
     }
 }
